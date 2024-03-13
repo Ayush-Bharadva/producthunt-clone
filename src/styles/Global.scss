@@ -1,0 +1,22 @@
+$text-color: #4b587c;
+
+.flex-center {
+	display: flex;
+	// justify-content: center;
+	align-items: center;
+}
+
+.text-button {
+	background: none;
+	border: none;
+	color: $text-color;
+	font-size: 1rem;
+	cursor: pointer;
+}
+
+.main-container {
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	padding: 3rem 0;
+}

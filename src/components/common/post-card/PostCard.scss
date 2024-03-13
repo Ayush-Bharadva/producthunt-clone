@@ -1,0 +1,100 @@
+$text-color: #4b587c;
+
+.post-card {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-radius: 9px;
+	// border: 1px solid #e0e0e0;
+	padding: 0.5rem;
+	cursor: pointer;
+	margin: 0.5rem 0;
+	width: 100%;
+	transition: all 0.3s ease-in-out;
+
+	.product-image {
+		height: 48px;
+		width: 48px;
+		border-radius: 7px;
+		overflow: hidden;
+	}
+	.product-details {
+		flex: 1;
+		padding: 1rem;
+		text-align: left;
+
+		.product-name {
+			font-weight: 500;
+		}
+
+		.share-icon {
+			margin-left: 4px;
+			vertical-align: middle;
+			transition: all 0.2s ease-in-out;
+			cursor: pointer;
+
+			&:hover {
+				color: #e12e0d;
+			}
+		}
+
+		.product-other-details {
+			display: flex;
+			gap: 7px;
+			margin-top: 3px;
+
+			.comment {
+				gap: 4px;
+				font-size: 0.85rem;
+				transition: all 0.2s ease-in-out;
+				cursor: pointer;
+
+				&:hover {
+					color: #e12e0d;
+				}
+			}
+
+			.topics {
+				display: flex;
+				gap: 7px;
+				font-size: 0.85rem;
+				transition: all 0.2s ease-in-out;
+				color: $text-color;
+				text-transform: capitalize;
+
+				.topic:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+
+	.up-vote-button {
+		background-color: #fff;
+		border: 1px solid #d9e1ec;
+		border-radius: 5px;
+		transition: all 0.3s ease-in-out;
+		cursor: pointer;
+
+		.up-vote {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-end;
+			align-items: center;
+			height: 44px;
+			width: 44px;
+			gap: 2px;
+			font-size: 13px;
+			font-weight: 500;
+			padding: 2px 7px 0;
+		}
+
+		&:hover {
+			border: 1px solid #feb6b0;
+		}
+	}
+
+	&:hover {
+		background-image: linear-gradient(12deg, white 0 25%, #feede6 95%);
+	}
+}

@@ -1,0 +1,21 @@
+.aside {
+	margin-left: 3rem;
+	font-size: 0.8rem;
+	.top-launches {
+		.top-launches-heading {
+			text-transform: uppercase;
+			margin-bottom: 1.25rem;
+		}
+		.launches-list {
+			.launch {
+				font-weight: 500;
+				margin-bottom: 0.5rem;
+				cursor: pointer;
+
+				&:hover {
+					color: #e12e0d;
+				}
+			}
+		}
+	}
+}

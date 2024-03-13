@@ -1,0 +1,22 @@
+$text-color: #4b587c;
+
+.search {
+	border-radius: 15px;
+	background-color: #f5f8ff;
+	overflow: hidden;
+	padding: 0.35rem 1rem;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	color: $text-color;
+	font-size: 1rem;
+	.search-icon {
+		display: inline-block;
+	}
+	input {
+		border: none;
+		outline: none;
+		background: none;
+		color: $text-color;
+	}
+}
