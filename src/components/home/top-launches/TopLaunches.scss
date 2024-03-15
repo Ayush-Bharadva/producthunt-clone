@@ -1,6 +1,12 @@
 .aside {
-	margin-left: 3rem;
-	font-size: 0.8rem;
+	font-size: 0.75rem;
+	width: 20%;
+	margin-left: 4rem;
+	padding-left: 4.5rem;
+	border-left: 1px solid #d9e1ec;
+	height: inherit;
+	align-self: stretch;
+
 	.top-launches {
 		.top-launches-heading {
 			text-transform: uppercase;

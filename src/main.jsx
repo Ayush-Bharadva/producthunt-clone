@@ -4,8 +4,6 @@ import App from "./App.jsx"
 import "./index.scss"
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
 
-console.log(import.meta.env.VITE_API_URL);
-
 const client = new ApolloClient({
   uri: import.meta.env.VITE_API_URL,
   cache: new InMemoryCache(),
@@ -20,4 +18,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <App />
     </ApolloProvider>
   </React.StrictMode>,
-)
+);
