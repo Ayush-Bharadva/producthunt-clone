@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 import "./Launches.scss";
 import { days, years } from "../../utils/constants";
 import PostCard from "../../components/common/post-card/PostCard";
@@ -7,8 +7,9 @@ import { GET_FEATURED_POSTS } from "../../graphql/queries";
 
 const Launches = () => {
 
-  const location = useLocation();
-  console.log('location', location.pathname);
+  const selectFeatured = () => { }
+
+  const selectAll = () => { }
 
   const { data, error, loading } = useQuery(GET_FEATURED_POSTS, {
     variables: {
@@ -37,9 +38,13 @@ const Launches = () => {
             <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to="/leaderboard/yearly/2024">Yearly</NavLink>
           </div>
           <div className="button-group">
-            <NavLink to={`${location.pathname}`} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"}>Featured</NavLink>
+            <NavLink className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} onClick={selectFeatured}>
+              Featured
+            </NavLink>
             <span>|</span>
-            <NavLink to={`${location.pathname}/all`} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"}>All</NavLink>
+            <NavLink className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} onClick={selectAll}>
+              All
+            </NavLink>
           </div>
         </div>
         <div className="pagination">
@@ -61,7 +66,7 @@ const Launches = () => {
           {years.map((year, index) => {
             return (
               <div key={index} className="archive">
-                <NavLink to={`/leaderboard/${year}`} className={({ isActive }) => isActive ? "archive-link active" : "archive-link"}>{year}</NavLink>
+                <NavLink to={`/leaderboard/yearly/${year}`} className={({ isActive }) => isActive ? "archive-link active" : "archive-link"}>{year}</NavLink>
               </div>
             )
           })}

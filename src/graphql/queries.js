@@ -7,11 +7,16 @@ export const GET_FEATURED_POSTS = gql`
 				id
 				name
 				tagline
+				description
 				# createdAt
 				# featuredAt
 				commentsCount
 				votesCount
-				# website
+				media {
+					url
+					videoUrl
+				}
+				website
 				thumbnail {
 					type
 					url

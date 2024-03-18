@@ -27,3 +27,109 @@ $text-color: #4b587c;
 		flex: 1 0 90%;
 	}
 }
+
+.search-container {
+	display: flex;
+	justify-content: flex-start;
+	flex-direction: column;
+	background-color: #fff;
+	width: 500px;
+	height: 300px;
+	border-radius: 5px;
+	overflow: hidden;
+
+	.search-input-container {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 0.5rem;
+		background-color: #f5f8ff;
+		padding: 0.75rem 1rem;
+		font-size: 1rem;
+		color: $text-color;
+
+		input {
+			font-size: 0.9rem;
+			background: none;
+			border: none;
+			text-align: left;
+			flex: 1 0;
+		}
+		.search-arrow {
+			font-size: 1.25rem;
+		}
+	}
+
+	.trending-searches-wrapper {
+		margin-top: 0.25rem;
+		padding: 0 0.75rem;
+
+		.trending-title {
+			font-size: 0.9rem;
+			color: $text-color;
+			margin: 0.3rem 0;
+		}
+
+		.trending-searches {
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			gap: 0.5rem;
+
+			.trending-search {
+				border: 1px solid lightgrey;
+				border-radius: 4px;
+				font-size: 0.7rem;
+				padding: 0.3rem 0.4rem;
+				color: $text-color;
+			}
+		}
+	}
+
+	.search-options {
+		display: flex;
+		flex-direction: column;
+		padding: 0.5rem;
+
+		.search-option-wrapper {
+			flex: 1 0;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 0.5rem;
+			margin: 0.5rem 0;
+
+			.icon {
+				font-size: 1.2rem;
+				color: $text-color;
+				padding: 0.5rem;
+				vertical-align: middle;
+				border-radius: 50%;
+			}
+			.text {
+				font-size: 0.9rem;
+				text-align: left;
+				flex: 1 0;
+				vertical-align: middle;
+
+				p:nth-child(1) {
+					font-size: 0.8rem;
+				}
+				p:nth-child(2) {
+					font-size: 0.7rem;
+					font-weight: 300;
+					color: $text-color;
+				}
+			}
+			.button {
+				background: none;
+				border: 1px solid lightgrey;
+				border-radius: 4px;
+				color: $text-color;
+				font-size: 0.65rem;
+				padding: 0.4rem;
+				cursor: pointer;
+			}
+		}
+	}
+}

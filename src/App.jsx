@@ -4,10 +4,7 @@ import "./App.scss";
 import "./styles/Global.scss";
 import Layout from './components/layout/Layout';
 import Home from './pages/home/Home';
-import PageNotFound from "./pages/not-found-page/PageNotFound";
-// import Weekly from './components/Weekly';
-// import Monthly from './components/Monthly';
-// import Yearly from './components/Yearly';
+import { CircularProgress } from "@mui/material";
 
 const lazyImport = name =>
   lazy(() => import("./pages/index").then(module => ({ default: module[name] })));
@@ -17,12 +14,13 @@ const Products = lazyImport("Products");
 const News = lazyImport("News");
 const Community = lazyImport("Community");
 const Advertise = lazyImport("Advertise");
+const PageNotFound = lazyImport("PageNotFound");
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<Layout />}>
-        <Route path="/" element={<Home featured />}>
+      <Route path="" element={<Layout />}>
+        <Route path="/" element={<Home featured={true} />} >
           <Route path="all" element={<Home featured={false} />} />
         </Route>
         <Route path="leaderboard" element={<Launches />}>
@@ -51,7 +49,7 @@ const router = createBrowserRouter(
 
 function App() {
   return (
-    <Suspense fallback={<p>loading..</p>}>
+    <Suspense fallback={<CircularProgress />}>
       <RouterProvider router={router} />
     </Suspense>
   )

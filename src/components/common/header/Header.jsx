@@ -39,9 +39,7 @@ const Header = () => {
           <button type="button" className="sign-in-btn">Sign in</button>
         </div>
       </header>
-      {
-        isHeaderOpen && <MobileHeader />
-      }
+      {isHeaderOpen && <MobileHeader />}
     </>
   )
 }

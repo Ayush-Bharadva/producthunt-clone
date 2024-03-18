@@ -46,3 +46,23 @@ export const days = [
 	"30",
 	"31",
 ];
+
+export const TrendingSearches = ["Edrawmax", "Eesee", "Shar", "Sha", "Sharpe"];
+
+export const SearchOptions = [
+	{
+		title: "Yesterday",
+		subtitle: "Top products from yesterday",
+		buttonText: "Time travel",
+	},
+	{
+		title: "Last Month",
+		subtitle: "Top products from last month",
+		buttonText: "Time travel",
+	},
+	{
+		title: "2024",
+		subtitle: "Top products from this year",
+		buttonText: "Time travel",
+	},
+];

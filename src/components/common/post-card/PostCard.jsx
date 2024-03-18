@@ -4,7 +4,7 @@ import { FaRegComment } from 'react-icons/fa';
 import { IoTriangle } from 'react-icons/io5';
 import { RiShareForward2Fill } from 'react-icons/ri';
 import './PostCard.scss';
-import Post from '../../post/Post';
+import SelectedPost from '../../post/SelectedPost';
 import { useModal } from '../../../hooks/useModal';
 
 const PostCard = ({ post }) => {
@@ -47,9 +47,14 @@ const PostCard = ({ post }) => {
           </div>
         </button>
       </div>
-      {isModalOpen ? <Post imgSrc={post.thumbnail.url} /> : null}
+      {isModalOpen ?
+        <SelectedPost post={post}
+          imgSrc={post.thumbnail.url}
+          closeModal={toggleModal}
+          mediaList={post.media}
+        /> : null}
     </>
-  )
+  );
 }
 
 export default PostCard;

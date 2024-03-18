@@ -7,11 +7,14 @@ import "./Home.scss";
 import InfiniteScroll from "react-infinite-scroller";
 import { useEffect, useState } from "react";
 import { PropTypes } from "prop-types";
+import { CircularProgress } from "@mui/material";
 
 const Home = ({ featured }) => {
 
   const [postsData, setPostsData] = useState([]);
   const [endCursor, setEndCursor] = useState(null);
+
+  console.log('re-render, featured :', featured);
 
   const { data, error, loading, fetchMore } = useQuery(GET_FEATURED_POSTS, {
     variables: {
@@ -66,14 +69,14 @@ const Home = ({ featured }) => {
           <div className="button-group">
             <NavLink to="/" className={({ isActive }) => isActive ? "category-btn active" : "category-btn"}>Featured</NavLink>
             <span>|</span>
-            <NavLink to="all" className={({ isActive }) => isActive ? "category-btn active" : "category-btn"}>All</NavLink>
+            <NavLink to="/all" className={({ isActive }) => isActive ? "category-btn active" : "category-btn"}>All</NavLink>
           </div>
         </div>
         <InfiniteScroll
           className="posts-container"
           loadMore={handleLoadMore}
           hasMore={hasNextPage}
-          loader={<div>loading...</div>}
+          loader={<CircularProgress />}
           threshold={50}
           initialLoad={false}>
           {postsData.map(post => <PostCard key={post.id} post={post} />)}
