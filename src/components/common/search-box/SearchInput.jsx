@@ -46,7 +46,7 @@ const SearchInput = () => {
             </div>
           </div>
         </Modal> :
-        <div className="search">
+        <div className="search" onClick={handleSearchFocus}>
           <FiSearch className="search-icon" />
           <input type="text" onFocus={handleSearchFocus} placeholder="Search..." />
         </div>}

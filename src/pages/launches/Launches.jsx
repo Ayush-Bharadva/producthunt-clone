@@ -1,17 +1,21 @@
-import { NavLink } from "react-router-dom"
+import { NavLink, useLocation } from "react-router-dom"
+import { PropTypes } from "prop-types";
 import "./Launches.scss";
 import { days, years } from "../../utils/constants";
 import PostCard from "../../components/common/post-card/PostCard";
 import { useQuery } from "@apollo/client";
-import { GET_FEATURED_POSTS } from "../../graphql/queries";
+import { GET_POSTS } from "../../graphql/queries";
+import CategoryProvider from "../../context/CategoryProvider";
 
-const Launches = () => {
+const Launches = ({ featured }) => {
 
-  const selectFeatured = () => { }
+  const location = useLocation();
+  // const navigate = useNavigate();
+  // const { year, month, day } = useParams();
 
-  const selectAll = () => { }
-
-  const { data, error, loading } = useQuery(GET_FEATURED_POSTS, {
+  console.log(location.pathname, 'featured :', featured);
+  // console.log('featured :', featured)
+  const { data, error, loading } = useQuery(GET_POSTS, {
     variables: {
       "first": 15,
       "featured": true,
@@ -22,36 +26,30 @@ const Launches = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  console.log(data);
-
   const { nodes: allPosts } = data.posts;
 
   return (
-    <>
+    <CategoryProvider>
       <div className="launches-container">
         <div className="launches-heading">
           <div className="heading-text">Best of March 12, 2024</div>
           <div className="routes">
-            <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to="/leaderboard/daily/2024/3/15">Daily</NavLink>
-            <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to="/leaderboard/weekly/2024/1">Weekly</NavLink>
-            <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to="/leaderboard/monthly/2024/3">Monthly</NavLink>
-            <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to="/leaderboard/yearly/2024">Yearly</NavLink>
+            <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to={`/leaderboard/daily/2024/3/19`}>Daily</NavLink>
+            <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to={`/leaderboard/weekly/2024/1`}>Weekly</NavLink>
+            <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to={`/leaderboard/monthly/2024/3`}>Monthly</NavLink>
+            <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to={`/leaderboard/yearly/2024`}>Yearly</NavLink>
           </div>
           <div className="button-group">
-            <NavLink className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} onClick={selectFeatured}>
-              Featured
-            </NavLink>
+            <NavLink to="/leaderboard/daily/2024/3/19" className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} end>Featured</NavLink>
             <span>|</span>
-            <NavLink className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} onClick={selectAll}>
-              All
-            </NavLink>
+            <NavLink to="/leaderboard/daily/2024/3/19/all" className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} end>All</NavLink>
           </div>
         </div>
         <div className="pagination">
           {days.map((day, index) => {
             return (
               <div key={index}>
-                <NavLink to={`/leaderboard/daily/${day}`} className={({ isActive }) => isActive ? "day selected" : "day"}>{day}</NavLink>
+                <NavLink to={`/leaderboard/daily/2024/3/${day}`} className={({ isActive }) => isActive ? "day selected" : "day"}>{day}</NavLink>
               </div>
             );
           })}
@@ -68,12 +66,20 @@ const Launches = () => {
               <div key={index} className="archive">
                 <NavLink to={`/leaderboard/yearly/${year}`} className={({ isActive }) => isActive ? "archive-link active" : "archive-link"}>{year}</NavLink>
               </div>
-            )
+            );
           })}
         </div>
       </div>
-    </>
+    </CategoryProvider>
   )
 }
 
-export default Launches
+export default Launches;
+
+Launches.defaultProps = {
+  featured: true
+}
+
+Launches.propTypes = {
+  featured: PropTypes.bool
+};

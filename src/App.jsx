@@ -20,27 +20,26 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="" element={<Layout />}>
-        <Route path="/" element={<Home featured={true} />} >
-          <Route path="all" element={<Home featured={false} />} />
-        </Route>
-        <Route path="leaderboard" element={<Launches />}>
+        <Route path="/" element={<Home featured />} />
+        <Route path="all" element={<Home />} />
+        <Route path="/leaderboard" element={<Launches featured />}>
           <Route path="daily/:year/:month/:day" element={<Launches featured />}>
-            <Route path="all" element={<Launches featured={false} />} />
+            <Route path="all" element={<Launches />} />
           </Route>
-          <Route path="weekly/:year/:week" element={<Launches featured />} >
-            <Route path="all" element={<Launches featured={false} />} />
+          <Route path="weekly/:year/:week" element={<Launches featured />}>
+            <Route path="all" element={<Launches />} />
           </Route>
-          <Route path="monthly/:year/:month" element={<Launches featured />} >
-            <Route path="all" element={<Launches featured={false} />} />
+          <Route path="monthly/:year/:month" element={<Launches featured />}>
+            <Route path="all" element={<Launches />} />
           </Route>
           <Route path="yearly/:year" element={<Launches featured />} >
-            <Route path="all" element={<Launches featured={false} />} />
+            <Route path="all" element={<Launches />} />
           </Route>
         </Route>
-        <Route path="products" element={<Products />} />
-        <Route path="news" element={<News />} />
-        <Route path="community" element={<Community />} />
-        <Route path="advertise" element={<Advertise />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/news" element={<News />} />
+        <Route path="/community" element={<Community />} />
+        <Route path="/advertise" element={<Advertise />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </>
@@ -55,4 +54,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

@@ -20,33 +20,12 @@ $text-color: #4b587c;
 		gap: 1rem;
 	}
 
-	.button-group {
-		display: flex;
-		align-items: center;
-		gap: 7px;
-
-		.category-btn {
-			text-decoration: none;
-			color: $text-color;
-			font-size: 0.85rem;
-			font-weight: 500;
-			cursor: pointer;
-		}
-
-		.active {
-			color: #e12e0d;
-		}
-
-		span {
-			font-size: 0.75rem;
-		}
-	}
-
 	.link {
 		text-decoration: none;
 		color: $text-color;
 		padding-bottom: 0.35rem;
 	}
+
 	.link-active {
 		color: #e12e0d;
 		border-bottom: 3px solid #e12e0d;
@@ -54,7 +33,7 @@ $text-color: #4b587c;
 }
 
 .pagination {
-	margin-top: 1.25rem;
+	margin: 1rem 0;
 	border: 1px solid #d9e1ec;
 	padding: 0.5rem;
 	border-radius: 5px;

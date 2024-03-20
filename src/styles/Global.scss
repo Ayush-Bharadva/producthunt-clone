@@ -10,6 +10,28 @@ $text-color: #4b587c;
 	overflow: hidden;
 }
 
+.button-group {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+
+	.category-btn {
+		text-decoration: none;
+		color: $text-color;
+		font-size: 0.85rem;
+		font-weight: 500;
+		cursor: pointer;
+	}
+
+	.active {
+		color: #e12e0d;
+	}
+
+	span {
+		font-size: 0.75rem;
+	}
+}
+
 .text-button {
 	background: none;
 	border: none;

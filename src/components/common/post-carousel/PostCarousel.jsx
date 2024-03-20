@@ -28,9 +28,11 @@ const PostCarousel = ({ mediaList }) => {
       </div>
       <div className="post-carousel" ref={carouselRef}>
         {mediaList.map(media => {
-          return <div className="media-wrapper" key={media.url}>
-            <img className="media" src={media.url} loading="lazy" />
-          </div>
+          return (
+            <div className="media-wrapper" key={media.url}>
+              <img className="media" src={media.url} />
+            </div>
+          )
         })}
       </div>
       <div onClick={scrollRight}>

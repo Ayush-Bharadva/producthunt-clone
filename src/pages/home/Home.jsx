@@ -1,27 +1,34 @@
 import { useQuery } from "@apollo/client"
 import { NavLink } from 'react-router-dom';
-import { GET_FEATURED_POSTS } from "../../graphql/queries";
+import { CircularProgress } from "@mui/material";
+import InfiniteScroll from "react-infinite-scroller";
+import "./Home.scss";
+import { GET_POSTS } from "../../graphql/queries";
 import TopLaunches from "../../components/home/top-launches/TopLaunches";
 import PostCard from "../../components/common/post-card/PostCard";
-import "./Home.scss";
-import InfiniteScroll from "react-infinite-scroller";
 import { useEffect, useState } from "react";
 import { PropTypes } from "prop-types";
-import { CircularProgress } from "@mui/material";
+import TopPostsByPeriod from './TopPostsByPeriod';
 
 const Home = ({ featured }) => {
 
+  // console.log("postsGroupedByDate :", postsGroupedByDate);
+  // countTotalWeeksFromYear();
+
   const [postsData, setPostsData] = useState([]);
   const [endCursor, setEndCursor] = useState(null);
+  // const cursorRef = useRef(null);
 
-  console.log('re-render, featured :', featured);
+  // console.log('previousDate :', previousDate);
+  // console.log('re-render, featured :', featured);
 
-  const { data, error, loading, fetchMore } = useQuery(GET_FEATURED_POSTS, {
+  const { data, error, loading, fetchMore } = useQuery(GET_POSTS, {
     variables: {
       "first": 10,
-      "featured": featured,
-      "order": "RANKING",
-      "after": endCursor
+      "featured": !!featured,
+      "order": "VOTES",
+      "after": endCursor,
+      "postedAfter": "2024-03-20",
     },
     keepPreviousData: true
   });
@@ -42,7 +49,6 @@ const Home = ({ featured }) => {
     });
   }, []);
 
-
   const handleLoadMore = () => {
     if (!loading && data && data.posts && data.posts.pageInfo.hasNextPage) {
       fetchMore({
@@ -58,6 +64,8 @@ const Home = ({ featured }) => {
       });
     }
   }
+
+  console.log('postsData :', postsData);
 
   if (error) return <p>Error: {error.message}</p>;
 
@@ -81,6 +89,31 @@ const Home = ({ featured }) => {
           initialLoad={false}>
           {postsData.map(post => <PostCard key={post.id} post={post} />)}
         </InfiniteScroll>
+        {!hasNextPage ?
+          <>
+            <TopPostsByPeriod
+              featured={featured}
+              title="Yesterday's Top Products"
+              periodLabel="daily/2024/3/19"
+              postedAfter="2024-03-19"
+              postedBefore="2024-03-20"
+            />
+            <TopPostsByPeriod
+              featured={featured}
+              title="Last Week's Top Products"
+              periodLabel="weekly/2024/11"
+              postedAfter="2024-03-11"
+              postedBefore="2024-03-17"
+            />
+            <TopPostsByPeriod
+              featured={featured}
+              title="Last Month's Top Products"
+              periodLabel="/monthly/2024/3"
+              postedAfter="2024-03-1"
+              postedBefore="2024-03-20"
+            />
+          </>
+          : null}
       </div>
       <TopLaunches />
     </>
@@ -90,5 +123,5 @@ const Home = ({ featured }) => {
 export default Home;
 
 Home.propTypes = {
-  featured: PropTypes.bool.isRequired
-}
+  featured: PropTypes.bool
+};

@@ -6,10 +6,14 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { IoClose } from "react-icons/io5";
 import { useState } from "react";
 import MobileHeader from "./MobileHeader";
+import { getTodaysDate } from "../../../utils/helper";
 
 const Header = () => {
 
   const [isHeaderOpen, setIsHeaderOpen] = useState(false);
+
+  const [fullDate, year, month, day] = getTodaysDate();
+  console.log('fullDate :', fullDate, year, month, day)
 
   const toggleHeader = () => {
     setIsHeaderOpen(!isHeaderOpen);
@@ -27,11 +31,11 @@ const Header = () => {
         </div>
         <nav className="navbar" >
           <ul className="navbar-links" >
-            <NavLink to="leaderboard/daily/2024/3/15" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Launches</NavLink>
-            <NavLink to="products" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Products</NavLink>
-            <NavLink to="news" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>News</NavLink>
-            <NavLink to="community" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Community</NavLink>
-            <NavLink to="advertise" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Advertise</NavLink>
+            <NavLink to="/leaderboard/daily/2024/3/19" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Launches</NavLink>
+            <NavLink to="/products" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Products</NavLink>
+            <NavLink to="/news" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>News</NavLink>
+            <NavLink to="/community" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Community</NavLink>
+            <NavLink to="/advertise" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Advertise</NavLink>
           </ul>
         </nav>
         <div className="right">
