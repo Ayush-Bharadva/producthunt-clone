@@ -6,6 +6,8 @@ import PostCard from "../../components/common/post-card/PostCard";
 import { useQuery } from "@apollo/client";
 import { GET_POSTS } from "../../graphql/queries";
 import CategoryProvider from "../../context/CategoryProvider";
+import { GoArrowLeft } from "react-icons/go";
+import { GoArrowRight } from "react-icons/go";
 
 const Launches = ({ featured }) => {
 
@@ -35,7 +37,7 @@ const Launches = ({ featured }) => {
           <div className="heading-text">Best of March 12, 2024</div>
           <div className="routes">
             <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to={`/leaderboard/daily/2024/3/19`}>Daily</NavLink>
-            <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to={`/leaderboard/weekly/2024/1`}>Weekly</NavLink>
+            <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to={`/leaderboard/weekly/2024/11`}>Weekly</NavLink>
             <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to={`/leaderboard/monthly/2024/3`}>Monthly</NavLink>
             <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to={`/leaderboard/yearly/2024`}>Yearly</NavLink>
           </div>
@@ -45,14 +47,18 @@ const Launches = ({ featured }) => {
             <NavLink to="/leaderboard/daily/2024/3/19/all" className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} end>All</NavLink>
           </div>
         </div>
-        <div className="pagination">
-          {days.map((day, index) => {
-            return (
-              <div key={index}>
-                <NavLink to={`/leaderboard/daily/2024/3/${day}`} className={({ isActive }) => isActive ? "day selected" : "day"}>{day}</NavLink>
-              </div>
-            );
-          })}
+        <div className="pagination-container">
+          <GoArrowLeft />
+          <div className="pages">
+            {days.map((day, index) => {
+              return (
+                <div key={index}>
+                  <NavLink to={`/leaderboard/daily/2024/3/${day}`} className={({ isActive }) => isActive ? "page selected" : "page"}>{day}</NavLink>
+                </div>
+              );
+            })}
+          </div>
+          <GoArrowRight />
         </div>
         <div className="posts-list">
           {allPosts.map(post => <PostCard key={post.id} post={post} />)}

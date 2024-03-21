@@ -65,6 +65,21 @@ $text-color: #4b587c;
 	}
 }
 
+.see-all-button {
+	width: 100%;
+	background-color: #fff;
+	padding: 8px 16px;
+	margin: 8px 0;
+	border: 1px solid #d9e1ec;
+	text-align: center;
+	border-radius: 5px;
+	transition: all 0.2s ease;
+
+	&:hover {
+		border-color: #feb6b0;
+	}
+}
+
 @media screen and (max-width: 1440px) {
 	.main-container {
 		max-width: 990px;

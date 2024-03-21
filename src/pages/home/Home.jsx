@@ -6,66 +6,56 @@ import "./Home.scss";
 import { GET_POSTS } from "../../graphql/queries";
 import TopLaunches from "../../components/home/top-launches/TopLaunches";
 import PostCard from "../../components/common/post-card/PostCard";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PropTypes } from "prop-types";
-import TopPostsByPeriod from './TopPostsByPeriod';
+import TopPostsByPeriod from "./TopPostsByPeriod";
 
 const Home = ({ featured }) => {
 
-  // console.log("postsGroupedByDate :", postsGroupedByDate);
-  // countTotalWeeksFromYear();
-
-  const [postsData, setPostsData] = useState([]);
-  const [endCursor, setEndCursor] = useState(null);
-  // const cursorRef = useRef(null);
-
-  // console.log('previousDate :', previousDate);
-  // console.log('re-render, featured :', featured);
-
-  const { data, error, loading, fetchMore } = useQuery(GET_POSTS, {
-    variables: {
-      "first": 10,
-      "featured": !!featured,
-      "order": "VOTES",
-      "after": endCursor,
-      "postedAfter": "2024-03-20",
-    },
-    keepPreviousData: true
+  const [postState, setPostState] = useState({
+    postsData: [],
+    endCursor: null,
+    hasMore: true
   });
 
-  const { posts: { pageInfo: { hasNextPage } = {} } = {} } = data || {};
+  const { postsData, endCursor, hasMore } = postState;
 
-  useEffect(() => {
-    fetchMore({
-      variables: {
-        "first": 10,
-        "featured": true,
-        "order": "RANKING",
-        "after": endCursor
-      },
-    }).then(newData => {
-      setPostsData(newData.data.posts.nodes);
-      setEndCursor(newData.data.posts.pageInfo.endCursor);
-    });
-  }, []);
+  const { error, fetchMore } = useQuery(GET_POSTS, {
+    variables: {
+      "first": 10,
+      "featured": true,
+      "postedAfter": "2024-03-21",
+      "after": null,
+    },
+    onCompleted: (data) => {
+      const { posts } = data ?? {};
+      setPostState(() => ({
+        postsData: posts.nodes,
+        hasMore: posts.pageInfo.hasNextPage,
+        endCursor: posts.pageInfo.endCursor
+      }));
+    }
+  });
 
   const handleLoadMore = () => {
-    if (!loading && data && data.posts && data.posts.pageInfo.hasNextPage) {
+    if (hasMore) {
       fetchMore({
         variables: {
-          "first": 10,
-          "featured": true,
-          "order": "RANKING",
           "after": endCursor
+        },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult) return prev;
+          console.log("fetchMoreResult", fetchMoreResult);
+
+          setPostState((prev) => ({
+            postsData: [...prev.postsData, ...fetchMoreResult.posts.nodes],
+            hasMore: fetchMoreResult.posts.pageInfo.hasNextPage,
+            endCursor: fetchMoreResult.posts.pageInfo.endCursor
+          }));
         }
-      }).then(newData => {
-        setPostsData([...postsData, ...newData.data.posts.nodes]);
-        setEndCursor(newData.data.posts.pageInfo.endCursor);
       });
     }
   }
-
-  console.log('postsData :', postsData);
 
   if (error) return <p>Error: {error.message}</p>;
 
@@ -83,13 +73,13 @@ const Home = ({ featured }) => {
         <InfiniteScroll
           className="posts-container"
           loadMore={handleLoadMore}
-          hasMore={hasNextPage}
+          hasMore={hasMore}
           loader={<CircularProgress />}
           threshold={50}
           initialLoad={false}>
           {postsData.map(post => <PostCard key={post.id} post={post} />)}
         </InfiniteScroll>
-        {!hasNextPage ?
+        {!hasMore ?
           <>
             <TopPostsByPeriod
               featured={featured}
@@ -108,7 +98,7 @@ const Home = ({ featured }) => {
             <TopPostsByPeriod
               featured={featured}
               title="Last Month's Top Products"
-              periodLabel="/monthly/2024/3"
+              periodLabel="monthly/2024/3"
               postedAfter="2024-03-1"
               postedBefore="2024-03-20"
             />

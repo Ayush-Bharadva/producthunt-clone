@@ -59,7 +59,7 @@ export const getTodaysDate = () => {
 };
 
 const todaysDate = new Date().toISOString().split("T")[0];
-console.log("todaysDate :", todaysDate);
+// console.log("todaysDate :", todaysDate);
 
 export const formatDate = date => {
 	return format(new Date(date), "yyyy-MM-dd");

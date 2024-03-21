@@ -9,6 +9,10 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
   headers: {
     "Authorization": `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`
+  },
+  onError: ({ networkErrors, graphQLErrors }) => {
+    console.log('graphQLErrors :', graphQLErrors);
+    console.log('networkErrors :', networkErrors);
   }
 });
 
