@@ -1,8 +1,8 @@
 import { PropTypes } from "prop-types";
 import "./PostCarousel.scss";
-import { HiOutlineArrowLeftCircle } from "react-icons/hi2";
-import { HiOutlineArrowCircleRight } from "react-icons/hi";
 import { useRef } from "react";
+import { IoArrowBackCircleOutline } from "react-icons/io5";
+import { IoArrowForwardCircleOutline } from "react-icons/io5";
 
 const PostCarousel = ({ mediaList }) => {
 
@@ -23,8 +23,8 @@ const PostCarousel = ({ mediaList }) => {
 
   return (
     <div className="carousel-wrapper">
-      <div onClick={scrollLeft}>
-        <HiOutlineArrowLeftCircle className="left-arrow" />
+      <div onClick={scrollLeft} className="left-arrow">
+        <IoArrowBackCircleOutline />
       </div>
       <div className="post-carousel" ref={carouselRef}>
         {mediaList.map(media => {
@@ -35,8 +35,8 @@ const PostCarousel = ({ mediaList }) => {
           )
         })}
       </div>
-      <div onClick={scrollRight}>
-        <HiOutlineArrowCircleRight className="right-arrow" />
+      <div onClick={scrollRight} className="right-arrow">
+        <IoArrowForwardCircleOutline />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client";
 import { NavLink } from 'react-router-dom';
 import { CircularProgress } from "@mui/material";
 import InfiniteScroll from "react-infinite-scroller";
@@ -6,56 +6,64 @@ import "./Home.scss";
 import { GET_POSTS } from "../../graphql/queries";
 import TopLaunches from "../../components/home/top-launches/TopLaunches";
 import PostCard from "../../components/common/post-card/PostCard";
-import { useState } from "react";
+import { lazy, useCallback, useState } from "react";
 import { PropTypes } from "prop-types";
-import TopPostsByPeriod from "./TopPostsByPeriod";
 
-const Home = ({ featured }) => {
+const TopPostsByPeriod = lazy(() => import("./TopPostsByPeriod"));
+
+const Home = () => {
 
   const [postState, setPostState] = useState({
-    postsData: [],
+    postsList: [],
     endCursor: null,
     hasMore: true
   });
+  const [isFeaturedPosts, setIsFeaturedPosts] = useState(true);
 
-  const { postsData, endCursor, hasMore } = postState;
+  // const currentDate = getTodaysDate();
+
+  const filterAllPosts = () => {
+    setIsFeaturedPosts(false);
+  };
+
+  const { postsList, endCursor, hasMore } = postState;
 
   const { error, fetchMore } = useQuery(GET_POSTS, {
     variables: {
       "first": 10,
-      "featured": true,
+      "featured": isFeaturedPosts,
       "postedAfter": "2024-03-21",
       "after": null,
     },
     onCompleted: (data) => {
       const { posts } = data ?? {};
       setPostState(() => ({
-        postsData: posts.nodes,
+        postsList: posts.nodes,
         hasMore: posts.pageInfo.hasNextPage,
         endCursor: posts.pageInfo.endCursor
       }));
     }
   });
 
-  const handleLoadMore = () => {
+  const handleLoadMore = useCallback(() => {
     if (hasMore) {
       fetchMore({
         variables: {
           "after": endCursor
         },
         updateQuery: (prev, { fetchMoreResult }) => {
-          if (!fetchMoreResult) return prev;
-          console.log("fetchMoreResult", fetchMoreResult);
-
+          if (!fetchMoreResult) {
+            return prev;
+          }
           setPostState((prev) => ({
-            postsData: [...prev.postsData, ...fetchMoreResult.posts.nodes],
+            postsList: [...prev.postsList, ...fetchMoreResult.posts.nodes],
             hasMore: fetchMoreResult.posts.pageInfo.hasNextPage,
             endCursor: fetchMoreResult.posts.pageInfo.endCursor
           }));
         }
       });
     }
-  }
+  }, [endCursor, hasMore, fetchMore])
 
   if (error) return <p>Error: {error.message}</p>;
 
@@ -77,26 +85,29 @@ const Home = ({ featured }) => {
           loader={<CircularProgress />}
           threshold={50}
           initialLoad={false}>
-          {postsData.map(post => <PostCard key={post.id} post={post} />)}
+          {postsList.map(post => <PostCard key={post.id} post={post} />)}
         </InfiniteScroll>
         {!hasMore ?
           <>
             <TopPostsByPeriod
-              featured={featured}
+              featured={isFeaturedPosts}
+              filterAllPosts={filterAllPosts}
               title="Yesterday's Top Products"
               periodLabel="daily/2024/3/19"
               postedAfter="2024-03-19"
               postedBefore="2024-03-20"
             />
             <TopPostsByPeriod
-              featured={featured}
+              featured={isFeaturedPosts}
+              filterAllPosts={filterAllPosts}
               title="Last Week's Top Products"
               periodLabel="weekly/2024/11"
               postedAfter="2024-03-11"
               postedBefore="2024-03-17"
             />
             <TopPostsByPeriod
-              featured={featured}
+              featured={isFeaturedPosts}
+              filterAllPosts={filterAllPosts}
               title="Last Month's Top Products"
               periodLabel="monthly/2024/3"
               postedAfter="2024-03-1"

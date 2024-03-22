@@ -55,6 +55,10 @@ $text-color: #4b587c;
 			border: none;
 			text-align: left;
 			flex: 1 0;
+			color: $text-color;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
 		}
 		.search-arrow {
 			font-size: 1.25rem;

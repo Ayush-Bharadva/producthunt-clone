@@ -12,9 +12,6 @@ const TopLaunches = () => {
           <p className="launch">Last month&apos;s winners</p>
         </div>
       </div>
-      {/* <div className="coming-soon"></div>
-      <div className="latest-stories"></div>
-      <div className="discussions"></div> */}
     </div>
   )
 }

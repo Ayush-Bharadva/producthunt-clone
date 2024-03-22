@@ -127,7 +127,8 @@ $text-color: #4b587c;
 		}
 	}
 	.main-container {
-		.home-container {
+		.home-container,
+		.launches-container {
 			max-width: 100%;
 			margin: 0 2rem;
 		}
@@ -163,7 +164,8 @@ $text-color: #4b587c;
 		max-width: 100% !important;
 		margin: 0 1rem !important;
 
-		.home-container {
+		.home-container,
+		.launches-container {
 			margin: 0;
 		}
 	}

@@ -10,7 +10,6 @@ import { useModal } from '../../../hooks/useModal';
 const PostCard = ({ post }) => {
 
   const { isModalOpen, toggleModal } = useModal();
-
   const { topics: { edges } } = post;
 
   return (

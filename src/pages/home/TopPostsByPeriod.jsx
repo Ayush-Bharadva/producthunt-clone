@@ -3,9 +3,9 @@ import { useQuery } from '@apollo/client';
 import { GET_POSTS } from '../../graphql/queries';
 import { NavLink, useNavigate } from 'react-router-dom';
 import PostCard from '../../components/common/post-card/PostCard';
-// import { CircularProgress } from "@mui/material";
+import { useMemo } from 'react';
 
-const TopPostsByPeriod = ({ featured, title, periodLabel, postedBefore, postedAfter }) => {
+const TopPostsByPeriod = ({ featured, filterAllPosts, title, periodLabel, postedBefore, postedAfter }) => {
 
   const navigate = useNavigate();
 
@@ -24,26 +24,27 @@ const TopPostsByPeriod = ({ featured, title, periodLabel, postedBefore, postedAf
     navigate(`/leaderboard/${periodLabel}`);
   };
 
-  const { posts: { nodes: productsList } = {} } = data || {};
+  const productsList = useMemo(() => data?.posts?.nodes || [], [data]);
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <>
+    <div className="period-wise-products">
       <div className="heading">
         <p className="title">{title}</p>
         <div className="button-group">
           <NavLink to={`/leaderboard/${periodLabel}`} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"}>Featured</NavLink>
           <span>|</span>
-          <NavLink to={`/leaderboard/${periodLabel}/all`} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} end>All</NavLink>
+          <NavLink to={`/leaderboard/${periodLabel}/all`} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} onClick={filterAllPosts} end>All</NavLink>
         </div>
       </div>
-      <div>
-        {productsList?.map(post => <PostCard key={post.id} post={post} />)}
-      </div>
+      {productsList.length > 0 &&
+        (<div>
+          {productsList?.map(post => <PostCard key={post.id} post={post} />)}
+        </div>)}
       <button type="button" className="see-all-button" onClick={handleNavigation}>
         See all {title.toLowerCase()}
       </button>
-    </>
+    </div>
   );
 }
 
@@ -54,5 +55,6 @@ TopPostsByPeriod.propTypes = {
   title: PropTypes.string,
   periodLabel: PropTypes.string,
   postedBefore: PropTypes.string,
-  postedAfter: PropTypes.string
+  postedAfter: PropTypes.string,
+  filterAllPosts: PropTypes.func
 };

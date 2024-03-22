@@ -45,7 +45,6 @@ export const GET_POSTS = gql`
 			pageInfo {
 				endCursor
 				hasNextPage
-				hasPreviousPage
 				startCursor
 			}
 			totalCount

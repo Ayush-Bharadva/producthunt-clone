@@ -1,50 +1,57 @@
-import { NavLink, useLocation } from "react-router-dom"
-import { PropTypes } from "prop-types";
+import { useState } from "react";
+import { useQuery } from "@apollo/client";
+import { NavLink } from "react-router-dom"
+import { GoArrowLeft, GoArrowRight } from "react-icons/go";
 import "./Launches.scss";
 import { days, years } from "../../utils/constants";
 import PostCard from "../../components/common/post-card/PostCard";
-import { useQuery } from "@apollo/client";
 import { GET_POSTS } from "../../graphql/queries";
-import CategoryProvider from "../../context/CategoryProvider";
-import { GoArrowLeft } from "react-icons/go";
-import { GoArrowRight } from "react-icons/go";
 
-const Launches = ({ featured }) => {
+const Launches = () => {
 
-  const location = useLocation();
-  // const navigate = useNavigate();
-  // const { year, month, day } = useParams();
+  const [postState, setPostState] = useState({
+    postsList: [],
+    endCursor: null,
+    hasMore: true
+  });
 
-  console.log(location.pathname, 'featured :', featured);
-  // console.log('featured :', featured)
-  const { data, error, loading } = useQuery(GET_POSTS, {
+  const { error } = useQuery(GET_POSTS, {
     variables: {
       "first": 15,
       "featured": true,
-      "order": "RANKING"
+    },
+    onCompleted: (data) => {
+      const { posts } = data ?? {};
+      setPostState(() => ({
+        postsList: posts.nodes ?? [],
+        hasMore: posts.pageInfo.hasNextPage ?? false,
+        endCursor: posts.pageInfo.endCursor ?? null
+      }));
     }
   });
 
-  if (loading) return <p>Loading...</p>;
+  const { postsList } = postState;
+
   if (error) return <p>Error: {error.message}</p>;
 
-  const { nodes: allPosts } = data.posts;
+  const isActiveLink = ({ isActive }) => isActive ? "link link-active" : "link";
+  const isButtonActive = ({ isActive }) => isActive ? "category-btn active" : "category-btn";
 
   return (
-    <CategoryProvider>
+    <>
       <div className="launches-container">
         <div className="launches-heading">
           <div className="heading-text">Best of March 12, 2024</div>
           <div className="routes">
-            <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to={`/leaderboard/daily/2024/3/19`}>Daily</NavLink>
-            <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to={`/leaderboard/weekly/2024/11`}>Weekly</NavLink>
-            <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to={`/leaderboard/monthly/2024/3`}>Monthly</NavLink>
-            <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to={`/leaderboard/yearly/2024`}>Yearly</NavLink>
+            <NavLink className={isActiveLink} to={`/leaderboard/daily/2024/3/21`}>Daily</NavLink>
+            <NavLink className={isActiveLink} to={`/leaderboard/weekly/2024/11`}>Weekly</NavLink>
+            <NavLink className={isActiveLink} to={`/leaderboard/monthly/2024/3`}>Monthly</NavLink>
+            <NavLink className={isActiveLink} to={`/leaderboard/yearly/2024`}>Yearly</NavLink>
           </div>
           <div className="button-group">
-            <NavLink to="/leaderboard/daily/2024/3/19" className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} end>Featured</NavLink>
+            <NavLink to="/leaderboard/daily/2024/3/21" className={isButtonActive} end>Featured</NavLink>
             <span>|</span>
-            <NavLink to="/leaderboard/daily/2024/3/19/all" className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} end>All</NavLink>
+            <NavLink to="/leaderboard/daily/2024/3/21/all" className={isButtonActive} end>All</NavLink>
           </div>
         </div>
         <div className="pagination-container">
@@ -61,7 +68,7 @@ const Launches = ({ featured }) => {
           <GoArrowRight />
         </div>
         <div className="posts-list">
-          {allPosts.map(post => <PostCard key={post.id} post={post} />)}
+          {postsList.map(post => <PostCard key={post.id} post={post} />)}
         </div>
       </div>
       <div className="launch-archive">
@@ -76,16 +83,8 @@ const Launches = ({ featured }) => {
           })}
         </div>
       </div>
-    </CategoryProvider>
+    </>
   )
 }
 
 export default Launches;
-
-Launches.defaultProps = {
-  featured: true
-}
-
-Launches.propTypes = {
-  featured: PropTypes.bool
-};
