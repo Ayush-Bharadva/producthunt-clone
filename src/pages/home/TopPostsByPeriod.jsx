@@ -1,9 +1,9 @@
-import { PropTypes } from 'prop-types';
-import { useQuery } from '@apollo/client';
-import { GET_POSTS } from '../../graphql/queries';
-import { NavLink, useNavigate } from 'react-router-dom';
-import PostCard from '../../components/common/post-card/PostCard';
-import { useMemo } from 'react';
+import { PropTypes } from "prop-types";
+import { useQuery } from "@apollo/client";
+import { GET_POSTS } from "../../graphql/queries";
+import { NavLink, useNavigate } from "react-router-dom";
+import PostCard from "../../components/common/post-card/PostCard";
+import { useMemo } from "react";
 
 const TopPostsByPeriod = ({ featured, filterAllPosts, title, periodLabel, postedBefore, postedAfter }) => {
 
@@ -25,7 +25,10 @@ const TopPostsByPeriod = ({ featured, filterAllPosts, title, periodLabel, posted
   };
 
   const productsList = useMemo(() => data?.posts?.nodes || [], [data]);
-  if (error) return <p>Error: {error.message}</p>;
+
+  if (error) {
+    <p>Error: {error.message}</p>;
+  }
 
   return (
     <div className="period-wise-products">

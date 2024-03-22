@@ -8,10 +8,13 @@ import TopLaunches from "../../components/home/top-launches/TopLaunches";
 import PostCard from "../../components/common/post-card/PostCard";
 import { lazy, useCallback, useState } from "react";
 import { PropTypes } from "prop-types";
+import { getTodaysDate } from "../../utils/helper";
 
 const TopPostsByPeriod = lazy(() => import("./TopPostsByPeriod"));
 
 const Home = () => {
+
+  const [todaysDate, year, month, day] = getTodaysDate();
 
   const [postState, setPostState] = useState({
     postsList: [],
@@ -19,8 +22,6 @@ const Home = () => {
     hasMore: true
   });
   const [isFeaturedPosts, setIsFeaturedPosts] = useState(true);
-
-  // const currentDate = getTodaysDate();
 
   const filterAllPosts = () => {
     setIsFeaturedPosts(false);
@@ -32,7 +33,7 @@ const Home = () => {
     variables: {
       "first": 10,
       "featured": isFeaturedPosts,
-      "postedAfter": "2024-03-21",
+      "postedAfter": todaysDate,
       "after": null,
     },
     onCompleted: (data) => {
@@ -60,12 +61,15 @@ const Home = () => {
             hasMore: fetchMoreResult.posts.pageInfo.hasNextPage,
             endCursor: fetchMoreResult.posts.pageInfo.endCursor
           }));
+          return fetchMoreResult;
         }
       });
     }
-  }, [endCursor, hasMore, fetchMore])
+  }, [endCursor, hasMore, fetchMore]);
 
-  if (error) return <p>Error: {error.message}</p>;
+  if (error) {
+    return <p>Error: {error.message}</p>
+  }
 
   return (
     <>
@@ -93,15 +97,15 @@ const Home = () => {
               featured={isFeaturedPosts}
               filterAllPosts={filterAllPosts}
               title="Yesterday's Top Products"
-              periodLabel="daily/2024/3/19"
-              postedAfter="2024-03-19"
-              postedBefore="2024-03-20"
+              periodLabel={`daily/${year}/${month}/${day}`}
+              postedAfter="2024-03-20"
+              postedBefore="2024-03-21"
             />
             <TopPostsByPeriod
               featured={isFeaturedPosts}
               filterAllPosts={filterAllPosts}
               title="Last Week's Top Products"
-              periodLabel="weekly/2024/11"
+              periodLabel={`weekly/${year}/11`}
               postedAfter="2024-03-11"
               postedBefore="2024-03-17"
             />
@@ -109,7 +113,7 @@ const Home = () => {
               featured={isFeaturedPosts}
               filterAllPosts={filterAllPosts}
               title="Last Month's Top Products"
-              periodLabel="monthly/2024/3"
+              periodLabel={`monthly/${year}/3`}
               postedAfter="2024-03-1"
               postedBefore="2024-03-20"
             />

@@ -7,18 +7,19 @@ import { IoArrowForwardCircleOutline } from "react-icons/io5";
 const PostCarousel = ({ mediaList }) => {
 
   const carouselRef = useRef(null);
+  const carouselImageRef = useRef(null);
 
-  const handleCarousalScroll = (scrollWidth) => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollLeft += scrollWidth;
+  const handleCarousalScroll = (dir) => {
+    if (carouselRef.current && carouselImageRef.current) {
+      carouselRef.current.scrollLeft += (dir * carouselImageRef.current.scrollWidth);
     }
   };
 
   const scrollLeft = () => {
-    handleCarousalScroll(-350);
+    handleCarousalScroll(-1);
   };
   const scrollRight = () => {
-    handleCarousalScroll(350);
+    handleCarousalScroll(1);
   };
 
   return (
@@ -30,9 +31,9 @@ const PostCarousel = ({ mediaList }) => {
         {mediaList.map(media => {
           return (
             <div className="media-wrapper" key={media.url}>
-              <img className="media" src={media.url} />
+              <img ref={carouselImageRef} className="media" src={media.url} />
             </div>
-          )
+          );
         })}
       </div>
       <div onClick={scrollRight} className="right-arrow">

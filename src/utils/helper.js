@@ -12,6 +12,7 @@ import {
 	getDate,
 	startOfWeek,
 	endOfWeek,
+	add,
 } from "date-fns";
 
 export const getAllDaysInMonth = (year, month) => {
@@ -22,12 +23,21 @@ export const getAllDaysInMonth = (year, month) => {
 	return allDays.map(day => getDate(day));
 };
 
+export const getTodaysPSTdate = () => {
+	const currentDate = format(new Date(), "yyyy-MM-dd");
+	const result = add(new Date(currentDate), { hours: 12, minutes: 30 });
+	return format(result, "yyyy-MM-dd");
+	// return pstDate;
+};
+
 /***********************************************************************************************/
 
 export const getTodaysDate = () => {
 	const currentDate = format(new Date(), "yyyy-MM-dd");
+	const [year, month, day] = currentDate.split("-");
 	console.log("currentDate :", currentDate);
-	return currentDate;
+
+	return [currentDate, year, month, day];
 };
 
 export function getWeeksOfYear(year) {
@@ -58,3 +68,6 @@ export function getWeeksOfYear(year) {
 
 	return weeks;
 }
+
+export const getActiveLinkClassName = (isActive, base, active) =>
+	isActive ? `${base} ${active}` : `${base}`;
