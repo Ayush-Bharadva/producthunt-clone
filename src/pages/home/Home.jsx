@@ -8,13 +8,15 @@ import TopLaunches from "../../components/home/top-launches/TopLaunches";
 import PostCard from "../../components/common/post-card/PostCard";
 import { lazy, useCallback, useState } from "react";
 import { PropTypes } from "prop-types";
-import { getTodaysDate } from "../../utils/helper";
+import { getTodaysPSTDate, getYesterdaysPSTDate } from "../../utils/helper.js";
 
 const TopPostsByPeriod = lazy(() => import("./TopPostsByPeriod"));
 
 const Home = () => {
 
-  const [todaysDate, year, month, day] = getTodaysDate();
+  const [todaysDate, year, month, day] = getTodaysPSTDate();
+  const [yesterdaysDate] = getYesterdaysPSTDate();
+  console.log("todaysDate", todaysDate);
 
   const [postState, setPostState] = useState({
     postsList: [],
@@ -98,8 +100,8 @@ const Home = () => {
               filterAllPosts={filterAllPosts}
               title="Yesterday's Top Products"
               periodLabel={`daily/${year}/${month}/${day}`}
-              postedAfter="2024-03-20"
-              postedBefore="2024-03-21"
+              postedAfter={yesterdaysDate}
+              postedBefore={todaysDate}
             />
             <TopPostsByPeriod
               featured={isFeaturedPosts}

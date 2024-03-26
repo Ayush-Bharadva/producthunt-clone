@@ -35,7 +35,7 @@ const TopPostsByPeriod = ({ featured, filterAllPosts, title, periodLabel, posted
       <div className="heading">
         <p className="title">{title}</p>
         <div className="button-group">
-          <NavLink to={`/leaderboard/${periodLabel}`} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"}>Featured</NavLink>
+          <NavLink to={`/`} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"}>Featured</NavLink>
           <span>|</span>
           <NavLink to={`/leaderboard/${periodLabel}/all`} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} onClick={filterAllPosts} end>All</NavLink>
         </div>

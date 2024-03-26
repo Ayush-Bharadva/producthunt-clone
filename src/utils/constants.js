@@ -1,17 +1,4 @@
-export const years = [
-	"2024",
-	"2023",
-	"2022",
-	"2021",
-	"2020",
-	"2019",
-	"2018",
-	"2017",
-	"2016",
-	"2015",
-	"2014",
-	"2013",
-];
+export const years = ["2024", "2023", "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013"];
 
 export const days = [
 	"1",
@@ -46,6 +33,8 @@ export const days = [
 	"30",
 	"31",
 ];
+
+export const Weeks = ["Feb 26 - Mar 3", "Mar 4 - Mar 10", "Mar 11 - Mar 17", "Mar 18 - Mar 24", "Mar 25 - Mar 31"];
 
 export const TrendingSearches = ["Edrawmax", "Eesee", "Shar", "Sha", "Sharpe"];
 

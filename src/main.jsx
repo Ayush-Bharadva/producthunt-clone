@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client"
 import App from "./App.jsx"
 import "./index.scss"
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
+import { GoogleOAuthProvider } from "@react-oauth/google"
 
 const client = new ApolloClient({
   uri: import.meta.env.VITE_API_URL,
@@ -17,9 +18,11 @@ const client = new ApolloClient({
 });
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
-  </React.StrictMode>,
+  <GoogleOAuthProvider clientId="710618875060-pnfhfiarsioofdaasi9f0aqgs17u6q5b.apps.googleusercontent.com">
+    <React.StrictMode>
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
+    </React.StrictMode>
+  </GoogleOAuthProvider>,
 );

@@ -2,28 +2,28 @@ import { NavLink } from "react-router-dom";
 import SearchInput from "../search-box/SearchInput";
 import { FaAngleRight } from "react-icons/fa6";
 
-const MobileHeader = () => {
+const MobileNavigationMenu = () => {
   return (
-    <div className="mobile-header">
+    <div className="mobile-navigation-menu">
       <SearchInput />
-      <nav className="mobile-header-nav">
-        <div className="mobile-header-link">
+      <nav className="mobile-nav">
+        <div className="nav-link">
           <NavLink to="leaderboard">Launches</NavLink>
           <FaAngleRight />
         </div>
-        <div className="mobile-header-link">
+        <div className="nav-link">
           <NavLink to="products">Products</NavLink>
           <FaAngleRight />
         </div>
-        <div className="mobile-header-link">
+        <div className="nav-link">
           <NavLink to="news">News</NavLink>
           <FaAngleRight />
         </div>
-        <div className="mobile-header-link">
+        <div className="nav-link">
           <NavLink to="community">Community</NavLink>
           <FaAngleRight />
         </div>
-        <div className="mobile-header-link">
+        <div className="nav-link">
           <NavLink to="advertise">Advertise</NavLink>
         </div>
       </nav>
@@ -31,4 +31,4 @@ const MobileHeader = () => {
   )
 }
 
-export default MobileHeader
+export default MobileNavigationMenu
