@@ -1,7 +1,6 @@
 $text-color: #4b587c;
 
 .launches-container {
-	// margin: 0 auto;
 	padding-right: 2rem;
 	text-align: center;
 	padding-right: 3rem;
@@ -26,38 +25,54 @@ $text-color: #4b587c;
 		color: $text-color;
 		padding-bottom: 0.35rem;
 	}
+
 	.link-active {
 		color: #e12e0d;
 		border-bottom: 3px solid #e12e0d;
 	}
 }
 
-.pagination {
-	margin-top: 1.25rem;
+.pagination-container {
+	margin: 1rem 0;
 	border: 1px solid #d9e1ec;
 	padding: 0.5rem;
 	border-radius: 5px;
-	display: flex;
-	justify-content: space-evenly;
 	font-size: 0.75rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 7px;
 
-	.day {
-		flex: 1 1 0;
-		text-decoration: none;
-		color: $text-color;
-		cursor: pointer;
-		padding: 0.35rem;
-		border-radius: 5px;
+	.pages {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+		.page {
+			flex: 1 1 0;
+			text-decoration: none;
+			color: $text-color;
+			cursor: pointer;
+			padding: 0.35rem;
+			border-radius: 5px;
 
-		&:hover {
-			background-color: #e8e8e8;
+			&:hover {
+				background-color: #e8e8e8;
+			}
+		}
+
+		.selected {
+			color: #ff6154;
+			background-color: rgba(255, 97, 84, 0.1);
+			pointer-events: none;
 		}
 	}
 
-	.selected {
-		color: #ff6154;
-		background-color: rgba(255, 97, 84, 0.1);
-		pointer-events: none;
+	.move-left-btn,
+	.move-right-btn {
+		cursor: pointer;
+		&:hover {
+			background-color: #e8e8e8;
+		}
 	}
 }
 
@@ -79,7 +94,6 @@ $text-color: #4b587c;
 			cursor: pointer;
 			padding: 0.15rem 0.5rem;
 			border-radius: 4px;
-			// font-weight: 500;
 
 			.archive-link {
 				text-decoration: none;

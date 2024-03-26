@@ -1,16 +1,34 @@
 import { gql } from "@apollo/client";
 
 export const GET_POSTS = gql`
-	query GetPosts($first: Int, $featured: Boolean, $order: PostsOrder) {
-		posts(first: $first, featured: $featured, order: $order) {
+	query GetPosts(
+		$first: Int
+		$featured: Boolean
+		$order: PostsOrder
+		$after: String
+		$postedBefore: DateTime
+		$postedAfter: DateTime
+	) {
+		posts(
+			first: $first
+			featured: $featured
+			order: $order
+			after: $after
+			postedBefore: $postedBefore
+			postedAfter: $postedAfter
+		) {
 			nodes {
 				id
 				name
 				tagline
-				createdAt
-				featuredAt
+				description
 				commentsCount
 				votesCount
+				media {
+					url
+					videoUrl
+				}
+				website
 				thumbnail {
 					type
 					url
@@ -23,14 +41,12 @@ export const GET_POSTS = gql`
 						}
 					}
 				}
-				website
 			}
-			# pageInfo {
-			# 	endCursor
-			# 	hasNextPage
-			# 	hasPreviousPage
-			# 	startCursor
-			# }
+			pageInfo {
+				endCursor
+				hasNextPage
+				startCursor
+			}
 			totalCount
 		}
 	}

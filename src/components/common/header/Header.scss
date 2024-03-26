@@ -1,8 +1,18 @@
 $text-color: #4b587c;
 
+img {
+	height: 100%;
+	width: 100%;
+	object-fit: contain;
+	background: transparent;
+}
+
+.close-header {
+	font-size: 1.75rem;
+	color: $text-color;
+}
+
 .header {
-	width: 100vw;
-	width: 99vw;
 	height: 70px;
 	display: grid;
 	grid-template-columns: 1fr 2fr 1fr;
@@ -15,6 +25,11 @@ $text-color: #4b587c;
 		justify-content: flex-start;
 		align-items: center;
 		gap: 32px;
+
+		.hamburger-menu {
+			display: none;
+			align-self: flex-end;
+		}
 	}
 
 	.navbar {
@@ -31,10 +46,6 @@ $text-color: #4b587c;
 				text-decoration: none;
 				color: $text-color;
 			}
-
-			// .nav-link:active {
-			// 	color: #e12e0d;
-			// }
 
 			.active {
 				color: #e12e0d;
@@ -59,9 +70,47 @@ $text-color: #4b587c;
 	}
 }
 
-img {
-	height: 100%;
+.mobile-navigation-menu {
+	position: absolute;
+	top: 65px;
+	left: 0;
+	height: calc(100vh - 65px);
 	width: 100%;
-	object-fit: contain;
-	background: transparent;
+	padding: 2rem;
+	background-color: white;
+	background-attachment: fixed;
+
+	.mobile-nav {
+		margin-top: 1.5rem;
+		width: 100%;
+
+		.nav-link {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			font-size: 1.2rem;
+			margin: 1rem 0;
+			cursor: pointer;
+
+			a {
+				flex: 1 0;
+				text-decoration: none;
+				color: #333;
+				font-weight: 500;
+			}
+		}
+	}
+}
+
+.user-avatar {
+	height: 32px;
+	width: auto;
+}
+
+@media screen and (min-width: 761px) {
+	.mobile-header,
+	.hamburger-menu,
+	.close-header {
+		display: none;
+	}
 }
