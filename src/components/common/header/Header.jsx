@@ -1,50 +1,34 @@
-import { NavLink } from "react-router-dom";
+import { googleLogout, useGoogleLogin } from "@react-oauth/google";
+import { NavLink, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import "./Header.scss";
 import Logo from "./../logo/Logo";
-import SearchInput from "../search-box/SearchInput";
+import SearchInput from "../search-input/SearchInput";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoClose } from "react-icons/io5";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import MobileNavigationMenu from "./MobileNavigationMenu";
-import { AuthContext } from "../../../context/AuthProvider";
+
+const isActiveLink = ({ isActive }) => isActive ? "nav-link active" : "nav-link";
 
 const Header = () => {
 
-  const [isHeaderOpen, setIsHeaderOpen] = useState(false);
-  const { login, logOut } = useContext(AuthContext);
-  const userProfile = JSON.parse(localStorage.getItem("profile"));
-
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleHeader = () => {
-    setIsHeaderOpen(!isHeaderOpen);
+    setIsMenuOpen(!isMenuOpen);
   }
-
-  useEffect(() => {
-    if (isHeaderOpen) {
-      document.body.classList.add('overflow-hidden');
-    } else {
-      document.body.classList.remove('overflow-hidden');
-    }
-    return () => {
-      document.body.classList.remove('overflow-hidden');
-    };
-  }, [isHeaderOpen]);
-
-  const isActiveLink = ({ isActive }) => isActive ? "nav-link active" : "nav-link";
-
-  console.log("userProfile", userProfile);
 
   return (
     <>
       <header className="header">
         <div className="left">
-          {!isHeaderOpen ?
+          {!isMenuOpen ?
             <RxHamburgerMenu className="hamburger-menu" onClick={toggleHeader} /> :
             <IoClose className="close-header" onClick={toggleHeader} />}
           <Logo />
           <SearchInput />
         </div>
-        <nav className={isHeaderOpen ? "navbar" : "navbar"}>
+        <nav className="navbar">
           <ul className="navbar-links" >
             <NavLink to="/leaderboard/daily/2024/3/21" className={isActiveLink}>Launches</NavLink>
             <NavLink to="/products" className={isActiveLink}>Products</NavLink>
@@ -55,21 +39,56 @@ const Header = () => {
         </nav>
         <div className="right">
           <button type="button" className="text-button">How to post?</button>
-          <UserProfileButton userProfile={userProfile} logOut={logOut} login={login} />
+          <UserProfileButton />
         </div>
       </header>
-      {isHeaderOpen && <MobileNavigationMenu />}
+      <MobileNavigationMenu isMenuOpen={isMenuOpen} />
     </>
   )
 }
 
 export default Header;
 
-const UserProfileButton = ({ userProfile, logOut, login }) => {
-  return userProfile.picture ?
+const UserProfileButton = () => {
+
+  const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const navigate = useNavigate();
+
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => setUser(codeResponse),
+    onError: (error) => console.log("Login Failed :", error),
+  });
+
+  useEffect(() => {
+    if (user) {
+      fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+        headers: {
+          "Authorization": `Bearer ${user.access_token}`,
+          "Accept": "application/json"
+        }
+      }).then((response) => response.json()).then((data) => {
+        setProfile(data);
+        localStorage.setItem("profile", JSON.stringify(data));
+      }).catch((error) => console.log("Error: ", error));
+    }
+  }, [user])
+
+  const navigateToUserProfile = () => {
+    navigate("/user");
+  }
+
+  const logOut = useCallback(() => {
+    googleLogout();
+    setUser(null);
+    setProfile(null);
+    localStorage.removeItem("profile");
+  }, []);
+
+  return profile?.picture ?
     <>
-      <div className="user-avatar">
-        <img src={userProfile?.picture} alt="user-avatar" />
+      <div className="user-avatar" onClick={navigateToUserProfile}>
+        <img src={profile.picture} alt="user-avatar" />
       </div>
       <button type="button" className="sign-in-btn" onClick={logOut}>Log Out</button>
     </>

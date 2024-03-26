@@ -12,10 +12,10 @@ const TopPostsByPeriod = ({ featured, filterAllPosts, title, periodLabel, posted
   const { data, error } = useQuery(GET_POSTS, {
     variables: {
       "first": 5,
-      "featured": !!featured,
+      "featured": true,
       "order": "VOTES",
-      "postedAfter": postedAfter,
-      "postedBefore": postedBefore
+      "postedAfter": postedAfter || null,
+      "postedBefore": postedBefore || null
     },
     keepPreviousData: true
   });
@@ -37,7 +37,7 @@ const TopPostsByPeriod = ({ featured, filterAllPosts, title, periodLabel, posted
         <div className="button-group">
           <NavLink to={`/`} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"}>Featured</NavLink>
           <span>|</span>
-          <NavLink to={`/leaderboard/${periodLabel}/all`} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} onClick={filterAllPosts} end>All</NavLink>
+          <NavLink to={`/leaderboard/${periodLabel}/all`} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} onClick={handleNavigation} end>All</NavLink>
         </div>
       </div>
       {productsList.length > 0 &&

@@ -1,9 +1,23 @@
 import { NavLink } from "react-router-dom";
-import SearchInput from "../search-box/SearchInput";
+import PropTypes from "prop-types";
+import SearchInput from "../search-input/SearchInput";
 import { FaAngleRight } from "react-icons/fa6";
+import { useEffect } from "react";
 
-const MobileNavigationMenu = () => {
-  return (
+const MobileNavigationMenu = ({ isMenuOpen }) => {
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.classList.add('overflow-hidden');
+    } else {
+      document.body.classList.remove('overflow-hidden');
+    }
+    return () => {
+      document.body.classList.remove('overflow-hidden');
+    };
+  }, [isMenuOpen]);
+
+  return isMenuOpen ? (
     <div className="mobile-navigation-menu">
       <SearchInput />
       <nav className="mobile-nav">
@@ -28,7 +42,11 @@ const MobileNavigationMenu = () => {
         </div>
       </nav>
     </div>
-  )
+  ) : null;
 }
 
-export default MobileNavigationMenu
+export default MobileNavigationMenu;
+
+MobileNavigationMenu.propTypes = {
+  isMenuOpen: PropTypes.bool
+};

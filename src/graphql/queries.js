@@ -51,3 +51,46 @@ export const GET_POSTS = gql`
 		}
 	}
 `;
+
+export const GET_ALL_POSTS_BY_DATE = gql`
+	query GetAllPostsByDate(
+		$first: Int
+		$after: String
+		$postedBefore: DateTime
+		$postedAfter: DateTime
+	) {
+		posts(first: $first, after: $after, postedBefore: $DateTime, postedAfter: $DateTime) {
+			nodes {
+				id
+				name
+				tagline
+				description
+				commentsCount
+				votesCount
+				media {
+					url
+					videoUrl
+				}
+				website
+				thumbnail {
+					type
+					url
+					videoUrl
+				}
+				topics {
+					edges {
+						node {
+							name
+						}
+					}
+				}
+			}
+			pageInfo {
+				endCursor
+				hasNextPage
+				startCursor
+			}
+			totalCount
+		}
+	}
+`;

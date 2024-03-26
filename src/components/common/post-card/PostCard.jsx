@@ -47,7 +47,8 @@ const PostCard = ({ post }) => {
         </button>
       </div>
       {isModalOpen ?
-        <SelectedPost post={post}
+        <SelectedPost
+          post={post}
           imgSrc={post.thumbnail.url}
           closeModal={toggleModal}
           mediaList={post.media}

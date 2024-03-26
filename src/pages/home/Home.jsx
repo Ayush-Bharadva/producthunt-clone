@@ -8,33 +8,39 @@ import TopLaunches from "../../components/home/top-launches/TopLaunches";
 import PostCard from "../../components/common/post-card/PostCard";
 import { lazy, useCallback, useState } from "react";
 import { PropTypes } from "prop-types";
-import { getTodaysPSTDate, getYesterdaysPSTDate } from "../../utils/helper.js";
+import { getTodaysDate, getWeekNumberFromDate, getYesterdaysDate } from "../../utils/helper.js";
 
 const TopPostsByPeriod = lazy(() => import("./TopPostsByPeriod"));
 
 const Home = () => {
 
-  const [todaysDate, year, month, day] = getTodaysPSTDate();
-  const [yesterdaysDate] = getYesterdaysPSTDate();
-  console.log("todaysDate", todaysDate);
+  const todaysDate = getTodaysDate();
+  const yesterdaysDate = getYesterdaysDate();
+  const currentWeekNumber = getWeekNumberFromDate(todaysDate);
+  // console.log('currentWeekNumber', currentWeekNumber);
+
+  // console.log(yesterdaysDate);
+
+  const [year, month, day] = todaysDate.split("-");
 
   const [postState, setPostState] = useState({
     postsList: [],
     endCursor: null,
     hasMore: true
   });
-  const [isFeaturedPosts, setIsFeaturedPosts] = useState(true);
+  // const [isFeaturedPosts, setIsFeaturedPosts] = useState(true);
+  // const [selectedDate, setSelectedDate] = useState(yesterdaysDate);
 
-  const filterAllPosts = () => {
-    setIsFeaturedPosts(false);
-  };
+  // const filterAllPosts = () => {
+  //   setIsFeaturedPosts(false);
+  // };
 
   const { postsList, endCursor, hasMore } = postState;
 
   const { error, fetchMore } = useQuery(GET_POSTS, {
     variables: {
       "first": 10,
-      "featured": isFeaturedPosts,
+      "featured": true,
       "postedAfter": todaysDate,
       "after": null,
     },
@@ -55,15 +61,26 @@ const Home = () => {
           "after": endCursor
         },
         updateQuery: (prev, { fetchMoreResult }) => {
+
+          // console.log('prevResults --handleLoadMore', prev);
+          // console.log('fetchMoreResult', fetchMoreResult);
+
           if (!fetchMoreResult) {
             return prev;
           }
+          const { posts } = fetchMoreResult;
           setPostState((prev) => ({
-            postsList: [...prev.postsList, ...fetchMoreResult.posts.nodes],
-            hasMore: fetchMoreResult.posts.pageInfo.hasNextPage,
-            endCursor: fetchMoreResult.posts.pageInfo.endCursor
+            postsList: [...prev.postsList, ...posts.nodes],
+            hasMore: posts.pageInfo.hasNextPage,
+            endCursor: posts.pageInfo.endCursor
           }));
-          return fetchMoreResult;
+          return {
+            posts: {
+              ...posts,
+              nodes: [...prev.posts.nodes, ...posts.nodes],
+              pageInfo: posts.pageInfo
+            }
+          };
         }
       });
     }
@@ -96,28 +113,28 @@ const Home = () => {
         {!hasMore ?
           <>
             <TopPostsByPeriod
-              featured={isFeaturedPosts}
-              filterAllPosts={filterAllPosts}
+              // featured={isFeaturedPosts}
+              // filterAllPosts={filterAllPosts}
               title="Yesterday's Top Products"
               periodLabel={`daily/${year}/${month}/${day}`}
               postedAfter={yesterdaysDate}
-              postedBefore={todaysDate}
+            // postedBefore={todaysDate}
             />
             <TopPostsByPeriod
-              featured={isFeaturedPosts}
-              filterAllPosts={filterAllPosts}
+              // featured={isFeaturedPosts}
+              // filterAllPosts={filterAllPosts}
               title="Last Week's Top Products"
-              periodLabel={`weekly/${year}/11`}
-              postedAfter="2024-03-11"
+              periodLabel={`weekly/${year}/${currentWeekNumber}`}
               postedBefore="2024-03-17"
+              postedAfter="2024-03-11"
             />
             <TopPostsByPeriod
-              featured={isFeaturedPosts}
-              filterAllPosts={filterAllPosts}
+              // featured={isFeaturedPosts}
+              // filterAllPosts={filterAllPosts}
               title="Last Month's Top Products"
-              periodLabel={`monthly/${year}/3`}
-              postedAfter="2024-03-1"
+              periodLabel={`monthly/${year}/${month}`}
               postedBefore="2024-03-20"
+              postedAfter="2024-03-1"
             />
           </>
           : null}

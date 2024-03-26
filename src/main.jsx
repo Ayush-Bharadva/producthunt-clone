@@ -12,8 +12,8 @@ const client = new ApolloClient({
     "Authorization": `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`
   },
   onError: ({ networkErrors, graphQLErrors }) => {
-    console.log('graphQLErrors :', graphQLErrors);
-    console.log('networkErrors :', networkErrors);
+    console.error('graphQLErrors :', graphQLErrors);
+    console.error('networkErrors :', networkErrors);
   }
 });
 
