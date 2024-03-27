@@ -48,6 +48,7 @@ const router = createBrowserRouter(
 );
 
 function App() {
+
   return (
     <Suspense fallback={<CircularProgress />}>
       <RouterProvider router={router} />

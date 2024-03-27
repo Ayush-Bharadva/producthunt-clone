@@ -5,17 +5,21 @@ import "./index.scss"
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
 import { GoogleOAuthProvider } from "@react-oauth/google"
 
+
 const client = new ApolloClient({
   uri: import.meta.env.VITE_API_URL,
   cache: new InMemoryCache(),
   headers: {
-    "Authorization": `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`
+    "Authorization": `Bearer ${localStorage.getItem("token")}`
   },
   onError: ({ networkErrors, graphQLErrors }) => {
     console.error('graphQLErrors :', graphQLErrors);
     console.error('networkErrors :', networkErrors);
   }
 });
+
+// console.log('api-url:', import.meta.env.VITE_API_URL);
+// console.log('token:', import.meta.env.VITE_ACCESS_TOKEN);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <GoogleOAuthProvider clientId="710618875060-pnfhfiarsioofdaasi9f0aqgs17u6q5b.apps.googleusercontent.com">

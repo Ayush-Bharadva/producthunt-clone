@@ -1,12 +1,12 @@
-import { googleLogout, useGoogleLogin } from "@react-oauth/google";
-import { NavLink, useNavigate } from "react-router-dom";
+// import { googleLogout, useGoogleLogin } from "@react-oauth/google";
+import { Link, NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
 import "./Header.scss";
 import Logo from "./../logo/Logo";
 import SearchInput from "../search-input/SearchInput";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoClose } from "react-icons/io5";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import MobileNavigationMenu from "./MobileNavigationMenu";
 
 const isActiveLink = ({ isActive }) => isActive ? "nav-link active" : "nav-link";
@@ -51,49 +51,13 @@ export default Header;
 
 const UserProfileButton = () => {
 
-  const [user, setUser] = useState(null);
-  const [profile, setProfile] = useState(null);
-  const navigate = useNavigate();
-
-  const login = useGoogleLogin({
-    onSuccess: (codeResponse) => setUser(codeResponse),
-    onError: (error) => console.log("Login Failed :", error),
-  });
-
-  useEffect(() => {
-    if (user) {
-      fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-        headers: {
-          "Authorization": `Bearer ${user.access_token}`,
-          "Accept": "application/json"
-        }
-      }).then((response) => response.json()).then((data) => {
-        setProfile(data);
-        localStorage.setItem("profile", JSON.stringify(data));
-      }).catch((error) => console.log("Error: ", error));
-    }
-  }, [user])
-
-  const navigateToUserProfile = () => {
-    navigate("/user");
-  }
-
-  const logOut = useCallback(() => {
-    googleLogout();
-    setUser(null);
-    setProfile(null);
-    localStorage.removeItem("profile");
-  }, []);
-
-  return profile?.picture ?
-    <>
-      <div className="user-avatar" onClick={navigateToUserProfile}>
-        <img src={profile.picture} alt="user-avatar" />
-      </div>
-      <button type="button" className="sign-in-btn" onClick={logOut}>Log Out</button>
-    </>
-    :
-    <button type="button" className="sign-in-btn" onClick={login}>Sign In</button>;
+  return (
+    <Link to="https://api.producthunt.com/v2/oauth/authorize?client_id=39zsVF6R_8mbajaavFpoNkEHlqNTfw6IFgM5d2OpvhU&redirect_uri=https://producthunt-clone-5173.netlify.app:3000&response_type=code&scope=public+private">
+      <button type="button" className="sign-in-btn">
+        Sign In
+      </button>
+    </Link>
+  );
 };
 
 UserProfileButton.propTypes = {

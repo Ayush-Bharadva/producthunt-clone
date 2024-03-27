@@ -77,3 +77,10 @@ export const SearchOptions = [
 		navigateTo: "/leaderboard/yearly/2024",
 	},
 ];
+
+export const PeriodLabel = {
+	yesterday: "Yesterday",
+	weekly: "Weekly",
+	monthly: "Monthly",
+	yearly: "Yearly",
+};
