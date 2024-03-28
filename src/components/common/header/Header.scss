@@ -58,7 +58,8 @@ img {
 		justify-content: flex-end;
 		align-items: center;
 		gap: 16px;
-		.sign-in-btn {
+		.sign-in-btn,
+		.submit-btn {
 			padding: 0.5rem 1rem;
 			background-color: #fef6f2;
 			color: #e12e0d;
@@ -105,6 +106,13 @@ img {
 .user-avatar {
 	height: 32px;
 	width: auto;
+}
+
+.profile-avatar-wrapper {
+	height: 32px;
+	border-radius: 50%;
+	overflow: hidden;
+	cursor: pointer;
 }
 
 @media screen and (min-width: 761px) {

@@ -2,31 +2,28 @@ import React from "react"
 import ReactDOM from "react-dom/client"
 import App from "./App.jsx"
 import "./index.scss"
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
-import { GoogleOAuthProvider } from "@react-oauth/google"
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { showToast } from "./utils/helper.js";
 
+const token = localStorage.getItem("token");
 
 const client = new ApolloClient({
   uri: import.meta.env.VITE_API_URL,
   cache: new InMemoryCache(),
   headers: {
-    "Authorization": `Bearer ${localStorage.getItem("token")}`
+    "Authorization": `Bearer ${token ?? import.meta.env.VITE_DEV_TOKEN}`
   },
   onError: ({ networkErrors, graphQLErrors }) => {
     console.error('graphQLErrors :', graphQLErrors);
     console.error('networkErrors :', networkErrors);
+    showToast("error", "GraphQL Error");
   }
 });
 
-// console.log('api-url:', import.meta.env.VITE_API_URL);
-// console.log('token:', import.meta.env.VITE_ACCESS_TOKEN);
-
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <GoogleOAuthProvider clientId="710618875060-pnfhfiarsioofdaasi9f0aqgs17u6q5b.apps.googleusercontent.com">
-    <React.StrictMode>
-      <ApolloProvider client={client}>
-        <App />
-      </ApolloProvider>
-    </React.StrictMode>
-  </GoogleOAuthProvider>,
+  //<React.StrictMode>
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>
+  //</React.StrictMode>
 );

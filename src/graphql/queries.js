@@ -1,7 +1,27 @@
 import { gql } from "@apollo/client";
 
+export const GET_USERNAME = gql`
+	query {
+		viewer {
+			user {
+				username
+			}
+		}
+	}
+`;
+
 export const GET_USER = gql`
-	query GetUser{}
+	query GetUser($username: String) {
+		user(username: $username) {
+			coverImage
+			createdAt
+			headline
+			id
+			name
+			profileImage
+			username
+		}
+	}
 `;
 
 export const GET_POSTS = gql`

@@ -13,21 +13,11 @@ import {
 	startOfWeek,
 	endOfWeek,
 } from "date-fns";
+import toast from "react-hot-toast";
 
-const formatToPST = date => {
-	const pstDate = date.toLocaleString("en-US", {
-		timeZone: "America/Los_Angeles",
-	});
-	return format(new Date(pstDate), "yyyy-MM-dd");
+export const showToast = (message, type = "success") => {
+	toast[type](message);
 };
-
-const currentDate = new Date();
-const pstDate = formatToPST(currentDate);
-console.log("current date in PST : ", pstDate);
-
-// const formatToPST2 = date => {
-// 	const date = new Date(Date.UTC(d));
-// };
 
 export const getTodaysDate = () => {
 	let today = new Date();
@@ -83,17 +73,17 @@ export const getDaysOfMonth = dateString => {
 	return daysArray;
 };
 
-export const getTodaysPSTDate = () => {
-	const myDate = new Date();
-	const pstDate = myDate.toLocaleString("en-US", {
-		timeZone: "America/Los_Angeles",
-	});
-	console.log("todays date in PST : ", format(new Date(pstDate), "yyyy-MM-dd"));
+// export const getTodaysPSTDate = () => {
+// 	const myDate = new Date();
+// 	const pstDate = myDate.toLocaleString("en-US", {
+// 		timeZone: "America/Los_Angeles",
+// 	});
+// 	console.log("todays date in PST : ", format(new Date(pstDate), "yyyy-MM-dd"));
 
-	const todaysDate = format(new Date(pstDate), "yyyy-MM-dd");
-	const [year, month, day] = todaysDate.split("-");
-	return [todaysDate, year, month, day];
-};
+// 	const todaysDate = format(new Date(pstDate), "yyyy-MM-dd");
+// 	const [year, month, day] = todaysDate.split("-");
+// 	return [todaysDate, year, month, day];
+// };
 
 /***********************************************************************************************/
 
@@ -152,25 +142,3 @@ export const getWeeksSinceYear = year => {
 
 	return weeks;
 };
-
-export const getUserAccessToken = async code => {
-	const response = await fetch(`https://api.producthunt.com/v2/oauth/token`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			client_id: "39zsVF6R_8mbajaavFpoNkEHlqNTfw6IFgM5d2OpvhU",
-			client_secret: "v0XAT9pnOb0MIxj1s2d79J85kY3SF2ae4ZPUcJ_3o5c",
-			redirect_uri: "https://producthunt-clone-5173.netlify.app:3000",
-			code: code,
-			grant_type: "authorization_code",
-		}),
-	});
-	return response.json();
-};
-
-// Example usage:
-// const currentYear = new Date().getFullYear();
-// const weeksSinceCurrentYear = getWeeksSinceYear(currentYear);
-// console.log(weeksSinceCurrentYear);

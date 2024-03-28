@@ -2,7 +2,6 @@ $text-color: #4b587c;
 
 .flex-center {
 	display: flex;
-	// justify-content: center;
 	align-items: center;
 }
 
@@ -77,6 +76,42 @@ $text-color: #4b587c;
 
 	&:hover {
 		border-color: #feb6b0;
+	}
+}
+
+.hover-menu-wrapper {
+	position: absolute;
+	top: 4.5%;
+	right: 2%;
+	height: auto;
+	background: none;
+	padding-top: 0.75rem;
+
+	.hover-menu {
+		background-color: #fff;
+		border-radius: 5px;
+		overflow: hidden;
+		margin-top: 0.25rem;
+		border: 1px solid #f1f1f1;
+		box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+		.menu-item {
+			padding: 0.5rem;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			// border: 1px solid red;
+			padding: 0.5rem 1.25rem;
+
+			a {
+				text-decoration: none;
+				color: $text-color;
+				font-weight: 500;
+			}
+
+			&:hover {
+				background-color: #f9f9f9;
+			}
+		}
 	}
 }
 

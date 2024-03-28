@@ -5,6 +5,8 @@ import "./styles/Global.scss";
 import Layout from "./components/layout/Layout";
 import Home from "./pages/home/Home";
 import { CircularProgress } from "@mui/material";
+// import Authorize from "./components/authorize/Authorize";
+import { Toaster } from "react-hot-toast";
 
 const lazyImport = name => lazy(() => import("./pages/index").then((module) => ({ default: module[name] })));
 
@@ -21,7 +23,7 @@ const router = createBrowserRouter(
     <>
       <Route path="" element={<Layout />}>
         <Route path="/" element={<Home />} />
-        <Route path="all" element={<Home />} />
+        <Route path="/all" element={<Home />} />
         <Route path="/leaderboard" element={<Launches />}>
           <Route path="daily/:year/:month/:day" element={<Launches />}>
             <Route path="all" element={<Launches />} />
@@ -41,6 +43,7 @@ const router = createBrowserRouter(
         <Route path="/community" element={<Community />} />
         <Route path="/advertise" element={<Advertise />} />
         <Route path="/user" element={<User />} />
+        {/* <Route path="/authorize" element={<Authorize />} /> */}
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </>
@@ -52,6 +55,7 @@ function App() {
   return (
     <Suspense fallback={<CircularProgress />}>
       <RouterProvider router={router} />
+      <Toaster position="bottom-right" />
     </Suspense>
   );
 }

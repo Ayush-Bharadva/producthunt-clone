@@ -3,7 +3,6 @@ import TopLaunches from "../../components/home/top-launches/TopLaunches";
 import { PropTypes } from "prop-types";
 import InfinitePostsViewer from "../../components/infinite-posts-scroller/InfinitePostScroller";
 
-// const today = startOfToday();
 const Home = () => {
 
   return (

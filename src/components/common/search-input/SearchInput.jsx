@@ -46,14 +46,16 @@ const SearchInput = () => {
             </div>
             <div className="search-options">
               {SearchOptions.map(({ title, subtitle, buttonText, navigateTo }, index) => {
-                return (<div key={index} className="search-option-wrapper" onClick={() => handleSearchOptionClick(navigateTo)} >
-                  <div className="icon"><PiClockCounterClockwise /></div>
-                  <div className="text">
-                    <p className="title">{title}</p>
-                    <p className="subtitle">{subtitle}</p>
+                return (
+                  <div key={index} className="search-option-wrapper" onClick={() => handleSearchOptionClick(navigateTo)} >
+                    <div className="icon"><PiClockCounterClockwise /></div>
+                    <div className="text">
+                      <p className="title">{title}</p>
+                      <p className="subtitle">{subtitle}</p>
+                    </div>
+                    <button className="button">{buttonText}</button>
                   </div>
-                  <button className="button">{buttonText}</button>
-                </div>)
+                );
               })}
             </div>
           </div>
