@@ -5,13 +5,11 @@ import "./index.scss"
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { showToast } from "./utils/helper.js";
 
-const token = localStorage.getItem("token");
-
 const client = new ApolloClient({
   uri: import.meta.env.VITE_API_URL,
   cache: new InMemoryCache(),
   headers: {
-    "Authorization": `Bearer ${token ?? import.meta.env.VITE_DEV_TOKEN}`
+    "Authorization": `Bearer ${import.meta.env.VITE_DEV_TOKEN}`
   },
   onError: ({ networkErrors, graphQLErrors }) => {
     console.error('graphQLErrors :', graphQLErrors);
@@ -21,9 +19,9 @@ const client = new ApolloClient({
 });
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  //<React.StrictMode>
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>
-  //</React.StrictMode>
+  <React.StrictMode>
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+  </React.StrictMode>
 );

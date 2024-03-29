@@ -45,14 +45,15 @@ export const GET_POSTS = gql`
 				id
 				name
 				tagline
+				createdAt
 				description
 				commentsCount
 				votesCount
+				website
 				media {
 					url
 					videoUrl
 				}
-				website
 				thumbnail {
 					type
 					url

@@ -4,32 +4,17 @@ import { useQuery } from "@apollo/client";
 import { GET_POSTS } from "../../graphql/queries";
 import { NavLink, useNavigate } from "react-router-dom";
 import PostCard from "../../components/common/post-card/PostCard";
-import { endOfMonth, endOfWeek, format, startOfMonth, startOfToday, startOfWeek, subDays, subMonths, subWeeks } from "date-fns";
-
-function formatDate(date) {
-  return format(date, 'yyyy-MM-dd');
-}
+import { startOfToday, subDays, subWeeks } from "date-fns";
+import { formatDate, getWeekNumberByDate } from "../../utils/helper";
 
 // today
 const today = startOfToday();
 console.log('Today:', formatDate(today));
 
-// Get yesterday's date
+// // Get yesterday's date
 const yesterday = formatDate(subDays(new Date(today), 1));
 
-// Get last week's starting and ending dates
-const lastWeekStart = formatDate(startOfWeek(subWeeks(new Date(), 1)));
-const lastWeekEnd = formatDate(endOfWeek(subWeeks(new Date(), 1)));
-
-// Get last month's starting and ending dates
-const lastMonthStart = formatDate(startOfMonth(subMonths(new Date(), 1)));
-const lastMonthEnd = formatDate(endOfMonth(subMonths(new Date(), 1)));
-
-console.log('Yesterday:', yesterday);
-console.log('Last week start:', lastWeekStart);
-console.log('Last week end:', lastWeekEnd);
-console.log('Last month start:', lastMonthStart);
-console.log('Last month end:', lastMonthEnd);
+const currentDate = new Date().toISOString();
 
 const TopPostsByPeriod = ({ title, periodLabel }) => {
 
@@ -42,7 +27,10 @@ const TopPostsByPeriod = ({ title, periodLabel }) => {
   let postedBeforeDate = null;
 
   const [year, month, day] = yesterday.split('-');
-  console.log(year, month, day);
+
+  const selectedDate = currentDate;
+  const previousWeekNumber = getWeekNumberByDate(subWeeks(new Date(selectedDate), 1));
+  console.log("previousWeekNumber", previousWeekNumber);
 
   if (periodLabel === "Yesterday") {
     postedAfterDate = yesterday;
@@ -70,7 +58,7 @@ const TopPostsByPeriod = ({ title, periodLabel }) => {
   if (periodLabel === "Yesterday") {
     navigationPath = `/leaderboard/daily/${year}/${month}/${day}`;
   } else if (periodLabel === "Weekly") {
-    navigationPath = `/leaderboard/weekly/${year}/13`;
+    navigationPath = `/leaderboard/weekly/${year}/${previousWeekNumber}`;
   } else if (periodLabel === "Monthly") {
     navigationPath = `/leaderboard/monthly/${year}/${month}`;
   }
@@ -94,7 +82,7 @@ const TopPostsByPeriod = ({ title, periodLabel }) => {
         <div className="button-group">
           <NavLink to={navigationPath} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} end>Featured</NavLink>
           <span>|</span>
-          <NavLink to={navigationPath} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} end>All</NavLink>
+          <NavLink to={`${navigationPath}/all`} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} end>All</NavLink>
         </div>
       </div>
       {productsList.length > 0 &&
@@ -118,62 +106,3 @@ TopPostsByPeriod.propTypes = {
   postedAfter: PropTypes.string,
   filterAllPosts: PropTypes.func
 };
-
-/*
-const handleLoadMore = useCallback(() => {
-  if (!hasMore) {
-    const previousDate = getPreviousDate(currentDate);
-    setHeading(previousDate);
-    fetchMore({
-      variables: {
-        "first": 10,
-        "postedAfter": previousDate,
-        "postedBefore": currentDate,
-        "after": null
-      },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult) {
-          return prev;
-        }
-        const { posts } = fetchMoreResult;
-        setPostState((prev) => ({
-          postsList: [...prev.postsList, ...posts.nodes],
-          hasMore: posts.pageInfo.hasNextPage,
-          endCursor: posts.pageInfo.endCursor
-        }));
-        return {
-          posts: {
-            ...posts,
-            nodes: [...prev.posts.nodes, ...posts.nodes],
-            pageInfo: posts.pageInfo
-          }
-        };
-      }
-    });
-  } else {
-    fetchMore({
-      variables: {
-        "after": endCursor
-      },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult) {
-          return prev;
-        }
-        const { posts } = fetchMoreResult;
-        setPostState((prev) => ({
-          postsList: [...prev.postsList, ...posts.nodes],
-          hasMore: posts.pageInfo.hasNextPage,
-          endCursor: posts.pageInfo.endCursor
-        }));
-        return {
-          posts: {
-            ...posts,
-            nodes: [...prev.posts.nodes, ...posts.nodes],
-            pageInfo: posts.pageInfo
-          }
-        };
-      }
-    });
-  }
-}, [endCursor, fetchMore, hasMore, currentDate]);
-*/

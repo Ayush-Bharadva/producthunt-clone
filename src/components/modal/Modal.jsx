@@ -1,8 +1,8 @@
-import { PropTypes } from 'prop-types';
+import { useEffect } from "react";
+import { createPortal } from "react-dom";
+import { PropTypes } from "prop-types";
 import "./Modal.scss";
-import { createPortal } from 'react-dom';
 import { IoClose } from "react-icons/io5";
-import { useEffect } from 'react';
 
 const Modal = ({ children, isOpenModal, closeModal }) => {
 
@@ -23,7 +23,7 @@ const Modal = ({ children, isOpenModal, closeModal }) => {
       </div>
     </div>,
     document.getElementById("modal")
-  )
+  );
 }
 
 export default Modal;

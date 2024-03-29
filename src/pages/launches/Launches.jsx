@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useParams } from "react-router-dom";
 import { GoArrowLeft, GoArrowRight } from "react-icons/go";
 import "./Launches.scss";
 import { Weeks, days, years } from "../../utils/constants";
@@ -17,15 +17,17 @@ const Launches = () => {
   const location = useLocation();
   const isWeekly = location.pathname.includes("weekly");
 
+  const { year, month, week, day } = useParams();
+
+  console.log(year, month, week, day);
+
   const todaysDate = getTodaysDate();
-  // const yesterdaysDate = getYesterdaysDate();
 
   const [postState, setPostState] = useState({
     postsList: [],
     endCursor: null,
     hasMore: true,
   });
-  // const [isFeaturedPosts, setIsFeaturedPosts] = useState(true);
 
   const { postsList, endCursor, hasMore } = postState;
 
@@ -84,16 +86,16 @@ const Launches = () => {
         <div className="launches-heading">
           <div className="heading-text">Best of March 12, 2024</div>
           <div className="routes">
-            <NavLink className={isActiveLink} to={`/leaderboard/daily/2024/3/21`}>
+            <NavLink className={isActiveLink} to={`/leaderboard/daily/${year}/${month}/${day}`}>
               Daily
             </NavLink>
-            <NavLink className={isActiveLink} to={`/leaderboard/weekly/2024/11`}>
+            <NavLink className={isActiveLink} to={`/leaderboard/weekly/2024/${week}`}>
               Weekly
             </NavLink>
-            <NavLink className={isActiveLink} to={`/leaderboard/monthly/2024/3`}>
+            <NavLink className={isActiveLink} to={`/leaderboard/monthly/${year}/${month}`}>
               Monthly
             </NavLink>
-            <NavLink className={isActiveLink} to={`/leaderboard/yearly/2024`}>
+            <NavLink className={isActiveLink} to={`/leaderboard/yearly/${year}`}>
               Yearly
             </NavLink>
           </div>

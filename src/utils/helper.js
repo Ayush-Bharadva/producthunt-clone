@@ -6,17 +6,36 @@ import {
 	isBefore,
 	isAfter,
 	isSameWeek,
-	startOfMonth,
-	endOfMonth,
-	eachDayOfInterval,
-	getDate,
 	startOfWeek,
 	endOfWeek,
+	subDays,
+	startOfMonth,
+	subMonths,
+	endOfMonth,
+	getWeek,
 } from "date-fns";
 import toast from "react-hot-toast";
 
-export const showToast = (message, type = "success") => {
+export const showToast = (type = "success", message) => {
 	toast[type](message);
+};
+
+export const groupItemsByDate = items => {
+	return items.reduce((acc, item) => {
+		const date = item.createdAt.split("T")[0];
+		acc[date] = acc[date] ?? [];
+		acc[date].push(item);
+		return acc;
+	}, {});
+};
+
+export const formatDate = date => {
+	return format(date, "yyyy-MM-dd");
+};
+
+export const getPreviousDate = inputDate => {
+	const previousDate = subDays(new Date(inputDate), 1);
+	return formatDate(previousDate);
 };
 
 export const getTodaysDate = () => {
@@ -26,63 +45,10 @@ export const getTodaysDate = () => {
 	return todaysDate;
 };
 
-export const getYesterdaysDate = () => {
-	const myDate = new Date();
-	myDate.setDate(myDate.getDate() - 1);
-	return myDate.toISOString().split("T")[0];
-};
-
-export const getPreviousDate = inputDate => {
-	const date = new Date(inputDate);
-	date.setDate(date.getDate() - 1);
-	return format(date, "yyyy-MM-dd");
-};
-
-export const getWeekNumberFromDate = date => {
-	let givenDate = new Date(date);
-	let startOfYear = new Date(givenDate.getFullYear(), 0, 0);
-	let diff = givenDate - startOfYear;
-	let oneWeek = 1000 * 60 * 60 * 24 * 7;
-	let weekNumber = Math.floor(diff / oneWeek);
-	return weekNumber;
-};
-
-export const splitDate = date => {
-	const [year, month, day] = date.split("-");
-	return [year, month, day];
-};
-
-export const getAllDaysInMonth = (year, month) => {
-	const startDate = startOfMonth(new Date(year, month - 1));
-	const endDate = endOfMonth(new Date(year, month - 1));
-
-	const allDays = eachDayOfInterval({ start: startDate, end: endDate });
-	return allDays.map(day => getDate(day));
-};
-
-export const getDaysOfMonth = dateString => {
-	const date = new Date(dateString);
-	const year = date.getFullYear();
-	const month = date.getMonth();
-
-	// Get the number of days in the month
-	const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-	// Generate an array containing all the days of the month
-	const daysArray = Array.from({ length: daysInMonth }, (_, index) => index + 1);
-	return daysArray;
-};
-
-// export const getTodaysPSTDate = () => {
+// export const getYesterdaysDate = () => {
 // 	const myDate = new Date();
-// 	const pstDate = myDate.toLocaleString("en-US", {
-// 		timeZone: "America/Los_Angeles",
-// 	});
-// 	console.log("todays date in PST : ", format(new Date(pstDate), "yyyy-MM-dd"));
-
-// 	const todaysDate = format(new Date(pstDate), "yyyy-MM-dd");
-// 	const [year, month, day] = todaysDate.split("-");
-// 	return [todaysDate, year, month, day];
+// 	myDate.setDate(myDate.getDate() - 1);
+// 	return myDate.toISOString().split("T")[0];
 // };
 
 /***********************************************************************************************/
@@ -116,29 +82,45 @@ export function getWeeksOfYear(year) {
 	return weeks;
 }
 
-export const getWeeksSinceYear = year => {
-	const weeks = [];
-	const currentDate = new Date();
+function yesterdayDate() {
+	const yesterday = subDays(new Date(), 1);
+	return yesterday.toISOString().slice(0, 10);
+}
 
-	// Create a date object for January 1st of the given year
-	const startDate = new Date(year, 0, 1);
+function getPreviousWeekDates() {
+	const startOfWeekDate = startOfWeek(subDays(new Date(), 7));
+	const endOfWeekDate = endOfWeek(subDays(new Date(), 7));
+	return [
+		startOfWeekDate.toISOString().slice(0, 10),
+		endOfWeekDate.toISOString().slice(0, 10),
+	];
+}
 
-	// Get the first day of the week (0: Sunday, 1: Monday, ..., 6: Saturday)
-	const startDayOfWeek = startDate.getDay();
+function getPreviousMonthDates() {
+	const startOfMonthDate = startOfMonth(subMonths(new Date(), 1));
+	const endOfMonthDate = endOfMonth(subMonths(new Date(), 1));
 
-	// Adjust startDate to the beginning of the week
-	startDate.setDate(startDate.getDate() - startDayOfWeek);
+	return [
+		startOfMonthDate.toISOString().slice(0, 10),
+		endOfMonthDate.toISOString().slice(0, 10),
+	];
+}
 
-	// Loop through each week until the current week
-	while (startDate <= currentDate) {
-		weeks.push({
-			start: format(new Date(startDate), "yyyy-mm-dd"), // Start of the week
-			end: format(new Date(startDate.setDate(startDate.getDate() + 6)), "yyyy-mm-dd"), // End of the week
-		});
-
-		// Move to the next week
-		startDate.setDate(startDate.getDate() + 1);
-	}
-
-	return weeks;
+export const getWeekNumberByDate = date => {
+	const weekNumber = getWeek(new Date(date));
+	console.log("Week number:", weekNumber);
+	return weekNumber;
 };
+getWeekNumberByDate("2024-03-29");
+
+// Example usage:
+
+console.log("----helper----");
+console.log("Yesterday's date:", yesterdayDate());
+const [startWeek, endWeek] = getPreviousWeekDates();
+console.log("Previous week's start date:", startWeek);
+console.log("Previous week's end date:", endWeek);
+const [startMonth, endMonth] = getPreviousMonthDates();
+console.log("Previous month's start date:", startMonth);
+console.log("Previous month's end date:", endMonth);
+console.log("----helper----");

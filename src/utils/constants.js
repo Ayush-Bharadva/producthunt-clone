@@ -1,3 +1,5 @@
+// import moment from "moment-timezone";
+
 export const years = [
 	"2024",
 	"2023",
@@ -84,3 +86,14 @@ export const PeriodLabel = {
 	monthly: "Monthly",
 	yearly: "Yearly",
 };
+
+// export const NavigateToLink = {
+// 	[PeriodLabel.yesterday]: "leaderboard/daily/2024/3/29",
+// 	[PeriodLabel.weekly]: "leaderboard/weekly/2024/11",
+// 	[PeriodLabel.monthly]: "leaderboard/monthly/2024/3",
+// };
+
+// export const IndianTime = moment.tz("Asia/Kolkata").format();
+// export const PSTTimeNow = moment.tz("America/New_York").format();
+// console.log("Indian Time:", IndianTime);
+// console.log("American Time:", PSTTimeNow);

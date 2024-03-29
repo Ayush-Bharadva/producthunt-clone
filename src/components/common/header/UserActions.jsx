@@ -16,7 +16,7 @@ const UserActions = () => {
   const [user, setUser] = useLocalStorage("user", null);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [isHovering, setIsHovering] = useState(true);
+  const [isHovering, setIsHovering] = useState(false);
   const navigate = useNavigate();
 
   const handleMouseEnter = () => setIsHovering(true);
@@ -46,12 +46,11 @@ const UserActions = () => {
   });
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const codeParam = params.get("code");
+    const codeParam = searchParams.get("code");
     if (codeParam) {
       setCode(codeParam);
     }
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     if (code) {
@@ -88,7 +87,7 @@ const UserActions = () => {
           </> :
           <>
             <button type="button" className="text-button">How to Post</button>
-            <Link to="https://api.producthunt.com/v2/oauth/authorize?client_id=39zsVF6R_8mbajaavFpoNkEHlqNTfw6IFgM5d2OpvhU&redirect_uri=https://producthunt-clone-5173.netlify.app:3000&response_type=code&scope=public+private">
+            <Link to="https://api.producthunt.com/v2/oauth/authorize?client_id=39zsVF6R_8mbajaavFpoNkEHlqNTfw6IFgM5d2OpvhU&redirect_uri=https://clone-producthunt-5173.netlify.app:3000&response_type=code&scope=public+private">
               <button type="button" className="sign-in-btn">
                 Sign In
               </button>
@@ -109,7 +108,7 @@ const HoverMenu = ({ logOutUser, ...props }) => {
           <NavLink to="/user">Profile</NavLink>
         </div>
         <div className="menu-item">
-          <NavLink to="/" className="text-button" onClick={logOutUser}>LogOut</NavLink>
+          <NavLink to="/" className="text-button" onClick={logOutUser}>Logout</NavLink>
         </div>
       </menu>
     </div>
