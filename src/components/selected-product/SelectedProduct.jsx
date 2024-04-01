@@ -1,13 +1,12 @@
 import { PropTypes } from "prop-types";
 import { Link } from "react-router-dom";
 import Modal from "../modal/Modal";
-import "./SelectedPost.scss";
-import PostCarousel from "../common/post-carousel/PostCarousel";
+import "./SelectedProduct.scss";
+import Carousel from "../common/carousel/Carousel";
 
-const SelectedPost = ({ post, imgSrc, mediaList, closeModal }) => {
-
+const SelectedProduct = ({ post, imgSrc, mediaList, closeModal }) => {
   return (
-    <Modal isOpen closeModal={closeModal} >
+    <Modal closeModal={closeModal} >
       <div className="post-container">
         <div className="post-meta-info">
           <div className="post-image">
@@ -19,12 +18,10 @@ const SelectedPost = ({ post, imgSrc, mediaList, closeModal }) => {
               <p>{post.tagline}</p>
             </div>
             <div className="actions">
-              <Link to={post.website} target="_blank" >
-                <button type="button" className="post-visit-btn">
-                  VISIT
-                </button>
+              <Link to={post.website} target="_blank" className="post-visit-btn">
+                Visit
               </Link>
-              <button type="button" className="post-upvote-btn">UPVOTE 156</button>
+              <button type="button" className="post-upvote-btn">UPVOTE {post.votesCount}</button>
             </div>
           </div>
           <div className="post-description">
@@ -34,16 +31,16 @@ const SelectedPost = ({ post, imgSrc, mediaList, closeModal }) => {
             </div>
           </div>
         </div>
-        <PostCarousel mediaList={mediaList} />
+        <Carousel mediaList={mediaList} />
         <div className="post-comments"></div>
       </div>
     </Modal>
-  )
-}
+  );
+};
 
-export default SelectedPost;
+export default SelectedProduct;
 
-SelectedPost.propTypes = {
+SelectedProduct.propTypes = {
   post: PropTypes.object.isRequired,
   imgSrc: PropTypes.string.isRequired,
   mediaList: PropTypes.array.isRequired,

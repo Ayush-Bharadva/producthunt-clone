@@ -6,7 +6,7 @@ import Layout from "./components/layout/Layout";
 import Home from "./pages/home/Home";
 import { CircularProgress } from "@mui/material";
 import { Toaster } from "react-hot-toast";
-import DateWisePosts from "./components/common/DateWisePosts";
+import AllProducts from "./pages/home/AllProducts";
 
 const lazyImport = name => lazy(() => import("./pages/index").then((module) => ({ default: module[name] })));
 
@@ -23,7 +23,7 @@ const router = createBrowserRouter(
     <>
       <Route path="" element={<Layout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/all" element={<DateWisePosts />} />
+        <Route path="/all" element={<AllProducts />} />
         <Route path="/leaderboard" element={<Launches />}>
           <Route path="daily/:year/:month/:day" element={<Launches />}>
             <Route path="all" element={<Launches />} />

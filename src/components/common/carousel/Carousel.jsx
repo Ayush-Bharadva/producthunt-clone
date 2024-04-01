@@ -1,17 +1,16 @@
 import { PropTypes } from "prop-types";
-import "./PostCarousel.scss";
+import "./Carousel.scss";
 import { useCallback, useRef } from "react";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { IoArrowForwardCircleOutline } from "react-icons/io5";
 
-const PostCarousel = ({ mediaList }) => {
+const Carousel = ({ mediaList }) => {
 
   const carouselRef = useRef(null);
-  const carouselItemRef = useRef(null);
 
   const handleCarousalScroll = useCallback((dir) => {
-    if (carouselRef.current && carouselItemRef.current) {
-      carouselRef.current.scrollLeft += (dir * carouselItemRef.current.scrollWidth);
+    if (carouselRef.current) {
+      carouselRef.current.scrollLeft += (dir * carouselRef.current.clientWidth);
     }
   }, []);
 
@@ -30,7 +29,7 @@ const PostCarousel = ({ mediaList }) => {
       <div className="post-carousel" ref={carouselRef}>
         {mediaList.map(media => {
           return (
-            <div className="media-wrapper" key={media.url} ref={carouselItemRef}>
+            <div className="media-wrapper" key={media.url}>
               <img className="media" src={media.url} />
             </div>
           );
@@ -41,10 +40,10 @@ const PostCarousel = ({ mediaList }) => {
       </div>
     </div>
   );
-}
+};
 
-export default PostCarousel;
+export default Carousel;
 
-PostCarousel.propTypes = {
+Carousel.propTypes = {
   mediaList: PropTypes.array.isRequired
 };

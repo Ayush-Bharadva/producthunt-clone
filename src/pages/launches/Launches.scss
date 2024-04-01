@@ -43,6 +43,14 @@ $text-color: #4b587c;
 	align-items: center;
 	gap: 7px;
 
+	.arrow-btn {
+		background: none;
+		border: none;
+		cursor: pointer;
+		color: $text-color;
+		align-self: center;
+	}
+
 	.pages {
 		display: flex;
 		justify-content: space-between;

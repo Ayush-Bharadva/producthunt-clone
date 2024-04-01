@@ -24,6 +24,53 @@ export const GET_USER = gql`
 	}
 `;
 
+export const GET_USER_DETAILS = gql`
+	query GetUserDetails($username: String) {
+		user(username: $username) {
+			id
+			createdAt
+			name
+			profileImage
+			headline
+			url
+			coverImage
+			votedPosts {
+				nodes {
+					id
+					name
+					tagline
+					description
+					reviewsCount
+					commentsCount
+					votesCount
+					isVoted
+					media {
+						url
+						videoUrl
+					}
+					thumbnail {
+						url
+						type
+						videoUrl
+					}
+					topics {
+						edges {
+							node {
+								name
+							}
+						}
+					}
+				}
+				totalCount
+				pageInfo {
+					endCursor
+					hasNextPage
+				}
+			}
+		}
+	}
+`;
+
 export const GET_POSTS = gql`
 	query GetPosts(
 		$first: Int
@@ -49,6 +96,7 @@ export const GET_POSTS = gql`
 				description
 				commentsCount
 				votesCount
+				isVoted
 				website
 				media {
 					url

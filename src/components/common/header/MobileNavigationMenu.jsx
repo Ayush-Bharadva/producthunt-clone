@@ -43,7 +43,7 @@ const MobileNavigationMenu = ({ isMenuOpen }) => {
       </nav>
     </div>
   ) : null;
-}
+};
 
 export default MobileNavigationMenu;
 

@@ -7,6 +7,9 @@ import { IoClose } from "react-icons/io5";
 import { useState } from "react";
 import MobileNavigationMenu from "./MobileNavigationMenu";
 import UserActions from "./UserActions";
+import { pstCurrentDate } from "../../../utils/helper";
+
+const [year, month, day] = pstCurrentDate.split("-");
 
 const isActiveLink = ({ isActive }) => isActive ? "nav-link active" : "nav-link";
 
@@ -15,7 +18,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleHeader = () => {
     setIsMenuOpen(!isMenuOpen);
-  }
+  };
 
   return (
     <>
@@ -29,18 +32,18 @@ const Header = () => {
         </div>
         <nav className="navbar">
           <ul className="navbar-links" >
-            <NavLink to="/leaderboard/daily/2024/3/21" className={isActiveLink}>Launches</NavLink>
+            <NavLink to={`/leaderboard/daily/${year}/${month}/${day}`} className={isActiveLink}>Launches</NavLink>
             <NavLink to="/products" className={isActiveLink}>Products</NavLink>
             <NavLink to="/news" className={isActiveLink}>News</NavLink>
             <NavLink to="/community" className={isActiveLink}>Community</NavLink>
             <NavLink to="/advertise" className={isActiveLink}>Advertise</NavLink>
           </ul>
         </nav>
-        <UserActions key={Math.random} />
+        <UserActions />
       </header>
       <MobileNavigationMenu isMenuOpen={isMenuOpen} />
     </>
-  )
-}
+  );
+};
 
 export default Header;

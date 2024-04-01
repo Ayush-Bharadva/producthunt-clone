@@ -3,14 +3,14 @@ import { Fragment } from 'react';
 import { FaRegComment } from 'react-icons/fa';
 import { IoTriangle } from 'react-icons/io5';
 import { RiShareForward2Fill } from 'react-icons/ri';
-import './PostCard.scss';
-import SelectedPost from '../../post/SelectedPost';
+import './ProductCard.scss';
+import SelectedProduct from '../../selected-product/SelectedProduct';
 import { useModal } from '../../../hooks/useModal';
 
-const PostCard = ({ post }) => {
+const ProductCard = ({ post }) => {
 
   const { isModalOpen, toggleModal } = useModal();
-  const { topics: { edges } } = post;
+  const { topics: { edges = [] } = {} } = post ?? {};
 
   return (
     <>
@@ -34,20 +34,20 @@ const PostCard = ({ post }) => {
                   <Fragment key={`${topic}-${index}`}>
                     <span className="topic" key={topic.node.name}>{topic.node.name}</span>
                   </Fragment>
-                )
+                );
               })}
             </div>
           </div>
         </div>
-        <button className="up-vote-button">
+        <button className={`up-vote-button ${post.isVoted ? "voted-product" : ""}`}>
           <div className="up-vote">
-            <IoTriangle />
+            <IoTriangle className="triangle-icon" />
             <p>{post.votesCount}</p>
           </div>
         </button>
       </div>
       {isModalOpen ?
-        <SelectedPost
+        <SelectedProduct
           post={post}
           imgSrc={post.thumbnail.url}
           closeModal={toggleModal}
@@ -55,10 +55,10 @@ const PostCard = ({ post }) => {
         /> : null}
     </>
   );
-}
+};
 
-export default PostCard;
+export default ProductCard;
 
-PostCard.propTypes = {
+ProductCard.propTypes = {
   post: PropTypes.object.isRequired,
 };

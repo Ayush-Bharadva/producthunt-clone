@@ -103,6 +103,43 @@ img {
 	}
 }
 
+.hover-menu-wrapper {
+	position: absolute;
+	top: 7.5%;
+	right: 2%;
+	height: auto;
+	background: none;
+	padding-top: 0.75rem;
+
+	.hover-menu {
+		background-color: #fff;
+		border-radius: 5px;
+		overflow: hidden;
+		margin-top: 0.25rem;
+		border: 1px solid #f1f1f1;
+		box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+		.menu-item {
+			padding: 0.5rem;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			padding: 0.5rem 1.25rem;
+
+			a {
+				text-decoration: none;
+				color: $text-color;
+				font-weight: 500;
+				font-size: 0.85rem;
+				text-align: left;
+			}
+
+			&:hover {
+				background-color: #f9f9f9;
+			}
+		}
+	}
+}
+
 .user-avatar {
 	height: 32px;
 	width: auto;

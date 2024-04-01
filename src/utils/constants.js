@@ -1,5 +1,3 @@
-// import moment from "moment-timezone";
-
 export const years = [
 	"2024",
 	"2023",
@@ -64,7 +62,7 @@ export const SearchOptions = [
 		title: "Yesterday",
 		subtitle: "Top products from yesterday",
 		buttonText: "Time travel",
-		navigateTo: "/leaderboard/daily/2024/3/26",
+		navigateTo: "/leaderboard/daily/2024/3/31",
 	},
 	{
 		title: "Last Month",
@@ -85,6 +83,11 @@ export const PeriodLabel = {
 	weekly: "Weekly",
 	monthly: "Monthly",
 	yearly: "Yearly",
+};
+
+export const ProductsType = {
+	featured: "featured",
+	all: "all",
 };
 
 // export const NavigateToLink = {

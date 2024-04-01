@@ -5,21 +5,12 @@ import { useModal } from "../../../hooks/useModal";
 import Modal from "../../modal/Modal";
 import { PiClockCounterClockwise } from "react-icons/pi";
 import { SearchOptions, TrendingSearches } from "../../../utils/constants";
-import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const SearchInput = () => {
 
   const { isModalOpen: isSearchModalOpen, toggleModal: toggleSearchModal } = useModal();
-  const handleSearchFocus = () => {
-    toggleSearchModal();
-  }
-
-  const navigate = useNavigate();
-
-  const handleSearchOptionClick = (navigateTo) => {
-    navigate(navigateTo);
-    toggleSearchModal();
-  };
+  const handleSearchFocus = () => toggleSearchModal();
 
   return (
     <>
@@ -29,7 +20,7 @@ const SearchInput = () => {
           <input type="text" onFocus={handleSearchFocus} placeholder="Search..." />
         </div>
       ) : (
-        <Modal isOpen closeModal={toggleSearchModal}>
+        <Modal closeModal={toggleSearchModal}>
           <div className="search-container">
             <div className="search-input-container">
               <FiSearch className="search-icon" />
@@ -40,21 +31,25 @@ const SearchInput = () => {
               <p className="trending-title">Trending</p>
               <div className="trending-searches">
                 {TrendingSearches.map((search, index) => {
-                  return <p key={index} className="trending-search">{search}</p>
+                  return <p key={index} className="trending-search">{search}</p>;
                 })}
               </div>
             </div>
             <div className="search-options">
               {SearchOptions.map(({ title, subtitle, buttonText, navigateTo }, index) => {
                 return (
-                  <div key={index} className="search-option-wrapper" onClick={() => handleSearchOptionClick(navigateTo)} >
-                    <div className="icon"><PiClockCounterClockwise /></div>
-                    <div className="text">
-                      <p className="title">{title}</p>
-                      <p className="subtitle">{subtitle}</p>
+                  <NavLink key={index} to={navigateTo} onClick={toggleSearchModal} className="search-option-link">
+                    <div className="search-option-wrapper">
+                      <div className="icon">
+                        <PiClockCounterClockwise />
+                      </div>
+                      <div className="text">
+                        <p className="title">{title}</p>
+                        <p className="subtitle">{subtitle}</p>
+                      </div>
+                      <button className="button">{buttonText}</button>
                     </div>
-                    <button className="button">{buttonText}</button>
-                  </div>
+                  </NavLink>
                 );
               })}
             </div>
@@ -62,7 +57,7 @@ const SearchInput = () => {
         </Modal>)
       }
     </>
-  )
-}
+  );
+};
 
-export default SearchInput
+export default SearchInput;

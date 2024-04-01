@@ -9,10 +9,11 @@ import {
 	startOfWeek,
 	endOfWeek,
 	subDays,
-	startOfMonth,
-	subMonths,
-	endOfMonth,
 	getWeek,
+	add,
+	subMonths,
+	startOfMonth,
+	endOfMonth,
 } from "date-fns";
 import toast from "react-hot-toast";
 
@@ -20,18 +21,53 @@ export const showToast = (type = "success", message) => {
 	toast[type](message);
 };
 
-export const groupItemsByDate = items => {
-	return items.reduce((acc, item) => {
-		const date = item.createdAt.split("T")[0];
-		acc[date] = acc[date] ?? [];
-		acc[date].push(item);
-		return acc;
-	}, {});
-};
-
 export const formatDate = date => {
 	return format(date, "yyyy-MM-dd");
 };
+
+export const convertToPST = date => {
+	return formatDate(
+		new Date(date).toLocaleString("en-US", { timeZone: "America/Los_Angeles" }),
+		"yyyy-mm-dd"
+	);
+};
+
+export const pstCurrentDate = new Date().toLocaleString("en-US", {
+	timeZone: "America/Los_Angeles",
+});
+
+export const getPreviousWeekDates = currentDate => {
+	const startOfWeekDate = add(startOfWeek(new Date(currentDate)), { days: 1 });
+	const endOfWeekDate = add(endOfWeek(new Date(currentDate)), { days: 1 });
+
+	const previousWeekStart = subDays(startOfWeekDate, 7);
+	const previousWeekEnd = subDays(endOfWeekDate, 7);
+	// console.log(
+	// 	"previousWeekStart :",
+	// 	convertToPST(previousWeekStart),
+	// 	"previousWeekEnd :",
+	// 	convertToPST(previousWeekEnd)
+	// );
+	return [previousWeekStart, previousWeekEnd];
+};
+
+export const getPreviousMonthDates = currentDate => {
+	const temp = subMonths(new Date(currentDate), 1);
+	const previousMonthStartDate = add(startOfMonth(temp), { days: 1 });
+	const previousMonthEndDate = endOfMonth(temp);
+
+	console.log(
+		"previousMonthStartDate :",
+		convertToPST(previousMonthStartDate),
+		"previousMonthEndDate :",
+		convertToPST(previousMonthEndDate)
+	);
+	return [previousMonthStartDate, previousMonthEndDate];
+};
+
+getPreviousMonthDates(pstCurrentDate);
+
+// getPreviousWeekDates(pstCurrentDate);
 
 export const getPreviousDate = inputDate => {
 	const previousDate = subDays(new Date(inputDate), 1);
@@ -40,18 +76,9 @@ export const getPreviousDate = inputDate => {
 
 export const getTodaysDate = () => {
 	let today = new Date();
-	// convert date to ISO string
 	let todaysDate = today.toISOString().split("T")[0];
 	return todaysDate;
 };
-
-// export const getYesterdaysDate = () => {
-// 	const myDate = new Date();
-// 	myDate.setDate(myDate.getDate() - 1);
-// 	return myDate.toISOString().split("T")[0];
-// };
-
-/***********************************************************************************************/
 
 export function getWeeksOfYear(year) {
 	const startOfGivenYear = startOfYear(new Date(year, 0, 1));
@@ -82,45 +109,53 @@ export function getWeeksOfYear(year) {
 	return weeks;
 }
 
-function yesterdayDate() {
+export const getYesterdayDate = () => {
 	const yesterday = subDays(new Date(), 1);
-	return yesterday.toISOString().slice(0, 10);
-}
+	return convertToPST(yesterday);
+};
 
-function getPreviousWeekDates() {
-	const startOfWeekDate = startOfWeek(subDays(new Date(), 7));
-	const endOfWeekDate = endOfWeek(subDays(new Date(), 7));
-	return [
-		startOfWeekDate.toISOString().slice(0, 10),
-		endOfWeekDate.toISOString().slice(0, 10),
-	];
-}
+export const getWeekDatesFromNumber = (year, weekNumber) => {
+	const date = new Date(year, 0, 1 + (weekNumber - 1) * 7);
+	const startDate = add(startOfWeek(date), { days: 1 });
+	const endDate = add(endOfWeek(date), { days: 1 });
+	// console.log("startDate :", startDate, "endDate :", endDate);
+	return [formatDate(startDate), formatDate(endDate)];
+};
 
-function getPreviousMonthDates() {
-	const startOfMonthDate = startOfMonth(subMonths(new Date(), 1));
-	const endOfMonthDate = endOfMonth(subMonths(new Date(), 1));
+// getWeekDatesFromNumber(2024, 11);
 
-	return [
-		startOfMonthDate.toISOString().slice(0, 10),
-		endOfMonthDate.toISOString().slice(0, 10),
-	];
-}
+/***********************************************************************************************/
+
+// function getPreviousWeekDates() {
+// 	const startOfWeekDate = startOfWeek(subDays(new Date(), 7));
+// 	const endOfWeekDate = endOfWeek(subDays(new Date(), 7));
+// 	return [
+// 		startOfWeekDate.toISOString().slice(0, 10),
+// 		endOfWeekDate.toISOString().slice(0, 10),
+// 	];
+// }
+
+// function getPreviousMonthDates() {
+// 	const startOfMonthDate = startOfMonth(subMonths(new Date(), 1));
+// 	const endOfMonthDate = endOfMonth(subMonths(new Date(), 1));
+
+// 	return [
+// 		startOfMonthDate.toISOString().slice(0, 10),
+// 		endOfMonthDate.toISOString().slice(0, 10),
+// 	];
+// }
 
 export const getWeekNumberByDate = date => {
 	const weekNumber = getWeek(new Date(date));
 	console.log("Week number:", weekNumber);
 	return weekNumber;
 };
-getWeekNumberByDate("2024-03-29");
-
-// Example usage:
-
-console.log("----helper----");
-console.log("Yesterday's date:", yesterdayDate());
-const [startWeek, endWeek] = getPreviousWeekDates();
-console.log("Previous week's start date:", startWeek);
-console.log("Previous week's end date:", endWeek);
-const [startMonth, endMonth] = getPreviousMonthDates();
-console.log("Previous month's start date:", startMonth);
-console.log("Previous month's end date:", endMonth);
-console.log("----helper----");
+// getWeekNumberByDate("2024-03-29");
+export const groupItemsByDate = items => {
+	return items.reduce((acc, item) => {
+		const date = item.createdAt.split("T")[0];
+		acc[date] = acc[date] ?? [];
+		acc[date].push(item);
+		return acc;
+	}, {});
+};

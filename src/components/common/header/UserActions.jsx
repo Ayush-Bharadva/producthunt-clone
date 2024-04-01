@@ -66,7 +66,7 @@ const UserActions = () => {
   }, [username, getUserDetails]);
 
   if (loading) {
-    return <div><CircularProgress /></div>;
+    return <CircularProgress />;
   }
 
   const logOutUser = () => {
@@ -95,8 +95,8 @@ const UserActions = () => {
           </>
       }
     </div>
-  )
-}
+  );
+};
 
 export default UserActions;
 
@@ -113,8 +113,8 @@ const HoverMenu = ({ logOutUser, ...props }) => {
       </menu>
     </div>
   );
-}
+};
 
 HoverMenu.propTypes = {
   logOutUser: PropTypes.func
-}
+};

@@ -1,17 +1,32 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { NavLink, useLocation, useParams } from "react-router-dom";
 import { GoArrowLeft, GoArrowRight } from "react-icons/go";
 import "./Launches.scss";
 import { Weeks, days, years } from "../../utils/constants";
-import PostCard from "../../components/common/post-card/PostCard";
+import ProductCard from "../../components/common/product-card/ProductCard";
 import { GET_POSTS } from "../../graphql/queries";
-import { getTodaysDate } from "../../utils/helper";
 import InfiniteScroll from "react-infinite-scroller";
 import { CircularProgress } from "@mui/material";
+import { getWeekDatesFromNumber } from "../../utils/helper";
 
 const isActiveLink = ({ isActive }) => (isActive ? "link link-active" : "link");
 const isButtonActive = ({ isActive }) => (isActive ? "category-btn active" : "category-btn");
+
+const calculatePostedAfterDate = (year, month, day, isWeekly, weekNumber) => {
+  if (!isWeekly) {
+    return `${year}-${month}-${day}`;
+  } else {
+    return getWeekDatesFromNumber(year, weekNumber);
+  }
+};
+const calculatePostedBeforeDate = (year, month, day, isWeekly, weekNumber) => {
+  if (!isWeekly) {
+    return `${year}-${month}-${+day + 1}`;
+  } else {
+    return getWeekDatesFromNumber(year, +weekNumber + 1);
+  }
+};
 
 const Launches = () => {
   const location = useLocation();
@@ -21,8 +36,6 @@ const Launches = () => {
 
   console.log(year, month, week, day);
 
-  const todaysDate = getTodaysDate();
-
   const [postState, setPostState] = useState({
     postsList: [],
     endCursor: null,
@@ -31,12 +44,17 @@ const Launches = () => {
 
   const { postsList, endCursor, hasMore } = postState;
 
+  let leftArrowLink = isWeekly ? `/leaderboard/weekly/2024/${week - 1}` : `/leaderboard/daily/2024/3/${day - 1}`;
+  let rightArrowLink = isWeekly ? `/leaderboard/weekly/2024/${week + 1}` : `/leaderboard/daily/2024/3/${parseInt(day) + 1}`;
+
   const { error, fetchMore } = useQuery(GET_POSTS, {
     variables: {
       "first": 10,
       "featured": true,
-      "postedAfter": todaysDate,
+      "postedAfter": calculatePostedAfterDate(year, month, day, isWeekly, week),
+      "postedBefore": calculatePostedBeforeDate(year, month, day, isWeekly, week),
       "after": null,
+      "order": "VOTES"
     },
     onCompleted: (data) => {
       const { posts } = data ?? {};
@@ -48,7 +66,7 @@ const Launches = () => {
     },
   });
 
-  const handleLoadMore = () => {
+  const handleLoadMore = useCallback(() => {
     if (hasMore) {
       fetchMore({
         variables: {
@@ -74,7 +92,7 @@ const Launches = () => {
         }
       });
     }
-  }
+  }, [endCursor, fetchMore, hasMore]);
 
   if (error) {
     return <p>Error: {error.message}</p>;
@@ -84,12 +102,12 @@ const Launches = () => {
     <>
       <div className="launches-container">
         <div className="launches-heading">
-          <div className="heading-text">Best of March 12, 2024</div>
+          <div className="heading-text">Best of March 31, 2024</div>
           <div className="routes">
             <NavLink className={isActiveLink} to={`/leaderboard/daily/${year}/${month}/${day}`}>
               Daily
             </NavLink>
-            <NavLink className={isActiveLink} to={`/leaderboard/weekly/2024/${week}`}>
+            <NavLink className={isActiveLink} to={`/leaderboard/weekly/${year}/${week}`}>
               Weekly
             </NavLink>
             <NavLink className={isActiveLink} to={`/leaderboard/monthly/${year}/${month}`}>
@@ -100,31 +118,35 @@ const Launches = () => {
             </NavLink>
           </div>
           <div className="button-group">
-            <NavLink to="/leaderboard/daily/2024/3/21" className={isButtonActive} end>
+            <NavLink to={`/leaderboard/daily/${year}/${month}/${day}`} className={isButtonActive} end>
               Featured
             </NavLink>
             <span>|</span>
-            <NavLink to="/leaderboard/daily/2024/3/21/all" className={isButtonActive} end>
+            <NavLink to={`/leaderboard/daily/${year}/${month}/${day}/all`} className={isButtonActive} end>
               All
             </NavLink>
           </div>
         </div>
         <div className="pagination-container">
-          <GoArrowLeft />
+          <NavLink className="arrow-btn" to={leftArrowLink}>
+            <GoArrowLeft />
+          </NavLink>
           <div className="pages">
             {!isWeekly
               ? days.map((day, index) => (
-                <NavLink key={index} to={`/leaderboard/daily/2024/3/${day}`} className={({ isActive }) => (isActive ? "page selected" : "page")}>
+                <NavLink key={index} to={`/leaderboard/${!isWeekly ? "daily" : "weekly"}/${year}/${month}/${day}`} className={({ isActive }) => (isActive ? "page selected" : "page")}>
                   {day}
                 </NavLink>
               ))
               : Weeks.map((week, index) => (
-                <NavLink key={index} to={`/leaderboard/weekly/2024/${index + 11}`} className={({ isActive }) => (isActive ? "page selected" : "page")}>
+                <NavLink key={index} to={`/leaderboard/${!isWeekly ? "daily" : "weekly"}/${year}/${index + 11}`} className={({ isActive }) => (isActive ? "page selected" : "page")}>
                   {week}
                 </NavLink>
               ))}
           </div>
-          <GoArrowRight />
+          <NavLink className="arrow-btn" to={rightArrowLink}>
+            <GoArrowRight />
+          </NavLink>
         </div>
         <InfiniteScroll
           className="posts-container"
@@ -133,7 +155,7 @@ const Launches = () => {
           loader={<CircularProgress />}
           threshold={50}
           initialLoad={false}>
-          {postsList.map(post => <PostCard key={post.id} post={post} />)}
+          {postsList.map(post => <ProductCard key={post.id} post={post} />)}
         </InfiniteScroll>
       </div>
       <div className="launch-archive">
@@ -144,8 +166,7 @@ const Launches = () => {
               <div key={index} className="archive">
                 <NavLink
                   to={`/leaderboard/yearly/${year}`}
-                  className={({ isActive }) => (isActive ? "archive-link active" : "archive-link")}
-                >
+                  className={({ isActive }) => (isActive ? "archive-link active" : "archive-link")}>
                   {year}
                 </NavLink>
               </div>
