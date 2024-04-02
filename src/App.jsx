@@ -6,7 +6,6 @@ import Layout from "./components/layout/Layout";
 import Home from "./pages/home/Home";
 import { CircularProgress } from "@mui/material";
 import { Toaster } from "react-hot-toast";
-import AllProducts from "./pages/home/AllProducts";
 
 const lazyImport = name => lazy(() => import("./pages/index").then((module) => ({ default: module[name] })));
 
@@ -17,13 +16,17 @@ const Community = lazyImport("Community");
 const Advertise = lazyImport("Advertise");
 const User = lazyImport("User");
 const PageNotFound = lazyImport("PageNotFound");
+const FeaturedProducts = lazyImport("FeaturedProducts");
+const AllProducts = lazyImport("AllProducts");
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="" element={<Layout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/all" element={<AllProducts />} />
+        <Route path="" element={<Home />} >
+          <Route path="" element={<FeaturedProducts />} />
+          <Route path="/all" element={<AllProducts />} />
+        </Route>
         <Route path="/leaderboard" element={<Launches />}>
           <Route path="daily/:year/:month/:day" element={<Launches />}>
             <Route path="all" element={<Launches />} />

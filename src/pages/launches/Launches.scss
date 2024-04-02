@@ -63,6 +63,19 @@ $text-color: #4b587c;
 			padding: 0.35rem;
 			border-radius: 5px;
 
+			button {
+				background: none;
+				border: none;
+				cursor: pointer;
+				color: $text-color;
+				align-self: center;
+			}
+
+			.disabled {
+				color: #ccc;
+				pointer-events: none;
+			}
+
 			&:hover {
 				background-color: #e8e8e8;
 			}

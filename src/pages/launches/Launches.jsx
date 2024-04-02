@@ -1,14 +1,14 @@
 import { useCallback, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { NavLink, useLocation, useParams } from "react-router-dom";
-import { GoArrowLeft, GoArrowRight } from "react-icons/go";
 import "./Launches.scss";
-import { Weeks, days, years } from "../../utils/constants";
+import { years } from "../../utils/constants";
 import ProductCard from "../../components/common/product-card/ProductCard";
 import { GET_POSTS } from "../../graphql/queries";
 import InfiniteScroll from "react-infinite-scroller";
 import { CircularProgress } from "@mui/material";
 import { getWeekDatesFromNumber } from "../../utils/helper";
+import DateSelector from "./DateSelector";
 
 const isActiveLink = ({ isActive }) => (isActive ? "link link-active" : "link");
 const isButtonActive = ({ isActive }) => (isActive ? "category-btn active" : "category-btn");
@@ -22,7 +22,7 @@ const calculatePostedAfterDate = (year, month, day, isWeekly, weekNumber) => {
 };
 const calculatePostedBeforeDate = (year, month, day, isWeekly, weekNumber) => {
   if (!isWeekly) {
-    return `${year}-${month}-${+day + 1}`;
+    return `${year}-${month}-${day + 1}`;
   } else {
     return getWeekDatesFromNumber(year, +weekNumber + 1);
   }
@@ -34,7 +34,7 @@ const Launches = () => {
 
   const { year, month, week, day } = useParams();
 
-  console.log(year, month, week, day);
+  // console.log(year, month, week, day);
 
   const [postState, setPostState] = useState({
     postsList: [],
@@ -44,8 +44,8 @@ const Launches = () => {
 
   const { postsList, endCursor, hasMore } = postState;
 
-  let leftArrowLink = isWeekly ? `/leaderboard/weekly/2024/${week - 1}` : `/leaderboard/daily/2024/3/${day - 1}`;
-  let rightArrowLink = isWeekly ? `/leaderboard/weekly/2024/${week + 1}` : `/leaderboard/daily/2024/3/${parseInt(day) + 1}`;
+  // let leftArrowLink = isWeekly ? `/leaderboard/weekly/2024/${week - 1}` : `/leaderboard/daily/2024/3/${day - 1}`;
+  // let rightArrowLink = isWeekly ? `/leaderboard/weekly/2024/${week + 1}` : `/leaderboard/daily/2024/3/${parseInt(day) + 1}`;
 
   const { error, fetchMore } = useQuery(GET_POSTS, {
     variables: {
@@ -98,11 +98,13 @@ const Launches = () => {
     return <p>Error: {error.message}</p>;
   }
 
+  // console.log("postsList", postsList);
+
   return (
     <>
       <div className="launches-container">
         <div className="launches-heading">
-          <div className="heading-text">Best of March 31, 2024</div>
+          <div className="heading-text">Best of {year}-{month}-{day}</div>
           <div className="routes">
             <NavLink className={isActiveLink} to={`/leaderboard/daily/${year}/${month}/${day}`}>
               Daily
@@ -127,27 +129,7 @@ const Launches = () => {
             </NavLink>
           </div>
         </div>
-        <div className="pagination-container">
-          <NavLink className="arrow-btn" to={leftArrowLink}>
-            <GoArrowLeft />
-          </NavLink>
-          <div className="pages">
-            {!isWeekly
-              ? days.map((day, index) => (
-                <NavLink key={index} to={`/leaderboard/${!isWeekly ? "daily" : "weekly"}/${year}/${month}/${day}`} className={({ isActive }) => (isActive ? "page selected" : "page")}>
-                  {day}
-                </NavLink>
-              ))
-              : Weeks.map((week, index) => (
-                <NavLink key={index} to={`/leaderboard/${!isWeekly ? "daily" : "weekly"}/${year}/${index + 11}`} className={({ isActive }) => (isActive ? "page selected" : "page")}>
-                  {week}
-                </NavLink>
-              ))}
-          </div>
-          <NavLink className="arrow-btn" to={rightArrowLink}>
-            <GoArrowRight />
-          </NavLink>
-        </div>
+        <DateSelector />
         <InfiniteScroll
           className="posts-container"
           loadMore={handleLoadMore}

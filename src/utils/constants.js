@@ -44,7 +44,6 @@ export const days = [
 	"28",
 	"29",
 	"30",
-	"31",
 ];
 
 export const Weeks = [
@@ -78,23 +77,30 @@ export const SearchOptions = [
 	},
 ];
 
-export const PeriodLabel = {
-	yesterday: "Yesterday",
-	weekly: "Weekly",
-	monthly: "Monthly",
-	yearly: "Yearly",
-};
+// export const PeriodLabel = {
+// 	yesterday: "Yesterday",
+// 	weekly: "Weekly",
+// 	monthly: "Monthly",
+// 	yearly: "Yearly",
+// };
 
 export const ProductsType = {
 	featured: "featured",
 	all: "all",
 };
 
-// export const NavigateToLink = {
-// 	[PeriodLabel.yesterday]: "leaderboard/daily/2024/3/29",
-// 	[PeriodLabel.weekly]: "leaderboard/weekly/2024/11",
-// 	[PeriodLabel.monthly]: "leaderboard/monthly/2024/3",
-// };
+export const eventType = {
+	yesterday: "Yesterday",
+	week: "Weekly",
+	month: "Monthly",
+};
+
+export const NavPlaceHolder = {
+	[eventType.yesterday]: "daily",
+	[eventType.week]: "weekly",
+	[eventType.month]: "monthly",
+	// [eventType.yesterday]: "yearly",
+};
 
 // export const IndianTime = moment.tz("Asia/Kolkata").format();
 // export const PSTTimeNow = moment.tz("America/New_York").format();

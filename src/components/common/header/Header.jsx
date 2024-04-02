@@ -7,9 +7,10 @@ import { IoClose } from "react-icons/io5";
 import { useState } from "react";
 import MobileNavigationMenu from "./MobileNavigationMenu";
 import UserActions from "./UserActions";
-import { pstCurrentDate } from "../../../utils/helper";
+import { formatDate, pstCurrentDate } from "../../../utils/helper";
 
-const [year, month, day] = pstCurrentDate.split("-");
+
+const [year, month, day] = formatDate(pstCurrentDate).split("-");
 
 const isActiveLink = ({ isActive }) => isActive ? "nav-link active" : "nav-link";
 

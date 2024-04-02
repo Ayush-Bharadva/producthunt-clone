@@ -4,22 +4,19 @@ import { useQuery } from "@apollo/client";
 import { GET_POSTS } from "../../graphql/queries";
 import { NavLink, useNavigate } from "react-router-dom";
 import ProductCard from "../../components/common/product-card/ProductCard";
-import { subWeeks } from "date-fns";
-import { getWeekNumberByDate } from "../../utils/helper";
+import { getNavLink } from "../../utils/helper";
+import { NavPlaceHolder } from "../../utils/constants";
 
-const currentDate = new Date().toISOString();
+// const currentDate = new Date().toISOString();
 
-const TopProductsByPeriod = ({ title, periodLabel, postedAfter, postedBefore }) => {
-
-  console.log("postedAfter", postedAfter);
-  console.log("postedBefore", postedBefore);
+const TopProductsByPeriod = ({ event, title, postedAfter, postedBefore }) => {
 
   const navigate = useNavigate();
 
   const [year, month, day] = postedAfter.split('-');
 
-  const selectedDate = currentDate;
-  const previousWeekNumber = getWeekNumberByDate(subWeeks(new Date(selectedDate), 1));
+  // const selectedDate = currentDate;
+  // const previousWeekNumber = getWeekNumberByDate(subWeeks(new Date(selectedDate), 1));
 
   const { data, error } = useQuery(GET_POSTS, {
     variables: {
@@ -32,17 +29,14 @@ const TopProductsByPeriod = ({ title, periodLabel, postedAfter, postedBefore }) 
     keepPreviousData: true
   });
 
-  let navigationPath = "";
-  if (periodLabel === "Yesterday") {
-    navigationPath = `/leaderboard/daily/${year}/${month}/${day}`;
-  } else if (periodLabel === "Weekly") {
-    navigationPath = `/leaderboard/weekly/${year}/${previousWeekNumber}`;
-  } else if (periodLabel === "Monthly") {
-    navigationPath = `/leaderboard/monthly/${year}/${month}`;
-  }
+  const navPath = getNavLink(NavPlaceHolder[event], postedAfter);
+  console.log("navPath", navPath);
+
+
+  // console.log("year", year, "month", month, "day", day, "previousWeekNumber", previousWeekNumber);
 
   const handleNavigation = () => {
-    navigate(navigationPath);
+    navigate(`/leaderboard/daily/${year}/${month}/${day}`);
   };
 
   const productsList = useMemo(() => data?.posts?.nodes || [], [data]);
@@ -56,9 +50,9 @@ const TopProductsByPeriod = ({ title, periodLabel, postedAfter, postedBefore }) 
       <div className="heading">
         <p className="title">{title}</p>
         <div className="button-group">
-          <NavLink to={navigationPath} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} end>Featured</NavLink>
+          <NavLink to={navPath} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} end>Featured</NavLink>
           <span>|</span>
-          <NavLink to={`${navigationPath}/all`} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} end>All</NavLink>
+          <NavLink to={`${navPath}/all`} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} end>All</NavLink>
         </div>
       </div>
       {productsList.length > 0 &&
@@ -75,8 +69,8 @@ const TopProductsByPeriod = ({ title, periodLabel, postedAfter, postedBefore }) 
 export default TopProductsByPeriod;
 
 TopProductsByPeriod.propTypes = {
+  event: PropTypes.string,
   title: PropTypes.string,
-  periodLabel: PropTypes.string,
   postedAfter: PropTypes.string,
   postedBefore: PropTypes.string,
 };

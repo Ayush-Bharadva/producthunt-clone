@@ -6,13 +6,12 @@ import { useLocalStorage } from "../../hooks/useLocalStorage";
 import ProductCard from "../../components/common/product-card/ProductCard";
 
 const User = () => {
-
-  const [userDetails] = useLocalStorage("user", null);
-  const { id, name, headline, profileImage } = userDetails;
+  const [userInfo] = useLocalStorage("user", null);
+  const { id, name, headline, profileImage } = userInfo;
 
   const { data, error, loading } = useQuery(GET_USER_DETAILS, {
     variables: {
-      username: userDetails?.username
+      username: userInfo?.username
     }
   });
 

@@ -1,29 +1,29 @@
-import { createContext, useCallback, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect } from "react";
 import { PropTypes } from "prop-types";
 import { showToast } from "../utils/helper";
 import { getAccessToken, getUserName } from "../services/auth-service";
 import { useSearchParams } from "react-router-dom";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { useLazyQuery } from "@apollo/client";
+import { GET_USER } from "../graphql/queries";
 
 export const UserContext = createContext({
   userInfo: null,
-  username: null,
   setUserInfo: () => { },
-  handleUserAuth: () => { },
-  handleUserLogout: () => { },
+  authenticateUser: () => { },
+  logoutUser: () => { },
 });
 
 const UserProvider = ({ children }) => {
 
-  const [userInfo, setUserInfo] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [username, setUsername] = useLocalStorage(null);
+  const [username, setUsername] = useLocalStorage("username", null);
+  const [userInfo, setUserInfo] = useLocalStorage("userInfo", null);
 
-  const handleUserAuth = useCallback(async () => {
+  const authenticateUser = useCallback(async () => {
     try {
       const { access_token } = await getAccessToken(searchParams.get("code"));
       const { data: { viewer: { user: { username = "" } = {} } = {} } = {} } = await getUserName(access_token);
-      setUserInfo({ username });
       setUsername(username);
       searchParams.delete("code");
       setSearchParams(searchParams);
@@ -32,23 +32,41 @@ const UserProvider = ({ children }) => {
     }
   }, [searchParams, setSearchParams, setUsername]);
 
-  const handleUserLogout = useCallback(() => {
+  const logoutUser = useCallback(() => {
     setUserInfo(null);
-  }, []);
+    setUsername(null);
+  }, [setUserInfo, setUsername]);
 
+  const [getUserDetails] = useLazyQuery(GET_USER, {
+    variables: { username },
+    onCompleted: (data) => {
+      setUserInfo(data.user);
+      searchParams.delete("code");
+      setSearchParams(searchParams);
+    },
+    onError: (error) => {
+      showToast("error", error.message);
+      console.error("Error in getUserDetails:", error);
+    }
+  });
 
   useEffect(() => {
     if (searchParams.get("code")) {
-      handleUserAuth();
+      authenticateUser();
     }
-  }, [searchParams, handleUserAuth]);
+  }, [searchParams, authenticateUser]);
+
+  useEffect(() => {
+    if (username) {
+      getUserDetails();
+    }
+  }, [username, getUserDetails]);
 
   const ctxValue = {
     userInfo,
-    username,
     setUserInfo,
-    handleUserAuth,
-    handleUserLogout
+    authenticateUser,
+    logoutUser
   };
 
   return (
