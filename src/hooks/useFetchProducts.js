@@ -2,13 +2,7 @@ import { useQuery } from "@apollo/client";
 import { useCallback, useState } from "react";
 import { GET_POSTS } from "../graphql/queries";
 
-export const useFetchProducts = ({
-	order,
-	postedAfter,
-	postedBefore,
-	featured,
-	username,
-}) => {
+export const useFetchProducts = ({ order, postedAfter, postedBefore, featured }) => {
 	const [productsInfo, setProductsInfo] = useState({
 		productsList: [],
 		endCursor: null,
@@ -25,7 +19,6 @@ export const useFetchProducts = ({
 			postedAfter: postedAfter ?? null,
 			postedBefore: postedBefore ?? null,
 			after: null,
-			username: username ?? null,
 		},
 		onCompleted: data => {
 			const { posts } = data ?? {};

@@ -125,6 +125,38 @@ export const GET_POSTS = gql`
 	}
 `;
 
+export const SEARCH_PRODUCTS = gql`
+	query SearchProducts($first: Int, $query: String) {
+		posts(first: $first, query: $query) {
+			nodes {
+				id
+				name
+				tagline
+				commentsCount
+				votesCount
+				media {
+					url
+					videoUrl
+				}
+				website
+				thumbnail {
+					type
+					url
+					videoUrl
+				}
+				topics {
+					edges {
+						node {
+							name
+						}
+					}
+				}
+			}
+			totalCount
+		}
+	}
+`;
+
 export const GET_ALL_POSTS_BY_DATE = gql`
 	query GetAllPostsByDate(
 		$first: Int

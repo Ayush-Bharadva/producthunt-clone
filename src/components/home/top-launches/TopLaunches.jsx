@@ -1,4 +1,4 @@
-import "./TopLaunches.scss"
+import "./TopLaunches.scss";
 
 const TopLaunches = () => {
   return (
@@ -13,7 +13,7 @@ const TopLaunches = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TopLaunches
+export default TopLaunches;

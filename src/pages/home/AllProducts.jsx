@@ -1,17 +1,17 @@
-import { groupItemsByDate, showToast } from "../../utils/helper";
+import { useMemo } from "react";
+import { NavLink } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroller";
 import { CircularProgress } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { groupItemsByDate, showToast } from "../../utils/helper";
 import ProductCard from "../../components/common/product-card/ProductCard";
 import { useFetchProducts } from "../../hooks/useFetchProducts";
-import { useMemo } from "react";
 
 const isActiveLink = ({ isActive }) => isActive ? "category-btn active" : "category-btn";
 
 const AllProducts = () => {
 
   const { productsList, error, hasMore, handleLoadMore } = useFetchProducts({
-    order: "NEWEST"
+    order: "NEWEST",
   });
 
   const dateWisePosts = useMemo(() => groupItemsByDate(productsList), [productsList]);
@@ -22,31 +22,29 @@ const AllProducts = () => {
   }
 
   return (
-    <>
-      <InfiniteScroll
-        className="posts-container"
-        loadMore={handleLoadMore}
-        hasMore={hasMore}
-        loader={<CircularProgress />}
-        threshold={50}
-        initialLoad={false}>
-        {Object.entries(dateWisePosts).map(([date, posts]) => {
-          return (
-            <>
-              <div className="heading">
-                <p className="title">Top Products Launching on {date}</p>
-                <div className="button-group">
-                  <NavLink to="/" className={isActiveLink}>Featured</NavLink>
-                  <span>|</span>
-                  <NavLink to="/all" className={isActiveLink}>All</NavLink>
-                </div>
+    <InfiniteScroll
+      className="posts-container"
+      loadMore={handleLoadMore}
+      hasMore={hasMore}
+      loader={<CircularProgress />}
+      threshold={50}
+      initialLoad={false}>
+      {Object.entries(dateWisePosts).map(([date, posts]) => {
+        return (
+          <>
+            <div className="heading">
+              <p className="title">Top Products Launching on {date}</p>
+              <div className="button-group">
+                <NavLink to="/" className={isActiveLink}>Featured</NavLink>
+                <span>|</span>
+                <NavLink to="/all" className={isActiveLink}>All</NavLink>
               </div>
-              {posts.map(post => <ProductCard key={post.id} post={post} />)}
-            </>
-          );
-        })}
-      </InfiniteScroll>
-    </>
+            </div>
+            {posts.map(product => <ProductCard key={product.id} product={product} />)}
+          </>
+        );
+      })}
+    </InfiniteScroll>
   );
 };
 

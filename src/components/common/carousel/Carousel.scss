@@ -11,7 +11,7 @@
 	}
 }
 
-.post-carousel {
+.product-carousel {
 	height: 200px;
 	display: flex;
 	overflow-x: auto;
@@ -25,7 +25,8 @@
 		border-radius: 5px;
 		overflow: hidden;
 
-		img {
+		.media {
+			aspect-ratio: 16/9;
 			height: 100%;
 			width: 100%;
 			object-fit: cover;

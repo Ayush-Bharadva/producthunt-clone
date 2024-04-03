@@ -80,6 +80,22 @@ $text-color: #4b587c;
 	}
 }
 
+.scroll-to-top {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	background-color: #e75c44;
+	color: #fff;
+	border: none;
+	border-radius: 50%;
+	text-align: center;
+	font-size: 1rem;
+	width: 32px;
+	height: 32px;
+	padding: 0.25rem;
+	cursor: pointer;
+}
+
 @media screen and (max-width: 1440px) {
 	.main-container {
 		max-width: 990px;
@@ -167,6 +183,23 @@ $text-color: #4b587c;
 		.home-container,
 		.launches-container {
 			margin: 0;
+		}
+	}
+}
+
+@media screen and (max-width: 425px) {
+	.heading {
+		.title {
+			font-size: 1.15rem !important;
+		}
+	}
+	.product-card {
+		.product-image {
+			height: 36px;
+			width: 36px;
+		}
+		.product-details {
+			font-size: small;
 		}
 	}
 }

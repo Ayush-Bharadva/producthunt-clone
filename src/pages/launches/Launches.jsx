@@ -1,134 +1,56 @@
-import { useCallback, useState } from "react";
-import { useQuery } from "@apollo/client";
-import { NavLink, useLocation, useParams } from "react-router-dom";
-import "./Launches.scss";
-import { years } from "../../utils/constants";
-import ProductCard from "../../components/common/product-card/ProductCard";
-import { GET_POSTS } from "../../graphql/queries";
+import { NavLink, useParams } from "react-router-dom";
+import { PropTypes } from "prop-types";
 import InfiniteScroll from "react-infinite-scroller";
 import { CircularProgress } from "@mui/material";
-import { getWeekDatesFromNumber } from "../../utils/helper";
+import "./Launches.scss";
+import ProductCard from "../../components/common/product-card/ProductCard";
 import DateSelector from "./DateSelector";
+import { extractDateInfo, getWeekDatesFromNumber, pstCurrentDate } from "../../utils/helper";
+import LaunchArchive from "./LaunchArchive";
+import { useFetchProducts } from "../../hooks/useFetchProducts";
 
 const isActiveLink = ({ isActive }) => (isActive ? "link link-active" : "link");
 const isButtonActive = ({ isActive }) => (isActive ? "category-btn active" : "category-btn");
 
-const calculatePostedAfterDate = (year, month, day, isWeekly, weekNumber) => {
-  if (!isWeekly) {
-    return `${year}-${month}-${day}`;
-  } else {
-    return getWeekDatesFromNumber(year, weekNumber);
-  }
-};
-const calculatePostedBeforeDate = (year, month, day, isWeekly, weekNumber) => {
-  if (!isWeekly) {
-    return `${year}-${month}-${day + 1}`;
-  } else {
-    return getWeekDatesFromNumber(year, +weekNumber + 1);
-  }
-};
+const { weekNumber } = extractDateInfo(pstCurrentDate);
+const [currentYear, currentMonth, currentDay] = pstCurrentDate.split("-");
 
 const Launches = () => {
-  const location = useLocation();
-  const isWeekly = location.pathname.includes("weekly");
 
   const { year, month, week, day } = useParams();
 
-  // console.log(year, month, week, day);
+  let postedAfter, postedBefore;
 
-  const [postState, setPostState] = useState({
-    postsList: [],
-    endCursor: null,
-    hasMore: true,
+  if (!month && !week && !day) {
+    postedAfter = `${year}-01-01`;
+    postedBefore = `${year}-12-31`;
+  } else if (month && !week) {
+    postedAfter = `${year}-${month}-01`;
+    postedBefore = `${year}-${month}-31`;
+  } else if (week && !month && !day) {
+    const [startDate, endDate] = getWeekDatesFromNumber(year, week);
+    postedAfter = startDate;
+    postedBefore = endDate;
+  } else if (day) {
+    postedAfter = `${year}-${month}-${day}`;
+    postedBefore = `${year}-${month}-${+day + 1}`;
+  }
+
+  const { productsList, hasMore, error, handleLoadMore } = useFetchProducts({
+    featured: true,
+    order: "VOTES",
+    postedAfter,
+    postedBefore,
   });
-
-  const { postsList, endCursor, hasMore } = postState;
-
-  // let leftArrowLink = isWeekly ? `/leaderboard/weekly/2024/${week - 1}` : `/leaderboard/daily/2024/3/${day - 1}`;
-  // let rightArrowLink = isWeekly ? `/leaderboard/weekly/2024/${week + 1}` : `/leaderboard/daily/2024/3/${parseInt(day) + 1}`;
-
-  const { error, fetchMore } = useQuery(GET_POSTS, {
-    variables: {
-      "first": 10,
-      "featured": true,
-      "postedAfter": calculatePostedAfterDate(year, month, day, isWeekly, week),
-      "postedBefore": calculatePostedBeforeDate(year, month, day, isWeekly, week),
-      "after": null,
-      "order": "VOTES"
-    },
-    onCompleted: (data) => {
-      const { posts } = data ?? {};
-      setPostState(() => ({
-        postsList: posts.nodes ?? [],
-        hasMore: posts.pageInfo.hasNextPage ?? false,
-        endCursor: posts.pageInfo.endCursor ?? null,
-      }));
-    },
-  });
-
-  const handleLoadMore = useCallback(() => {
-    if (hasMore) {
-      fetchMore({
-        variables: {
-          "after": endCursor
-        },
-        updateQuery: (prev, { fetchMoreResult }) => {
-          if (!fetchMoreResult) {
-            return prev;
-          }
-          const { posts } = fetchMoreResult;
-          setPostState((prev) => ({
-            postsList: [...prev.postsList, ...posts.nodes],
-            hasMore: posts.pageInfo.hasNextPage,
-            endCursor: posts.pageInfo.endCursor
-          }));
-          return {
-            posts: {
-              ...posts,
-              nodes: [...prev.posts.nodes, ...posts.nodes],
-              pageInfo: posts.pageInfo
-            }
-          };
-        }
-      });
-    }
-  }, [endCursor, fetchMore, hasMore]);
 
   if (error) {
     return <p>Error: {error.message}</p>;
   }
 
-  // console.log("postsList", postsList);
-
   return (
     <>
       <div className="launches-container">
-        <div className="launches-heading">
-          <div className="heading-text">Best of {year}-{month}-{day}</div>
-          <div className="routes">
-            <NavLink className={isActiveLink} to={`/leaderboard/daily/${year}/${month}/${day}`}>
-              Daily
-            </NavLink>
-            <NavLink className={isActiveLink} to={`/leaderboard/weekly/${year}/${week}`}>
-              Weekly
-            </NavLink>
-            <NavLink className={isActiveLink} to={`/leaderboard/monthly/${year}/${month}`}>
-              Monthly
-            </NavLink>
-            <NavLink className={isActiveLink} to={`/leaderboard/yearly/${year}`}>
-              Yearly
-            </NavLink>
-          </div>
-          <div className="button-group">
-            <NavLink to={`/leaderboard/daily/${year}/${month}/${day}`} className={isButtonActive} end>
-              Featured
-            </NavLink>
-            <span>|</span>
-            <NavLink to={`/leaderboard/daily/${year}/${month}/${day}/all`} className={isButtonActive} end>
-              All
-            </NavLink>
-          </div>
-        </div>
+        <LeaderBoardHeading year={year} month={month} day={day} />
         <DateSelector />
         <InfiniteScroll
           className="posts-container"
@@ -137,27 +59,49 @@ const Launches = () => {
           loader={<CircularProgress />}
           threshold={50}
           initialLoad={false}>
-          {postsList.map(post => <ProductCard key={post.id} post={post} />)}
+          {productsList.map(product => <ProductCard key={product.id} product={product} />)}
         </InfiniteScroll>
       </div>
-      <div className="launch-archive">
-        <p className="launch-archive-heading">LAUNCH ARCHIVE</p>
-        <div className="archive-list">
-          {years.map((year, index) => {
-            return (
-              <div key={index} className="archive">
-                <NavLink
-                  to={`/leaderboard/yearly/${year}`}
-                  className={({ isActive }) => (isActive ? "archive-link active" : "archive-link")}>
-                  {year}
-                </NavLink>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <LaunchArchive />
     </>
   );
 };
 
 export default Launches;
+
+const LeaderBoardHeading = ({ year, month, day }) => {
+  return (
+    <div className="launches-heading">
+      <div className="heading-text">Best of {year ?? ""}-{month ?? ""}-{day ?? ""}</div>
+      <div className="routes">
+        <NavLink className={isActiveLink} to={`/leaderboard/daily/${currentYear}/${currentMonth}/${currentDay}`}>
+          Daily
+        </NavLink>
+        <NavLink className={isActiveLink} to={`/leaderboard/weekly/${currentYear}/${weekNumber}`}>
+          Weekly
+        </NavLink>
+        <NavLink className={isActiveLink} to={`/leaderboard/monthly/${currentYear}/${currentMonth}`}>
+          Monthly
+        </NavLink>
+        <NavLink className={isActiveLink} to={`/leaderboard/yearly/${currentYear}`}>
+          Yearly
+        </NavLink>
+      </div>
+      <div className="button-group">
+        <NavLink to={`/leaderboard/daily/${year}/${month}/${day}`} className={isButtonActive} end>
+          Featured
+        </NavLink>
+        <span>|</span>
+        <NavLink to={`/leaderboard/daily/${year}/${month}/${day}/all`} className={isButtonActive} end>
+          All
+        </NavLink>
+      </div>
+    </div>
+  );
+};
+
+LeaderBoardHeading.propTypes = {
+  year: PropTypes.string,
+  month: PropTypes.string,
+  day: PropTypes.string,
+};

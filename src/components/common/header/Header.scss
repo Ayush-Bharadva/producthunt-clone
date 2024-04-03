@@ -141,11 +141,13 @@ img {
 }
 
 .user-avatar {
+	aspect-ratio: 1/1;
 	height: 32px;
 	width: auto;
 }
 
 .profile-avatar-wrapper {
+	aspect-ratio: 1/1;
 	height: 32px;
 	border-radius: 50%;
 	overflow: hidden;

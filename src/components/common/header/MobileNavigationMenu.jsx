@@ -1,10 +1,10 @@
+import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
-import SearchInput from "../search-input/SearchInput";
 import { FaAngleRight } from "react-icons/fa6";
-import { useEffect } from "react";
+import SearchInput from "../search-input/SearchInput";
 
-const MobileNavigationMenu = ({ isMenuOpen }) => {
+const MobileNavigationMenu = ({ isMenuOpen, closeMenu }) => {
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -22,23 +22,23 @@ const MobileNavigationMenu = ({ isMenuOpen }) => {
       <SearchInput />
       <nav className="mobile-nav">
         <div className="nav-link">
-          <NavLink to="leaderboard">Launches</NavLink>
+          <NavLink to="leaderboard/daily/2024/4/2" onClick={closeMenu}>Launches</NavLink>
           <FaAngleRight />
         </div>
         <div className="nav-link">
-          <NavLink to="products">Products</NavLink>
+          <NavLink to="products" onClick={closeMenu}>Products</NavLink>
           <FaAngleRight />
         </div>
         <div className="nav-link">
-          <NavLink to="news">News</NavLink>
+          <NavLink to="news" onClick={closeMenu}>News</NavLink>
           <FaAngleRight />
         </div>
         <div className="nav-link">
-          <NavLink to="community">Community</NavLink>
+          <NavLink to="community" onClick={closeMenu}>Community</NavLink>
           <FaAngleRight />
         </div>
         <div className="nav-link">
-          <NavLink to="advertise">Advertise</NavLink>
+          <NavLink to="advertise" onClick={closeMenu}>Advertise</NavLink>
         </div>
       </nav>
     </div>
@@ -48,5 +48,6 @@ const MobileNavigationMenu = ({ isMenuOpen }) => {
 export default MobileNavigationMenu;
 
 MobileNavigationMenu.propTypes = {
-  isMenuOpen: PropTypes.bool
+  isMenuOpen: PropTypes.bool,
+  closeMenu: PropTypes.func
 };

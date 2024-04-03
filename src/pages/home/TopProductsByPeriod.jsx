@@ -4,39 +4,23 @@ import { useQuery } from "@apollo/client";
 import { GET_POSTS } from "../../graphql/queries";
 import { NavLink, useNavigate } from "react-router-dom";
 import ProductCard from "../../components/common/product-card/ProductCard";
-import { getNavLink } from "../../utils/helper";
-import { NavPlaceHolder } from "../../utils/constants";
 
-// const currentDate = new Date().toISOString();
-
-const TopProductsByPeriod = ({ event, title, postedAfter, postedBefore }) => {
+const TopProductsByPeriod = ({ navPath, title, postedAfter, postedBefore }) => {
 
   const navigate = useNavigate();
-
-  const [year, month, day] = postedAfter.split('-');
-
-  // const selectedDate = currentDate;
-  // const previousWeekNumber = getWeekNumberByDate(subWeeks(new Date(selectedDate), 1));
 
   const { data, error } = useQuery(GET_POSTS, {
     variables: {
       "first": 5,
       "featured": true,
       "order": "VOTES",
-      "postedAfter": postedAfter || null,
-      "postedBefore": postedBefore || null
-    },
-    keepPreviousData: true
+      "postedAfter": postedAfter ?? null,
+      "postedBefore": postedBefore ?? null
+    }
   });
 
-  const navPath = getNavLink(NavPlaceHolder[event], postedAfter);
-  console.log("navPath", navPath);
-
-
-  // console.log("year", year, "month", month, "day", day, "previousWeekNumber", previousWeekNumber);
-
   const handleNavigation = () => {
-    navigate(`/leaderboard/daily/${year}/${month}/${day}`);
+    navigate(`${navPath}`);
   };
 
   const productsList = useMemo(() => data?.posts?.nodes || [], [data]);
@@ -57,7 +41,7 @@ const TopProductsByPeriod = ({ event, title, postedAfter, postedBefore }) => {
       </div>
       {productsList.length > 0 &&
         (<div>
-          {productsList?.map(post => <ProductCard key={post.id} post={post} />)}
+          {productsList?.map(product => <ProductCard key={product.id} product={product} />)}
         </div>)}
       <button className="see-all-button" onClick={handleNavigation}>
         See all {title.toLowerCase()}
@@ -69,7 +53,7 @@ const TopProductsByPeriod = ({ event, title, postedAfter, postedBefore }) => {
 export default TopProductsByPeriod;
 
 TopProductsByPeriod.propTypes = {
-  event: PropTypes.string,
+  navPath: PropTypes.string,
   title: PropTypes.string,
   postedAfter: PropTypes.string,
   postedBefore: PropTypes.string,

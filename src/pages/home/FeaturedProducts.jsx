@@ -1,20 +1,14 @@
 import { NavLink } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroller";
 import { CircularProgress } from "@mui/material";
-import { subDays } from "date-fns";
 import "./Home.scss";
 import ProductCard from "../../components/common/product-card/ProductCard";
-import { formatDate, getPreviousMonthDates, getPreviousWeekDates, pstCurrentDate, showToast } from "../../utils/helper";
+import { extractDateInfo, formatDate, pstCurrentDate, showToast } from "../../utils/helper";
 import TopProductsByPeriod from "./TopProductsByPeriod";
-import { eventType } from "../../utils/constants";
 import { useFetchProducts } from "../../hooks/useFetchProducts";
+import { ProductsTitle } from "../../utils/constants";
 
 const isActiveLink = ({ isActive }) => isActive ? "category-btn active" : "category-btn";
-
-const [previousWeekStartDate, previousWeekEndDate] = getPreviousWeekDates(pstCurrentDate);
-const [previousMonthStartDate, previousMonthEndDate] = getPreviousMonthDates(pstCurrentDate);
-
-// console.log("pstCurrentDate", pstCurrentDate);
 
 const FeaturedProducts = () => {
 
@@ -22,6 +16,10 @@ const FeaturedProducts = () => {
     featured: true,
     postedAfter: formatDate(pstCurrentDate),
   });
+
+  const { previousDate, previousWeekStartDate, previousWeekEndDate, previousMonthStartDate, previousMonthEndDate, weekNumber } = extractDateInfo(pstCurrentDate);
+
+  const [year, month, day] = previousDate.split("-");
 
   if (error) {
     showToast("error", error.message);
@@ -31,7 +29,7 @@ const FeaturedProducts = () => {
   return (
     <>
       <div className="heading">
-        <p className="title">Top Products Launching on {formatDate(pstCurrentDate)}</p>
+        <p className="title">Top Products Launching Today</p>
         <div className="button-group">
           <NavLink to="/" className={isActiveLink}>Featured</NavLink>
           <span>|</span>
@@ -45,30 +43,27 @@ const FeaturedProducts = () => {
         loader={<CircularProgress />}
         threshold={50}
         initialLoad={false}>
-        {productsList.map(post => <ProductCard key={post.id} post={post} />)}
+        {productsList.map(product => <ProductCard key={product.id} product={product} />)}
       </InfiniteScroll>
       {!hasMore ?
         <>
           <TopProductsByPeriod
-            title="Yesterday's Top Products"
-            // type={DurationType.daily}
-            event={eventType.yesterday}
-            postedAfter={formatDate(subDays(pstCurrentDate, 1))}
+            title={ProductsTitle.yesterday}
+            postedAfter={previousDate}
             postedBefore={formatDate(pstCurrentDate)}
+            navPath={`/leaderboard/daily/${year}/${month}/${day}`}
           />
           <TopProductsByPeriod
-            title="Last Week's Top Products"
-            // type={DurationType.weekly}
-            event={eventType.week}
+            title={ProductsTitle.lastWeek}
             postedAfter={formatDate(previousWeekStartDate)}
             postedBefore={formatDate(previousWeekEndDate)}
+            navPath={`/leaderboard/weekly/${year}/${weekNumber}`}
           />
           <TopProductsByPeriod
-            title="Last Month's Top Products"
-            // type={DurationType.monthly}
-            event={eventType.month}
+            title={ProductsTitle.lastMonth}
             postedAfter={formatDate(previousMonthStartDate)}
             postedBefore={formatDate(previousMonthEndDate)}
+            navPath={`/leaderboard/monthly/${year}/${month}`}
           />
         </>
         : null}

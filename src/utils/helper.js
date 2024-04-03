@@ -1,10 +1,4 @@
 import {
-	// startOfYear,
-	// endOfYear,
-	// addWeeks,
-	// isBefore,
-	// isAfter,
-	// isSameWeek,
 	format,
 	startOfWeek,
 	endOfWeek,
@@ -22,9 +16,7 @@ export const showToast = (type = "success", message) => {
 };
 
 export const formatDate = date => {
-	const newDate = format(new Date(date), "yyyy-MM-dd");
-	const [year, month, day] = newDate.split("-");
-	return `${+year}-${+month}-${+day}`;
+	return format(new Date(date), "yyyy-MM-dd");
 };
 
 export const pstCurrentDate = formatDate(
@@ -37,28 +29,38 @@ export const pstCurrentDate = formatDate(
 		"yyyy-MM-dd",
 	),
 );
-// console.log("HELPER :", pstCurrentDate);
 
-export const currentDate = formatDate(new Date());
-// console.log("currentDate :", currentDate);
-
-export const getPreviousWeekDates = currentDate => {
-	const startOfWeekDate = add(startOfWeek(new Date(currentDate)), { days: 1 });
-	const endOfWeekDate = add(endOfWeek(new Date(currentDate)), { days: 1 });
+export const getPreviousWeekDates = inputDate => {
+	const startOfWeekDate = add(startOfWeek(new Date(inputDate)), { days: 1 });
+	const endOfWeekDate = add(endOfWeek(new Date(inputDate)), { days: 1 });
 
 	const previousWeekStart = subDays(startOfWeekDate, 7);
 	const previousWeekEnd = subDays(endOfWeekDate, 7);
+
 	return [previousWeekStart, previousWeekEnd];
 };
 
-export const getPreviousMonthDates = currentDate => {
-	const startOfMonthDate = startOfMonth(new Date(currentDate));
-	const endOfMonthDate = endOfMonth(new Date(currentDate));
+export const getPreviousMonthDates = inputDate => {
+	const startOfMonthDate = startOfMonth(new Date(inputDate));
+	const endOfMonthDate = endOfMonth(new Date(inputDate));
 
 	const previousMonthStart = subMonths(startOfMonthDate, 1);
 	const previousMonthEnd = subDays(endOfMonthDate, endOfMonthDate.getDate());
 
 	return [previousMonthStart, previousMonthEnd];
+};
+
+export const getWeekDatesFromNumber = (year, weekNumber) => {
+	const date = new Date(year, 0, 1 + (weekNumber - 1) * 7);
+	const startDate = add(startOfWeek(date), { days: 1 });
+	const endDate = add(endOfWeek(date), { days: 1 });
+
+	return [formatDate(startDate), formatDate(endDate)];
+};
+
+export const getWeekNumberByDate = date => {
+	const weekNumber = getWeek(new Date(date));
+	return weekNumber;
 };
 
 export const extractDateInfo = inputDate => {
@@ -68,10 +70,6 @@ export const extractDateInfo = inputDate => {
 	const [previousMonthStartDate, previousMonthEndDate] = getPreviousMonthDates(date);
 	const weekNumber = getWeek(date);
 
-	// console.log("previousDate :", previousDate);
-	// console.log("weekStarting :", weekStarting, "weekEnding :", weekEnding);
-	// console.log("monthStarting :", monthStarting, "monthEnding :", monthEnding);
-	// console.log("weekNumber :", weekNumber);
 	return {
 		previousDate,
 		previousWeekStartDate,
@@ -82,80 +80,22 @@ export const extractDateInfo = inputDate => {
 	};
 };
 
-extractDateInfo("2024-04-02");
+export const getWeekGroupsFromDate = inputDate => {
+	const date = new Date(inputDate);
+	const weekNumber = getWeek(date);
 
-export function getNavLink(placeholder) {
-	const { weekNumber } = extractDateInfo(formatDate(currentDate));
+	const weekGroups = [];
+	for (let i = 1; i <= weekNumber; i++) {
+		const [startDate, endDate] = getWeekDatesFromNumber(date.getFullYear(), i);
 
-	const [year, month, day] = formatDate(currentDate).split("-");
-
-	if (placeholder === "daily") {
-		return `/leaderboard/daily/${year}/${month}/${day}`;
-	} else if (placeholder === "weekly") {
-		return `/leaderboard/weekly/${year}/${weekNumber}`;
-	} else if (placeholder === "monthly") {
-		return `/leaderboard/monthly/${year}/${month}`;
+		weekGroups.push({
+			startDate: format(startDate, "MMM-d"),
+			endDate: format(endDate, "MMM-d"),
+		});
 	}
-}
-
-// export const getPreviousDate = inputDate => {
-// 	const previousDate = subDays(new Date(inputDate), 1);
-// 	return formatDate(previousDate);
-// };
-
-// export const getTodaysDate = () => {
-// 	let today = new Date();
-// 	let todaysDate = today.toISOString().split("T")[0];
-// 	return todaysDate;
-// };
-
-// export function getWeeksOfYear(year) {
-// 	const startOfGivenYear = startOfYear(new Date(year, 0, 1));
-// 	const endOfGivenYear = endOfYear(new Date(year, 11, 31));
-
-// 	const weeks = [];
-// 	let currentWeekStart = startOfWeek(startOfGivenYear);
-
-// 	while (
-// 		isBefore(currentWeekStart, endOfGivenYear) ||
-// 		isSameWeek(currentWeekStart, endOfGivenYear)
-// 	) {
-// 		const currentWeekEnd = endOfWeek(currentWeekStart);
-
-// 		const weekObject = {
-// 			startDate: format(currentWeekStart, "yyyy-MM-dd"),
-// 			endDate: format(
-// 				isAfter(currentWeekEnd, endOfGivenYear) ? endOfGivenYear : currentWeekEnd,
-// 				"yyyy-MM-dd",
-// 			),
-// 		};
-
-// 		weeks.push(weekObject);
-
-// 		currentWeekStart = addWeeks(currentWeekStart, 1);
-// 	}
-// 	console.log("weeks :", weeks);
-// 	return weeks;
-// }
-
-export const getWeekDatesFromNumber = (year, weekNumber) => {
-	const date = new Date(year, 0, 1 + (weekNumber - 1) * 7);
-	const startDate = add(startOfWeek(date), { days: 1 });
-	const endDate = add(endOfWeek(date), { days: 1 });
-	// console.log("startDate :", startDate, "endDate :", endDate);
-	return [formatDate(startDate), formatDate(endDate)];
+	return weekGroups;
 };
 
-// getWeekDatesFromNumber(2024, 11);
-
-/***********************************************************************************************/
-
-export const getWeekNumberByDate = date => {
-	const weekNumber = getWeek(new Date(date));
-	// console.log("Week number:", weekNumber);
-	return weekNumber;
-};
-// getWeekNumberByDate("2024-03-29");
 export const groupItemsByDate = items => {
 	return items.reduce((acc, item) => {
 		const date = item.createdAt.split("T")[0];

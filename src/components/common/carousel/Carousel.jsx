@@ -1,8 +1,7 @@
-import { PropTypes } from "prop-types";
-import "./Carousel.scss";
 import { useCallback, useRef } from "react";
-import { IoArrowBackCircleOutline } from "react-icons/io5";
-import { IoArrowForwardCircleOutline } from "react-icons/io5";
+import { PropTypes } from "prop-types";
+import { IoArrowBackCircleOutline, IoArrowForwardCircleOutline } from "react-icons/io5";
+import "./Carousel.scss";
 
 const Carousel = ({ mediaList }) => {
 
@@ -26,7 +25,7 @@ const Carousel = ({ mediaList }) => {
       <div onClick={scrollLeft} className="left-arrow">
         <IoArrowBackCircleOutline />
       </div>
-      <div className="post-carousel" ref={carouselRef}>
+      <div className="product-carousel" ref={carouselRef}>
         {mediaList.map(media => {
           return (
             <div className="media-wrapper" key={media.url}>

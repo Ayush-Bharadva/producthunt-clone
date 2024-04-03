@@ -1,38 +1,45 @@
 import { PropTypes } from "prop-types";
 import { Link } from "react-router-dom";
+import { IoTriangle } from "react-icons/io5";
 import Modal from "../modal/Modal";
 import "./SelectedProduct.scss";
 import Carousel from "../common/carousel/Carousel";
 
-const SelectedProduct = ({ post, imgSrc, mediaList, closeModal }) => {
+const SelectedProduct = ({ product, closeModal }) => {
+
+  const { name = "", tagline = "", website = "", votesCount = "", description = "", media: mediaList = [], thumbnail: { url: imgSrc = "" } } = product ?? {};
+
   return (
     <Modal closeModal={closeModal} >
-      <div className="post-container">
-        <div className="post-meta-info">
-          <div className="post-image">
-            <img src={imgSrc} alt="post image" />
+      <div className="product-container">
+        <div className="product-meta-info">
+          <div className="product-image">
+            <img src={imgSrc} alt="product image" />
           </div>
-          <div className="post-heading">
+          <div className="product-heading">
             <div className="title">
-              <h2>{post.name}</h2>
-              <p>{post.tagline}</p>
+              <h2>{name}</h2>
+              <p>{tagline}</p>
             </div>
             <div className="actions">
-              <Link to={post.website} target="_blank" className="post-visit-btn">
+              <Link to={website} target="_blank" className="product-visit-btn">
                 Visit
               </Link>
-              <button type="button" className="post-upvote-btn">UPVOTE {post.votesCount}</button>
+              <button type="button" className="product-up-vote-btn">
+                <IoTriangle />
+                <span>UPVOTE {votesCount}</span>
+              </button>
             </div>
           </div>
-          <div className="post-description">
+          <div className="product-description">
             <div className="description-heading">
               <p>Free Options</p>
-              <p>{post.description}</p>
+              <p>{description}</p>
             </div>
           </div>
         </div>
         <Carousel mediaList={mediaList} />
-        <div className="post-comments"></div>
+        <div className="product-comments"></div>
       </div>
     </Modal>
   );
@@ -41,8 +48,6 @@ const SelectedProduct = ({ post, imgSrc, mediaList, closeModal }) => {
 export default SelectedProduct;
 
 SelectedProduct.propTypes = {
-  post: PropTypes.object.isRequired,
-  imgSrc: PropTypes.string.isRequired,
-  mediaList: PropTypes.array.isRequired,
+  product: PropTypes.object.isRequired,
   closeModal: PropTypes.func.isRequired
 };

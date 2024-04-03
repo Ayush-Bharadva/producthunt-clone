@@ -46,63 +46,10 @@ export const days = [
 	"30",
 ];
 
-export const Weeks = [
-	"Feb 26 - Mar 3",
-	"Mar 4 - Mar 10",
-	"Mar 11 - Mar 17",
-	"Mar 18 - Mar 24",
-	"Mar 25 - Mar 31",
-];
-
 export const TrendingSearches = ["Edrawmax", "Eesee", "Shar", "Sha", "Sharpe"];
 
-export const SearchOptions = [
-	{
-		title: "Yesterday",
-		subtitle: "Top products from yesterday",
-		buttonText: "Time travel",
-		navigateTo: "/leaderboard/daily/2024/3/31",
-	},
-	{
-		title: "Last Month",
-		subtitle: "Top products from last month",
-		buttonText: "Time travel",
-		navigateTo: "/leaderboard/monthly/2024/3",
-	},
-	{
-		title: "2024",
-		subtitle: "Top products from this year",
-		buttonText: "Time travel",
-		navigateTo: "/leaderboard/yearly/2024",
-	},
-];
-
-// export const PeriodLabel = {
-// 	yesterday: "Yesterday",
-// 	weekly: "Weekly",
-// 	monthly: "Monthly",
-// 	yearly: "Yearly",
-// };
-
-export const ProductsType = {
-	featured: "featured",
-	all: "all",
+export const ProductsTitle = {
+	yesterday: "Yesterday's Top Products",
+	lastWeek: "Last Week's Top Products",
+	lastMonth: "Last Month's Top Products",
 };
-
-export const eventType = {
-	yesterday: "Yesterday",
-	week: "Weekly",
-	month: "Monthly",
-};
-
-export const NavPlaceHolder = {
-	[eventType.yesterday]: "daily",
-	[eventType.week]: "weekly",
-	[eventType.month]: "monthly",
-	// [eventType.yesterday]: "yearly",
-};
-
-// export const IndianTime = moment.tz("Asia/Kolkata").format();
-// export const PSTTimeNow = moment.tz("America/New_York").format();
-// console.log("Indian Time:", IndianTime);
-// console.log("American Time:", PSTTimeNow);

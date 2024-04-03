@@ -7,17 +7,17 @@ import { IoClose } from "react-icons/io5";
 import { useState } from "react";
 import MobileNavigationMenu from "./MobileNavigationMenu";
 import UserActions from "./UserActions";
-import { formatDate, pstCurrentDate } from "../../../utils/helper";
+import { pstCurrentDate } from "../../../utils/helper";
 
-
-const [year, month, day] = formatDate(pstCurrentDate).split("-");
+const [year, month, day] = pstCurrentDate.split("-");
 
 const isActiveLink = ({ isActive }) => isActive ? "nav-link active" : "nav-link";
 
 const Header = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const toggleHeader = () => {
+
+  const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
@@ -26,8 +26,8 @@ const Header = () => {
       <header className="header">
         <div className="left">
           {!isMenuOpen ?
-            <RxHamburgerMenu className="hamburger-menu" onClick={toggleHeader} /> :
-            <IoClose className="close-header" onClick={toggleHeader} />}
+            <RxHamburgerMenu className="hamburger-menu" onClick={toggleMenu} /> :
+            <IoClose className="close-header" onClick={toggleMenu} />}
           <Logo />
           <SearchInput />
         </div>
@@ -42,7 +42,7 @@ const Header = () => {
         </nav>
         <UserActions />
       </header>
-      <MobileNavigationMenu isMenuOpen={isMenuOpen} />
+      <MobileNavigationMenu isMenuOpen={isMenuOpen} closeMenu={toggleMenu} />
     </>
   );
 };

@@ -1,6 +1,6 @@
 $text-color: #4b587c;
 
-.post-card {
+.product-card {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -115,7 +115,7 @@ $text-color: #4b587c;
 }
 
 @media screen and (max-width: 760px) {
-	.post-card {
+	.product-card {
 		.product-details {
 			padding: 0.5rem;
 

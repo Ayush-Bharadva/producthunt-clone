@@ -18,7 +18,7 @@ const getAccessTokenPayload = {
 
 export const getAccessToken = async code => {
 	try {
-		const response = await axiosInstance.post("oauth/token", {
+		const response = await axiosInstance.product("oauth/token", {
 			...getAccessTokenPayload,
 			code,
 		});
@@ -31,7 +31,7 @@ export const getAccessToken = async code => {
 
 export const getUserName = async token => {
 	try {
-		const response = await axiosInstance.post(
+		const response = await axiosInstance.product(
 			"api/graphql",
 			{
 				query: `
@@ -48,7 +48,7 @@ export const getUserName = async token => {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
-			}
+			},
 		);
 		return response.data;
 	} catch (error) {

@@ -4,10 +4,6 @@ $text-color: #4b587c;
 	text-align: center;
 	width: 100%;
 	max-width: 900px;
-	// padding-right: 2rem;
-	// padding-right: 3rem;
-	// border-right: 1px solid #d9e1ec;
-	// height: 100vh;
 }
 
 .launches-heading {
@@ -24,6 +20,10 @@ $text-color: #4b587c;
 		text-decoration: none;
 		color: $text-color;
 		padding-bottom: 0.35rem;
+
+		&:hover {
+			color: #e12e0d;
+		}
 	}
 
 	.link-active {
@@ -55,8 +55,13 @@ $text-color: #4b587c;
 		display: flex;
 		justify-content: space-between;
 		width: 100%;
-		.page {
-			flex: 1 1 0;
+		overflow: hidden;
+		overflow-x: auto;
+		scrollbar-width: none;
+
+		.day,
+		.week {
+			flex: 1 0;
 			text-decoration: none;
 			color: $text-color;
 			cursor: pointer;
@@ -79,6 +84,10 @@ $text-color: #4b587c;
 			&:hover {
 				background-color: #e8e8e8;
 			}
+		}
+
+		.week {
+			flex: 1 0 20%;
 		}
 
 		.selected {
@@ -115,20 +124,44 @@ $text-color: #4b587c;
 		.archive {
 			color: $text-color;
 			font-size: 0.9rem;
-			margin-bottom: 0.75rem;
+			margin-bottom: 0.5rem;
 			cursor: pointer;
-			padding: 0.15rem 0.5rem;
-			border-radius: 4px;
 
 			.archive-link {
+				border-radius: 4px;
+				display: inline-block;
+				width: 100%;
 				text-decoration: none;
 				font-weight: 500;
 				color: #333;
+				padding: 0.3rem 0.5rem;
+
+				&:hover {
+					background-color: #ddd;
+				}
 			}
 
-			&:hover {
-				background-color: #ddd;
+			.active {
+				background-color: #ffefee;
+				color: #ff6154;
+				pointer-events: none;
 			}
 		}
+	}
+}
+
+@media screen and (max-width: 1100px) {
+	.launches-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.launch-archive {
+		width: 100%;
+		margin-left: 0;
+		padding-left: 0;
+		border-left: none;
+		margin-top: 1.5rem;
 	}
 }
