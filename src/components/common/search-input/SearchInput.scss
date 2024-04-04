@@ -1,13 +1,12 @@
 $text-color: #4b587c;
+@import "../../../styles//Global.scss";
 
 .search {
 	border-radius: 15px;
 	background-color: #f5f8ff;
 	overflow: hidden;
 	padding: 0.5rem 1rem;
-	display: flex;
-	justify-content: flex-start;
-	align-items: center;
+	@include flex(row, flex-start, center);
 	gap: 8px;
 	color: $text-color;
 	font-size: 1rem;
@@ -20,6 +19,7 @@ $text-color: #4b587c;
 		color: $text-color;
 		opacity: 0.7;
 	}
+
 	input {
 		border: none;
 		outline: none;
@@ -31,18 +31,14 @@ $text-color: #4b587c;
 
 .search-container {
 	margin-top: 5rem;
-	display: flex;
-	justify-content: flex-start;
-	flex-direction: column;
+	@include flex(row, center, center);
 	background-color: #fff;
 	width: 500px;
 	border-radius: 5px;
 	overflow: hidden;
 
 	.search-input-container {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
+		@include flex(row, space-between, center);
 		gap: 0.5rem;
 		background-color: #f5f8ff;
 		padding: 0.75rem 1rem;
@@ -76,9 +72,7 @@ $text-color: #4b587c;
 		}
 
 		.trending-searches {
-			display: flex;
-			justify-content: flex-start;
-			align-items: center;
+			@include flex(row, flex-start, center);
 			gap: 0.5rem;
 
 			.trending-search {
@@ -106,9 +100,7 @@ $text-color: #4b587c;
 
 			.search-option-wrapper {
 				flex: 1 0;
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
+				@include flex(row, space-between, center);
 				gap: 0.5rem;
 				margin: 0.5rem 0 0 0;
 				padding: 0.2rem 0.5rem;

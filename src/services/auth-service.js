@@ -1,5 +1,4 @@
 import axios from "axios";
-import { showToast } from "../utils/helper";
 
 const axiosInstance = axios.create({
 	baseURL: "https://api.producthunt.com/v2/",
@@ -18,20 +17,21 @@ const getAccessTokenPayload = {
 
 export const getAccessToken = async code => {
 	try {
-		const response = await axiosInstance.product("oauth/token", {
+		const response = await axiosInstance.post("oauth/token", {
 			...getAccessTokenPayload,
 			code,
 		});
-		return response.data;
+		if (response.status === 200) {
+			return response.data;
+		}
 	} catch (error) {
-		showToast("error", "Failed to get access token");
-		throw new Error(error);
+		throw new Error("Failed to get access token");
 	}
 };
 
 export const getUserName = async token => {
 	try {
-		const response = await axiosInstance.product(
+		const response = await axiosInstance.post(
 			"api/graphql",
 			{
 				query: `
@@ -50,9 +50,10 @@ export const getUserName = async token => {
 				},
 			},
 		);
-		return response.data;
+		if (response.status === 200) {
+			return response.data;
+		}
 	} catch (error) {
-		showToast("error", "Failed to get username");
-		throw new Error(error);
+		throw new Error("Failed to get username");
 	}
 };

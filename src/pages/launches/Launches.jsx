@@ -1,4 +1,4 @@
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useLocation, useParams } from "react-router-dom";
 import { PropTypes } from "prop-types";
 import InfiniteScroll from "react-infinite-scroller";
 import { CircularProgress } from "@mui/material";
@@ -18,6 +18,8 @@ const [currentYear, currentMonth, currentDay] = pstCurrentDate.split("-");
 const Launches = () => {
 
   const { year, month, week, day } = useParams();
+  const location = useLocation();
+  const routeType = location.pathname.split("/")[2];
 
   let postedAfter, postedBefore;
 
@@ -50,7 +52,7 @@ const Launches = () => {
   return (
     <>
       <div className="launches-container">
-        <LeaderBoardHeading year={year} month={month} day={day} />
+        <LeaderBoardHeading year={year} month={month} day={day} type={routeType} />
         <DateSelector />
         <InfiniteScroll
           className="posts-container"
@@ -69,7 +71,27 @@ const Launches = () => {
 
 export default Launches;
 
-const LeaderBoardHeading = ({ year, month, day }) => {
+const LeaderBoardHeading = ({ year, month, day, type }) => {
+
+  let link = null;
+
+  switch (type) {
+    case "daily":
+      link = `/leaderboard/daily/${year}/${month}/${day}`;
+      break;
+    case "weekly":
+      link = `/leaderboard/weekly/${year}/${weekNumber}`;
+      break;
+    case "monthly":
+      link = `/leaderboard/monthly/${year}/${month}`;
+      break;
+    case "yearly":
+      link = `/leaderboard/yearly/${year}`;
+      break;
+    default:
+      break;
+  }
+
   return (
     <div className="launches-heading">
       <div className="heading-text">Best of {year ?? ""}-{month ?? ""}-{day ?? ""}</div>
@@ -88,11 +110,11 @@ const LeaderBoardHeading = ({ year, month, day }) => {
         </NavLink>
       </div>
       <div className="button-group">
-        <NavLink to={`/leaderboard/daily/${year}/${month}/${day}`} className={isButtonActive} end>
+        <NavLink to={link} className={isButtonActive} end>
           Featured
         </NavLink>
         <span>|</span>
-        <NavLink to={`/leaderboard/daily/${year}/${month}/${day}/all`} className={isButtonActive} end>
+        <NavLink to={`${link}/all`} className={isButtonActive} end>
           All
         </NavLink>
       </div>
@@ -104,4 +126,5 @@ LeaderBoardHeading.propTypes = {
   year: PropTypes.string,
   month: PropTypes.string,
   day: PropTypes.string,
+  type: PropTypes.string,
 };

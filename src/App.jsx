@@ -7,17 +7,17 @@ import Home from "./pages/home/Home";
 import { CircularProgress } from "@mui/material";
 import { Toaster } from "react-hot-toast";
 
-const lazyImport = name => lazy(() => import("./pages/index").then((module) => ({ default: module[name] })));
+const dynamicImport = name => lazy(() => import("./pages/index").then((module) => ({ default: module[name] })));
 
-const Launches = lazyImport("Launches");
-const Products = lazyImport("Products");
-const News = lazyImport("News");
-const Community = lazyImport("Community");
-const Advertise = lazyImport("Advertise");
-const User = lazyImport("User");
-const PageNotFound = lazyImport("PageNotFound");
-const FeaturedProducts = lazyImport("FeaturedProducts");
-const AllProducts = lazyImport("AllProducts");
+const Launches = dynamicImport("Launches");
+const Products = dynamicImport("Products");
+const News = dynamicImport("News");
+const Community = dynamicImport("Community");
+const Advertise = dynamicImport("Advertise");
+const User = dynamicImport("User");
+const PageNotFound = dynamicImport("PageNotFound");
+const FeaturedProducts = dynamicImport("FeaturedProducts");
+const AllProducts = dynamicImport("AllProducts");
 
 const router = createBrowserRouter(
   createRoutesFromElements(

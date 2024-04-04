@@ -1,11 +1,11 @@
 $text-color: #4b587c;
 
-img {
-	height: 100%;
-	width: 100%;
-	object-fit: contain;
-	background: transparent;
-}
+// img {
+// 	height: 100%;
+// 	width: 100%;
+// 	object-fit: contain;
+// 	background: transparent;
+// }
 
 .close-header {
 	font-size: 1.75rem;
@@ -144,6 +144,13 @@ img {
 	aspect-ratio: 1/1;
 	height: 32px;
 	width: auto;
+
+	img {
+		height: 100%;
+		width: 100%;
+		object-fit: cover;
+		border-radius: 50%;
+	}
 }
 
 .profile-avatar-wrapper {
@@ -152,6 +159,12 @@ img {
 	border-radius: 50%;
 	overflow: hidden;
 	cursor: pointer;
+
+	img {
+		height: 100%;
+		width: 100%;
+		object-fit: cover;
+	}
 }
 
 @media screen and (min-width: 761px) {

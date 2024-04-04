@@ -9,8 +9,6 @@ import { GET_USER } from "../graphql/queries";
 
 export const UserContext = createContext({
   userInfo: null,
-  setUserInfo: () => { },
-  authenticateUser: () => { },
   logoutUser: () => { },
 });
 
@@ -23,12 +21,15 @@ const UserProvider = ({ children }) => {
   const authenticateUser = useCallback(async () => {
     try {
       const { access_token } = await getAccessToken(searchParams.get("code"));
-      const { data: { viewer: { user: { username = "" } = {} } = {} } = {} } = await getUserName(access_token);
+      const { data } = await getUserName(access_token);
+
+      const username = data?.viewer?.user?.username;
+
       setUsername(username);
       searchParams.delete("code");
       setSearchParams(searchParams);
     } catch (error) {
-      showToast("error", "User authentication failed");
+      showToast("error", error.message);
     }
   }, [searchParams, setSearchParams, setUsername]);
 
@@ -38,7 +39,7 @@ const UserProvider = ({ children }) => {
   }, [setUserInfo, setUsername]);
 
   const [getUserDetails] = useLazyQuery(GET_USER, {
-    variables: { username },
+    variables: { username: username },
     onCompleted: (data) => {
       setUserInfo(data.user);
       searchParams.delete("code");
@@ -46,7 +47,6 @@ const UserProvider = ({ children }) => {
     },
     onError: (error) => {
       showToast("error", error.message);
-      console.error("Error in getUserDetails:", error);
     }
   });
 
@@ -60,12 +60,10 @@ const UserProvider = ({ children }) => {
     if (username) {
       getUserDetails();
     }
-  }, [username, getUserDetails]);
+  }, [getUserDetails, username]);
 
   const ctxValue = {
     userInfo,
-    setUserInfo,
-    authenticateUser,
     logoutUser
   };
 

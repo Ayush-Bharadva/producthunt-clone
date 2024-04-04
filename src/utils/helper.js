@@ -8,6 +8,8 @@ import {
 	subMonths,
 	startOfMonth,
 	endOfMonth,
+	eachDayOfInterval,
+	isAfter,
 } from "date-fns";
 import toast from "react-hot-toast";
 
@@ -16,7 +18,7 @@ export const showToast = (type = "success", message) => {
 };
 
 export const formatDate = date => {
-	return format(new Date(date), "yyyy-MM-dd");
+	return format(new Date(date), "yyyy-M-d");
 };
 
 export const pstCurrentDate = formatDate(
@@ -95,6 +97,29 @@ export const getWeekGroupsFromDate = inputDate => {
 	}
 	return weekGroups;
 };
+
+export const extractDaysInfo = (year, month, day) => {
+	console.log("year, month, day", year, month, day);
+	const currentDate = new Date(year, month - 1, day);
+	const totalDays = new Date(year, month, 0).getDate(); // Get total days in the month
+
+	const allDaysOfMonth = eachDayOfInterval({
+		start: new Date(year, month - 1, 1),
+		end: new Date(year, month - 1, totalDays),
+	});
+
+	const dayObjects = allDaysOfMonth.map(date => ({
+		label: date.getDate(),
+		isValid: !isAfter(date, currentDate),
+	}));
+
+	return dayObjects;
+};
+
+// const dayObjects = extractDaysInfo(2024, 4, 4);
+// console.log(dayObjects);
+
+/*Date Helpers End*/
 
 export const groupItemsByDate = items => {
 	return items.reduce((acc, item) => {

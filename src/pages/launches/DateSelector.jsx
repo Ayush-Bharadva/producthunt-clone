@@ -1,9 +1,7 @@
 import { GoArrowLeft, GoArrowRight } from "react-icons/go";
 import { NavLink, useLocation, useParams } from "react-router-dom";
-import { days } from "../../utils/constants";
-import { formatDate, getWeekGroupsFromDate, pstCurrentDate } from "../../utils/helper";
-
-const currentDay = formatDate(pstCurrentDate).split("-")[2];
+import { extractDaysInfo, getWeekGroupsFromDate, pstCurrentDate } from "../../utils/helper";
+import { useMemo } from "react";
 
 const DateSelector = () => {
 
@@ -13,32 +11,42 @@ const DateSelector = () => {
 
   const { year, month, week, day } = useParams();
 
+  const extractedDays = useMemo(() => {
+    if (isDaily) {
+      return extractDaysInfo(year, month, day);
+    }
+  }, [year, month, day, isDaily]);
+
   const weekGroups = getWeekGroupsFromDate(pstCurrentDate);
+
+  console.log("extractedDays", extractedDays);
 
   let leftArrowLink = isWeekly ? `/leaderboard/weekly/2024/${week - 1}` : `/leaderboard/daily/2024/3/${day - 1}`;
   let rightArrowLink = isWeekly ? `/leaderboard/weekly/2024/${week + 1}` : `/leaderboard/daily/2024/3/${+day + 1}`;
 
   return isWeekly || isDaily ? (
     <div className="pagination-container">
-      <NavLink className="arrow-btn" to={leftArrowLink}>
-        <GoArrowLeft />
+      <NavLink to={leftArrowLink}>
+        <GoArrowLeft className="left-arrow-icon" />
       </NavLink>
       <div className="pages">
-        {isDaily && days.map((day, index) => (
-          <NavLink key={index} to={`/leaderboard/daily/${year}/${month}/${day}`} className={({ isActive }) => (isActive ? "day selected" : "day")}>
-            <button type="button" className={+currentDay < +day ? "disabled" : ""} disabled={+currentDay < +day}>
-              {day}
-            </button>
-          </NavLink>
+        {isDaily && extractedDays?.map(({ label, isValid }) => (
+          <div key={label}>
+            {isValid ?
+              <NavLink to={`/leaderboard/daily/${year}/${month}/${label}`} className={({ isActive }) => (isActive ? "day selected" : "day")} end>
+                {label}
+              </NavLink> :
+              <button type="button" className="day disabled" disabled>{label}</button>}
+          </div>
         ))}
         {isWeekly && weekGroups.map(({ startDate, endDate }, index) => (
-          <NavLink key={index} to={`/leaderboard/weekly/${year}/${index + 1}`} className={({ isActive }) => (isActive ? "week selected" : "week")}>
+          <NavLink key={`${startDate}-${endDate}`} to={`/leaderboard/weekly/${year}/${index + 1}`} className={({ isActive }) => (isActive ? "week selected" : "week")}>
             {startDate}-{endDate}
           </NavLink>
         ))}
       </div>
-      <NavLink className="arrow-btn" to={rightArrowLink}>
-        <GoArrowRight />
+      <NavLink to={rightArrowLink}>
+        <GoArrowRight className="right-arrow-icon" />
       </NavLink>
     </div>
   ) : null;

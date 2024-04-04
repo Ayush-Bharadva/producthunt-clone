@@ -1,8 +1,8 @@
 import { NavLink } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroller";
 import { CircularProgress } from "@mui/material";
-import "./Home.scss";
-import ProductCard from "../../components/common/product-card/ProductCard";
+import "../../pages/home/Home.scss";
+import ProductCard from "../common/product-card/ProductCard";
 import { extractDateInfo, formatDate, pstCurrentDate, showToast } from "../../utils/helper";
 import TopProductsByPeriod from "./TopProductsByPeriod";
 import { useFetchProducts } from "../../hooks/useFetchProducts";

@@ -3,8 +3,9 @@ import { NavLink } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroller";
 import { CircularProgress } from "@mui/material";
 import { groupItemsByDate, showToast } from "../../utils/helper";
-import ProductCard from "../../components/common/product-card/ProductCard";
+import ProductCard from "../common/product-card/ProductCard";
 import { useFetchProducts } from "../../hooks/useFetchProducts";
+import Error from "../common/error/Error";
 
 const isActiveLink = ({ isActive }) => isActive ? "category-btn active" : "category-btn";
 
@@ -18,7 +19,8 @@ const AllProducts = () => {
 
   if (error) {
     showToast("error", error.message);
-    return <p>Error: {error.message}</p>;
+    <Error message={error.message} />;
+    // return <p>Error: {error.message}</p>;
   }
 
   return (

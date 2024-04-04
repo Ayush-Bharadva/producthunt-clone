@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_POSTS } from "../../graphql/queries";
 import { NavLink, useNavigate } from "react-router-dom";
-import ProductCard from "../../components/common/product-card/ProductCard";
+import ProductCard from "../common/product-card/ProductCard";
 
 const TopProductsByPeriod = ({ navPath, title, postedAfter, postedBefore }) => {
 

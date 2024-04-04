@@ -8,12 +8,14 @@ const scrollToTop = () => {
   });
 };
 
+const scrollThreshold = 100;
+
 const UpScrollButton = () => {
 
   const [showScrollBtn, setShowScrollBtn] = useState(false);
 
   const handleScroll = useCallback(() => {
-    const isScrolled = window.scrollY > 100;
+    const isScrolled = window.scrollY > scrollThreshold;
     setShowScrollBtn(isScrolled);
   }, []);
 

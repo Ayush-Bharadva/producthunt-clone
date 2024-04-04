@@ -1,9 +1,8 @@
-import React from "react"
-import ReactDOM from "react-dom/client"
-import App from "./App.jsx"
-import "./index.scss"
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
+import "./index.scss";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
-import { showToast } from "./utils/helper.js";
 
 const client = new ApolloClient({
   uri: import.meta.env.VITE_API_URL,
@@ -14,7 +13,6 @@ const client = new ApolloClient({
   onError: ({ networkErrors, graphQLErrors }) => {
     console.error('graphQLErrors :', graphQLErrors);
     console.error('networkErrors :', networkErrors);
-    showToast("error", "GraphQL Error");
   }
 });
 

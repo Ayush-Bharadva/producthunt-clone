@@ -5,5 +5,5 @@ export { default as News } from "./news/News";
 export { default as Products } from "./products/Products";
 export { default as PageNotFound } from "./page-not-found/PageNotFound";
 export { default as User } from "./user/User";
-export { default as FeaturedProducts } from "./home/FeaturedProducts";
-export { default as AllProducts } from "./home/AllProducts";
+export { default as FeaturedProducts } from "../components/home/FeaturedProducts";
+export { default as AllProducts } from "../components/home/AllProducts";
