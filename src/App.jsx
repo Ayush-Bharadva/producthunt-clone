@@ -28,18 +28,17 @@ const router = createBrowserRouter(
           <Route path="/all" element={<AllProducts />} />
         </Route>
         <Route path="/leaderboard" element={<Launches />}>
-          <Route path="daily/:year/:month/:day" element={<Launches />}>
-            <Route path="all" element={<Launches />} />
-          </Route>
-          <Route path="weekly/:year/:week" element={<Launches />}>
-            <Route path="all" element={<Launches />} />
-          </Route>
-          <Route path="monthly/:year/:month" element={<Launches />}>
-            <Route path="all" element={<Launches />} />
-          </Route>
-          <Route path="yearly/:year" element={<Launches />}>
-            <Route path="all" element={<Launches />} />
-          </Route>
+          <Route path="daily/:year/:month/:day" element={<Launches />} />
+          <Route path="daily/:year/:month/:day/all" element={<Launches />} />
+
+          <Route path="weekly/:year/:week" element={<Launches />} />
+          <Route path="weekly/:year/:week/all" element={<Launches />} />
+
+          <Route path="monthly/:year/:month" element={<Launches />} />
+          <Route path="monthly/:year/:month/all" element={<Launches />} />
+
+          <Route path="yearly/:year" element={<Launches />} />
+          <Route path="yearly/:year/all" element={<Launches />} />
         </Route>
         <Route path="/products" element={<Products />} />
         <Route path="/news" element={<News />} />

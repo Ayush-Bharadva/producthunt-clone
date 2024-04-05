@@ -5,8 +5,8 @@ import { CircularProgress } from "@mui/material";
 import "./Launches.scss";
 import ProductCard from "../../components/common/product-card/ProductCard";
 import DateSelector from "./DateSelector";
-import { extractDateInfo, getWeekDatesFromNumber, pstCurrentDate } from "../../utils/helper";
 import LaunchArchive from "./LaunchArchive";
+import { extractDateInfo, getWeekDatesFromNumber, pstCurrentDate } from "../../utils/helper";
 import { useFetchProducts } from "../../hooks/useFetchProducts";
 
 const isActiveLink = ({ isActive }) => (isActive ? "link link-active" : "link");
@@ -64,7 +64,7 @@ const Launches = () => {
           {productsList.map(product => <ProductCard key={product.id} product={product} />)}
         </InfiniteScroll>
       </div>
-      <LaunchArchive />
+      <LaunchArchive type={routeType} />
     </>
   );
 };
@@ -74,19 +74,24 @@ export default Launches;
 const LeaderBoardHeading = ({ year, month, day, type }) => {
 
   let link = null;
+  let heading = "Best of ";
 
   switch (type) {
     case "daily":
       link = `/leaderboard/daily/${year}/${month}/${day}`;
+      heading += `${day}-${month}-${year}`;
       break;
     case "weekly":
       link = `/leaderboard/weekly/${year}/${weekNumber}`;
+      heading += `week ${weekNumber}-${year}`;
       break;
     case "monthly":
       link = `/leaderboard/monthly/${year}/${month}`;
+      heading += `${year}-${month}`;
       break;
     case "yearly":
       link = `/leaderboard/yearly/${year}`;
+      heading += `${year}`;
       break;
     default:
       break;
@@ -94,7 +99,7 @@ const LeaderBoardHeading = ({ year, month, day, type }) => {
 
   return (
     <div className="launches-heading">
-      <div className="heading-text">Best of {year ?? ""}-{month ?? ""}-{day ?? ""}</div>
+      <h4 className="heading-text">{heading}</h4>
       <div className="routes">
         <NavLink className={isActiveLink} to={`/leaderboard/daily/${currentYear}/${currentMonth}/${currentDay}`}>
           Daily

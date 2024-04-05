@@ -15,9 +15,19 @@ $text-color: #4b587c;
 	overflow: hidden;
 }
 
+.text-btn {
+	font-size: 0.75rem;
+	border: none;
+	background: none;
+	font-weight: 600;
+	color: $text-color;
+	cursor: pointer;
+}
+
 .button-group {
 	display: flex;
 	align-items: center;
+	justify-self: flex-end;
 	gap: 7px;
 
 	.category-btn {
@@ -171,6 +181,13 @@ $text-color: #4b587c;
 			.product-meta-info {
 				width: inherit;
 			}
+			.carousel-wrapper {
+				.product-carousel {
+					.media-wrapper {
+						flex: 1 0 50% !important;
+					}
+				}
+			}
 		}
 	}
 }
@@ -208,9 +225,15 @@ $text-color: #4b587c;
 
 		.launches-container {
 			.launches-heading {
+				grid-template-columns: 1fr 2fr;
 				flex-direction: column;
 				align-items: flex-start;
+				justify-content: flex-start;
 				gap: 9px;
+
+				.routes {
+					justify-content: flex-end;
+				}
 
 				.button-group {
 					display: none;
@@ -225,12 +248,45 @@ $text-color: #4b587c;
 			margin: 0;
 			.product-meta-info {
 				width: 100%;
+				.product-heading {
+					flex-direction: column;
+					align-items: flex-start;
+					gap: 1rem;
+					.actions {
+						.product-visit-btn,
+						.product-up-vote-btn {
+							padding: 12px;
+						}
+						.product-up-vote-btn {
+							flex: 1;
+						}
+					}
+				}
+			}
+			.carousel-wrapper {
+				.left-arrow,
+				.right-arrow {
+					display: none;
+				}
 			}
 		}
+	}
+	.close-btn {
+		top: 1rem;
+		right: 1rem;
+		left: auto;
 	}
 }
 
 @media screen and (max-width: 425px) {
+	.main-container {
+		.launches-container {
+			.launches-heading {
+				display: flex;
+				align-items: center;
+			}
+		}
+	}
 	.heading {
 		.title {
 			font-size: 1.15rem !important;
@@ -247,6 +303,7 @@ $text-color: #4b587c;
 		}
 	}
 	.product-container {
+		padding: 20px !important;
 		.product-meta-info {
 			.product-heading {
 				flex-direction: column;
@@ -257,6 +314,13 @@ $text-color: #4b587c;
 					.product-up-vote-btn {
 						padding: 10px;
 					}
+				}
+			}
+		}
+		.carousel-wrapper {
+			.product-carousel {
+				.media-wrapper {
+					flex: 1 0 100% !important;
 				}
 			}
 		}

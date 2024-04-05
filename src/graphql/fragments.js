@@ -12,6 +12,24 @@ export const USER_FRAGMENT = gql`
 	}
 `;
 
+export const COMMENT_FRAGMENT = gql`
+	fragment CommentFragment on Comment {
+		id
+		body
+		isVoted
+		votesCount
+		replies {
+			nodes {
+				id
+				body
+				isVoted
+				votesCount
+			}
+			totalCount
+		}
+	}
+`;
+
 export const POST_FRAGMENT = gql`
 	fragment PostFragment on Post {
 		id

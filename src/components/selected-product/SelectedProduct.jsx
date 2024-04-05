@@ -4,10 +4,13 @@ import { IoTriangle } from "react-icons/io5";
 import Modal from "../modal/Modal";
 import "./SelectedProduct.scss";
 import Carousel from "../common/carousel/Carousel";
+import ProductComments from "../common/comment-section/ProductComments";
 
 const SelectedProduct = ({ product, closeModal }) => {
 
   const { name = "", tagline = "", website = "", votesCount = "", description = "", media: mediaList = [], thumbnail: { url: imgSrc = "" } } = product ?? {};
+
+  console.log("product :", product);
 
   return (
     <Modal closeModal={closeModal} >
@@ -39,7 +42,7 @@ const SelectedProduct = ({ product, closeModal }) => {
           </div>
         </div>
         <Carousel mediaList={mediaList} />
-        <div className="product-comments"></div>
+        <ProductComments product={product} />
       </div>
     </Modal>
   );

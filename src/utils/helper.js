@@ -9,7 +9,8 @@ import {
 	startOfMonth,
 	endOfMonth,
 	eachDayOfInterval,
-	isAfter,
+	isBefore,
+	addDays,
 } from "date-fns";
 import toast from "react-hot-toast";
 
@@ -51,6 +52,31 @@ export const getPreviousMonthDates = inputDate => {
 
 	return [previousMonthStart, previousMonthEnd];
 };
+
+export const getPreviousDate = inputDate => {
+	const previousDate = subDays(new Date(inputDate), 1);
+	console.log("previousDate", previousDate);
+	return formatDate(previousDate);
+};
+
+export const getNextDate = inputDate => {
+	const nextDate = addDays(new Date(inputDate), 1);
+	console.log("nextDate", nextDate);
+	return formatDate(nextDate);
+};
+
+export const getPreviousWeekNumber = inputDate => {
+	const previousWeekNumber = getWeek(subDays(new Date(inputDate), 7));
+	return previousWeekNumber;
+};
+
+export const getNextWeekNumber = inputDate => {
+	const nextWeekNumber = getWeek(addDays(new Date(inputDate), 7));
+	return nextWeekNumber;
+};
+
+console.log("prevDate :", getPreviousDate("2024-03-03"));
+console.log("nextDate :", getNextDate("2024-03-03"));
 
 export const getWeekDatesFromNumber = (year, weekNumber) => {
 	const date = new Date(year, 0, 1 + (weekNumber - 1) * 7);
@@ -98,10 +124,8 @@ export const getWeekGroupsFromDate = inputDate => {
 	return weekGroups;
 };
 
-export const extractDaysInfo = (year, month, day) => {
-	console.log("year, month, day", year, month, day);
-	const currentDate = new Date(year, month - 1, day);
-	const totalDays = new Date(year, month, 0).getDate(); // Get total days in the month
+export const extractDaysInfo = (year, month) => {
+	const totalDays = new Date(year, month, 0).getDate();
 
 	const allDaysOfMonth = eachDayOfInterval({
 		start: new Date(year, month - 1, 1),
@@ -110,14 +134,11 @@ export const extractDaysInfo = (year, month, day) => {
 
 	const dayObjects = allDaysOfMonth.map(date => ({
 		label: date.getDate(),
-		isValid: !isAfter(date, currentDate),
+		isValid: isBefore(date, pstCurrentDate),
 	}));
 
 	return dayObjects;
 };
-
-// const dayObjects = extractDaysInfo(2024, 4, 4);
-// console.log(dayObjects);
 
 /*Date Helpers End*/
 
