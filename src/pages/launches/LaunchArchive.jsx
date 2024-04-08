@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { PropTypes } from "prop-types";
 import { eachMonthOfInterval, format } from "date-fns";
@@ -8,8 +8,21 @@ const isActiveLink = ({ isActive }) => isActive ? "archive-link active" : "archi
 
 const LaunchArchive = memo(function LaunchArchive({ type }) {
 
-  const { year: selectedYear } = useParams();
+  const { year: selectedYear, month, week, day } = useParams();
   const showMonths = type === "monthly" ? true : false;
+
+  const linkEndPoint = useMemo(() => {
+    switch (type) {
+      case "daily":
+        return `${month}/${day}`;
+      case "weekly":
+        return `${week}`;
+      case "monthly":
+        return `${month}`;
+      default:
+        return "";
+    }
+  }, [type, month, week, day]);
 
   return (
     <div className="launch-archive">
@@ -19,7 +32,7 @@ const LaunchArchive = memo(function LaunchArchive({ type }) {
           return (
             <div key={index} className="archive">
               <NavLink
-                to={`/leaderboard/yearly/${year}`}
+                to={`/leaderboard/${type}/${year}/${linkEndPoint}`}
                 className={isActiveLink}>
                 {year}
               </NavLink>
@@ -40,12 +53,15 @@ LaunchArchive.propTypes = {
 
 const MonthSelector = ({ showMonths, selectedYear, year }) => {
 
-  const months = eachMonthOfInterval({
+  const months = useMemo(() => eachMonthOfInterval({
     start: new Date(selectedYear, 0, 1),
     end: new Date(selectedYear, 11, 31),
-  });
+  }), [selectedYear]);
 
-  const formattedMonths = months.map(month => format(month, "MMMM"));
+  const formattedMonths = useMemo(() => months.map(date => {
+    return format(date, "MMMM");
+  }), [months]);
+
 
   return (showMonths && selectedYear === year) ? (
     <ul className="months-selector">

@@ -20,7 +20,7 @@ const TopProductsByPeriod = ({ navPath, title, postedAfter, postedBefore }) => {
   });
 
   const handleNavigation = () => {
-    navigate(`${navPath}`);
+    navigate(navPath);
   };
 
   const productsList = useMemo(() => data?.posts?.nodes || [], [data]);
@@ -39,10 +39,11 @@ const TopProductsByPeriod = ({ navPath, title, postedAfter, postedBefore }) => {
           <NavLink to={`${navPath}/all`} className={({ isActive }) => isActive ? "category-btn active" : "category-btn"} end>All</NavLink>
         </div>
       </div>
-      {productsList.length > 0 &&
+      {productsList.length > 0 ?
         (<div>
           {productsList?.map(product => <ProductCard key={product.id} product={product} />)}
-        </div>)}
+        </div>) :
+        (<p>No Products found</p>)}
       <button className="see-all-button" onClick={handleNavigation}>
         See all {title.toLowerCase()}
       </button>

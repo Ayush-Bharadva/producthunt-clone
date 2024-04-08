@@ -33,7 +33,7 @@ const AllProducts = () => {
         return (
           <>
             <div className="heading">
-              <p className="title">Top Products Launching on {date}</p>
+              <p className="title">Products Launched on {date}</p>
               <div className="button-group">
                 <NavLink to="/" className={isActiveLink}>Featured</NavLink>
                 <span>|</span>

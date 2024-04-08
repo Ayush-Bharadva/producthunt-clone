@@ -1,12 +1,5 @@
 @import "../../../styles/Global.scss";
 
-.border-vertical {
-	margin-top: 1rem;
-	border: 4px solid red;
-	height: 100%;
-	width: 100%;
-}
-
 .product-comments {
 	margin-top: 1rem;
 	width: 100%;
@@ -16,7 +9,11 @@
 	margin: 1.5rem auto 0;
 }
 
-.comment {
+.temp {
+	background-color: rosybrown;
+}
+
+.user-comment {
 	display: flex;
 	padding: 0.5rem;
 	gap: 1rem;
@@ -28,19 +25,14 @@
 		height: 48px;
 		border-radius: 50%;
 		overflow: hidden;
-		display: flex;
-		flex-direction: column;
 
 		img {
 			height: 100%;
 			width: 100%;
 			object-fit: contain;
 		}
-
-		&::after {
-			border-left: 3px solid #d9e1ec;
-		}
 	}
+
 	.comment-info {
 		flex: 1 0;
 		color: $text-color;

@@ -17,7 +17,13 @@ export const GET_USER_DETAILS = gql`
 			votedPosts {
 				nodes {
 					...PostFragment
-				totalCount
+					comments {
+						nodes {
+							...CommentFragment
+						}
+						totalCount
+					}
+				}
 				pageInfo {
 					endCursor
 					hasNextPage
@@ -28,7 +34,6 @@ export const GET_USER_DETAILS = gql`
 	${USER_FRAGMENT}
 	${POST_FRAGMENT}
 	${COMMENT_FRAGMENT}
-	}
 `;
 
 export const GET_POSTS = gql`
@@ -65,45 +70,5 @@ export const GET_POSTS = gql`
 		}
 	}
 	${POST_FRAGMENT}
-	${COMMENT_FRAGMENT}
-`;
-
-export const GET_PRODUCT_COMMENTS = gql`
-	query GetPosts(
-		$first: Int
-		$featured: Boolean
-		$order: PostsOrder
-		$after: String
-		$postedBefore: DateTime
-		$postedAfter: DateTime
-	) {
-		posts(
-			first: $first
-			featured: $featured
-			order: $order
-			after: $after
-			postedBefore: $postedBefore
-			postedAfter: $postedAfter
-		) {
-			nodes {
-				id
-				name
-				tagline
-				commentsCount
-				comments {
-					nodes {
-						...CommentFragment
-					}
-				}
-			}
-			pageInfo {
-				endCursor
-				hasNextPage
-				hasPreviousPage
-				startCursor
-			}
-			totalCount
-		}
-	}
 	${COMMENT_FRAGMENT}
 `;

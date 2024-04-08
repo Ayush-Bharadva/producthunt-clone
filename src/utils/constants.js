@@ -46,6 +46,21 @@ export const days = [
 	"30",
 ];
 
+export const Months = [
+	"January",
+	"February",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"August",
+	"September",
+	"October",
+	"November",
+	"December",
+];
+
 export const TrendingSearches = ["Edrawmax", "Eesee", "Shar", "Sha", "Sharpe"];
 
 export const ProductsTitle = {

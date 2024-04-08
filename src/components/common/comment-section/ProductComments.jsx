@@ -2,7 +2,7 @@ import { PropTypes } from "prop-types";
 import UserAvatar from "../../../assets/images/user-avatar.jpg";
 import "./ProductComments.scss";
 
-const parseComment = (comment) => {
+const parseComments = (comment) => {
   const doc = new DOMParser().parseFromString(comment, "text/html");
   return doc.body.textContent;
 };
@@ -16,13 +16,12 @@ const ProductComments = ({ product }) => {
     <div className="product-comments">
       {productComments?.map(({ id, body, isVoted, votesCount }) => {
 
-        const parsedBody = parseComment(body);
+        const parsedComment = parseComments(body);
 
         return (
-          <div className="comment" key={id}>
+          <div className="user-comment" key={id}>
             <div className="commented-user-image">
               <img src={UserAvatar} alt="user-avatar" />
-              <div className="border-vertical"></div>
             </div>
             <div className="comment-info">
               <div className="commented-user-info">
@@ -30,7 +29,7 @@ const ProductComments = ({ product }) => {
                 <p className="user-name">username</p>
               </div>
               <div className="comment-body">
-                {parsedBody}
+                {parsedComment}
               </div>
               <div className="comment-stats">
                 <button className={isVoted ? "comment-up-vote-btn voted" : "comment-up-vote-btn"}>

@@ -15,12 +15,19 @@ $text-color: #4b587c;
 	overflow: hidden;
 }
 
+.disabled-btn {
+	border: none;
+	outline: none;
+	color: #ccc;
+	pointer-events: none;
+}
+
 .text-btn {
 	font-size: 0.75rem;
 	border: none;
 	background: none;
-	font-weight: 600;
 	color: $text-color;
+	font-weight: 600;
 	cursor: pointer;
 }
 
@@ -321,6 +328,26 @@ $text-color: #4b587c;
 			.product-carousel {
 				.media-wrapper {
 					flex: 1 0 100% !important;
+				}
+			}
+		}
+	}
+	.user-container {
+		.user-details-container {
+			.user-meta-info {
+				.user-avatar {
+					height: 60px !important;
+				}
+				.user-details {
+					.user-name {
+						font-size: 1rem !important;
+					}
+					.user-headline {
+						font-size: 0.9rem !important;
+					}
+					.user-id {
+						font-size: 0.6rem !important;
+					}
 				}
 			}
 		}

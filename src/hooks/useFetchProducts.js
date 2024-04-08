@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { useCallback, useState } from "react";
 import { GET_POSTS } from "../graphql/queries";
+import { showToast } from "../utils/helper";
 
 const defaultOrder = "RANKING";
 
@@ -10,6 +11,8 @@ export const useFetchProducts = ({
 	postedBefore,
 	featured,
 }) => {
+	console.log("useFetchProducts", order, postedAfter, postedBefore, featured);
+
 	const [productsInfo, setProductsInfo] = useState({
 		productsList: [],
 		endCursor: null,
@@ -35,6 +38,9 @@ export const useFetchProducts = ({
 				endCursor: posts.pageInfo.endCursor ?? null,
 			});
 		},
+		onError: error => {
+			showToast("error", error.message);
+		},
 	});
 
 	const handleLoadMore = useCallback(() => {
@@ -54,6 +60,10 @@ export const useFetchProducts = ({
 						hasMore: posts.pageInfo.hasNextPage,
 						endCursor: posts.pageInfo.endCursor,
 					}));
+				},
+				onError: error => {
+					showToast("error", error.message);
+					console.log("error", error);
 				},
 			});
 		}

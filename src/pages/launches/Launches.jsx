@@ -6,14 +6,12 @@ import "./Launches.scss";
 import ProductCard from "../../components/common/product-card/ProductCard";
 import DateSelector from "./DateSelector";
 import LaunchArchive from "./LaunchArchive";
-import { extractDateInfo, getWeekDatesFromNumber, pstCurrentDate } from "../../utils/helper";
+import { extractDateInfo, getHeading, getLink, getPostedDates, pstCurrentDate } from "../../utils/helper";
 import { useFetchProducts } from "../../hooks/useFetchProducts";
+import { useMemo } from "react";
 
 const isActiveLink = ({ isActive }) => (isActive ? "link link-active" : "link");
-const isButtonActive = ({ isActive }) => (isActive ? "category-btn active" : "category-btn");
-
-const { weekNumber } = extractDateInfo(pstCurrentDate);
-const [currentYear, currentMonth, currentDay] = pstCurrentDate.split("-");
+const isActiveButton = ({ isActive }) => (isActive ? "category-btn active" : "category-btn");
 
 const Launches = () => {
 
@@ -21,28 +19,13 @@ const Launches = () => {
   const location = useLocation();
   const routeType = location.pathname.split("/")[2];
 
-  let postedAfter, postedBefore;
+  const { startDate, endDate } = getPostedDates({ year, month, week, day });
 
-  if (!month && !week && !day) {
-    postedAfter = `${year}-01-01`;
-    postedBefore = `${year}-12-31`;
-  } else if (month && !week) {
-    postedAfter = `${year}-${month}-01`;
-    postedBefore = `${year}-${month}-31`;
-  } else if (week && !month && !day) {
-    const [startDate, endDate] = getWeekDatesFromNumber(year, week);
-    postedAfter = startDate;
-    postedBefore = endDate;
-  } else if (day) {
-    postedAfter = `${year}-${month}-${day}`;
-    postedBefore = `${year}-${month}-${+day + 1}`;
-  }
-
-  const { productsList, hasMore, error, handleLoadMore } = useFetchProducts({
+  const { productsList, hasMore, error, loading, handleLoadMore } = useFetchProducts({
     featured: true,
     order: "VOTES",
-    postedAfter,
-    postedBefore,
+    postedAfter: startDate,
+    postedBefore: endDate
   });
 
   if (error) {
@@ -54,15 +37,18 @@ const Launches = () => {
       <div className="launches-container">
         <LeaderBoardHeading year={year} month={month} day={day} type={routeType} />
         <DateSelector />
-        <InfiniteScroll
-          className="posts-container"
-          loadMore={handleLoadMore}
-          hasMore={hasMore}
-          loader={<CircularProgress />}
-          threshold={50}
-          initialLoad={false}>
-          {productsList.map(product => <ProductCard key={product.id} product={product} />)}
-        </InfiniteScroll>
+        {loading ?
+          <CircularProgress /> :
+          <InfiniteScroll
+            className="posts-container"
+            loadMore={handleLoadMore}
+            hasMore={hasMore}
+            loader={<CircularProgress />}
+            threshold={50}
+            initialLoad={false}>
+            {productsList.map(product => <ProductCard key={product.id} product={product} />)}
+          </InfiniteScroll>}
+        {!loading && !hasMore && productsList.length === 0 ? <p>No Products found</p> : null}
       </div>
       <LaunchArchive type={routeType} />
     </>
@@ -71,31 +57,15 @@ const Launches = () => {
 
 export default Launches;
 
+/* LeaderBoardHeading */
+
 const LeaderBoardHeading = ({ year, month, day, type }) => {
 
-  let link = null;
-  let heading = "Best of ";
+  const { weekNumber } = extractDateInfo(pstCurrentDate);
+  const [currentYear, currentMonth, currentDay] = pstCurrentDate.split("-");
 
-  switch (type) {
-    case "daily":
-      link = `/leaderboard/daily/${year}/${month}/${day}`;
-      heading += `${day}-${month}-${year}`;
-      break;
-    case "weekly":
-      link = `/leaderboard/weekly/${year}/${weekNumber}`;
-      heading += `week ${weekNumber}-${year}`;
-      break;
-    case "monthly":
-      link = `/leaderboard/monthly/${year}/${month}`;
-      heading += `${year}-${month}`;
-      break;
-    case "yearly":
-      link = `/leaderboard/yearly/${year}`;
-      heading += `${year}`;
-      break;
-    default:
-      break;
-  }
+  const link = useMemo(() => getLink({ type, year, month, day, weekNumber }), [day, month, type, weekNumber, year]);
+  const heading = useMemo(() => getHeading({ type, year, month, day, weekNumber }), [day, month, type, weekNumber, year]);
 
   return (
     <div className="launches-heading">
@@ -115,11 +85,11 @@ const LeaderBoardHeading = ({ year, month, day, type }) => {
         </NavLink>
       </div>
       <div className="button-group">
-        <NavLink to={link} className={isButtonActive} end>
+        <NavLink to={link.featured} className={isActiveButton} end>
           Featured
         </NavLink>
         <span>|</span>
-        <NavLink to={`${link}/all`} className={isButtonActive} end>
+        <NavLink to={link.all} className={isActiveButton} end>
           All
         </NavLink>
       </div>

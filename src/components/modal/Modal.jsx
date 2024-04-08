@@ -10,8 +10,8 @@ const Modal = ({ children, isOpenModal, closeModal }) => {
     document.body.classList.add("overflow-hidden");
     return () => {
       document.body.classList.remove("overflow-hidden");
-    }
-  }, [isOpenModal])
+    };
+  }, [isOpenModal]);
 
   return createPortal(
     <div className="modal-overlay">
@@ -24,12 +24,12 @@ const Modal = ({ children, isOpenModal, closeModal }) => {
     </div>,
     document.getElementById("modal")
   );
-}
+};
 
 export default Modal;
 
 Modal.propTypes = {
   children: PropTypes.node.isRequired,
-  isOpenModal: PropTypes.bool.isRequired,
-  closeModal: PropTypes.func.isRequired
-}
+  isOpenModal: PropTypes.bool,
+  closeModal: PropTypes.func
+};

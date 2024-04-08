@@ -3,21 +3,21 @@ import InfiniteScroll from "react-infinite-scroller";
 import { CircularProgress } from "@mui/material";
 import "../../pages/home/Home.scss";
 import ProductCard from "../common/product-card/ProductCard";
-import { extractDateInfo, formatDate, pstCurrentDate, showToast } from "../../utils/helper";
+import { extractDateInfo, pstCurrentDate, showToast } from "../../utils/helper";
 import TopProductsByPeriod from "./TopProductsByPeriod";
 import { useFetchProducts } from "../../hooks/useFetchProducts";
 import { ProductsTitle } from "../../utils/constants";
 
 const isActiveLink = ({ isActive }) => isActive ? "category-btn active" : "category-btn";
 
+const { previousDate, previousWeekStartDate, previousWeekEndDate, previousMonthStartDate, previousMonthEndDate, weekNumber } = extractDateInfo(pstCurrentDate);
+
 const FeaturedProducts = () => {
 
   const { productsList, hasMore, error, handleLoadMore } = useFetchProducts({
     featured: true,
-    postedAfter: formatDate(pstCurrentDate),
+    postedAfter: pstCurrentDate,
   });
-
-  const { previousDate, previousWeekStartDate, previousWeekEndDate, previousMonthStartDate, previousMonthEndDate, weekNumber } = extractDateInfo(pstCurrentDate);
 
   const [year, month, day] = previousDate.split("-");
 
@@ -50,19 +50,19 @@ const FeaturedProducts = () => {
           <TopProductsByPeriod
             title={ProductsTitle.yesterday}
             postedAfter={previousDate}
-            postedBefore={formatDate(pstCurrentDate)}
+            postedBefore={pstCurrentDate}
             navPath={`/leaderboard/daily/${year}/${month}/${day}`}
           />
           <TopProductsByPeriod
             title={ProductsTitle.lastWeek}
-            postedAfter={formatDate(previousWeekStartDate)}
-            postedBefore={formatDate(previousWeekEndDate)}
+            postedAfter={previousWeekStartDate}
+            postedBefore={previousWeekEndDate}
             navPath={`/leaderboard/weekly/${year}/${weekNumber}`}
           />
           <TopProductsByPeriod
             title={ProductsTitle.lastMonth}
-            postedAfter={formatDate(previousMonthStartDate)}
-            postedBefore={formatDate(previousMonthEndDate)}
+            postedAfter={previousMonthStartDate}
+            postedBefore={previousMonthEndDate}
             navPath={`/leaderboard/monthly/${year}/${month}`}
           />
         </>
