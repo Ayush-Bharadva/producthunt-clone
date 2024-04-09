@@ -1,10 +1,10 @@
 import { useQuery } from "@apollo/client";
-import { CircularProgress } from "@mui/material";
 import "./User.scss";
 import { GET_USER_DETAILS } from "../../graphql/queries";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import ProductCard from "../../components/common/product-card/ProductCard";
 import { showToast } from "../../utils/helper";
+import Loader from "../../components/common/loader/Loader";
 
 const User = () => {
   const [userInfo] = useLocalStorage("userInfo", null);
@@ -38,7 +38,7 @@ const User = () => {
         </div>
         <div className="user-voted-posts">
           <p className="heading">RECENTLY SUPPORTED</p>
-          {loading ? <CircularProgress /> :
+          {loading ? <Loader /> :
             votedPosts?.nodes.map((product) => <ProductCard key={product.id} product={product} />)}
         </div>
       </div>

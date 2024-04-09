@@ -1,5 +1,5 @@
 import "./Home.scss";
-import TopLaunches from "../../components/home/top-launches/TopLaunches";
+import TopLaunches from "../../components/pages/home/top-launches/TopLaunches";
 import { Outlet } from "react-router-dom";
 
 const Home = () => {

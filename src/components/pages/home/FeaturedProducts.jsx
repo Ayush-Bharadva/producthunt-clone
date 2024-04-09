@@ -1,12 +1,14 @@
 import { NavLink } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroller";
-import { CircularProgress } from "@mui/material";
-import "../../pages/home/Home.scss";
-import ProductCard from "../common/product-card/ProductCard";
-import { extractDateInfo, pstCurrentDate, showToast } from "../../utils/helper";
-import TopProductsByPeriod from "./TopProductsByPeriod";
-import { useFetchProducts } from "../../hooks/useFetchProducts";
-import { ProductsTitle } from "../../utils/constants";
+import "../../../pages/home/Home.scss";
+import ProductCard from "../../common/product-card/ProductCard";
+import { extractDateInfo, pstCurrentDate, showToast } from "../../../utils/helper";
+import { useFetchProducts } from "../../../hooks/useFetchProducts";
+import { ProductsTitle } from "../../../utils/constants";
+import { lazy } from "react";
+import Loader from "../../common/loader/Loader";
+
+const TopProductsByPeriod = lazy(() => import("../../../components/pages/home/TopProductsByPeriod"));
 
 const isActiveLink = ({ isActive }) => isActive ? "category-btn active" : "category-btn";
 
@@ -40,7 +42,7 @@ const FeaturedProducts = () => {
         className="products-container"
         loadMore={handleLoadMore}
         hasMore={hasMore}
-        loader={<CircularProgress />}
+        loader={<Loader />}
         threshold={50}
         initialLoad={false}>
         {productsList.map(product => <ProductCard key={product.id} product={product} />)}

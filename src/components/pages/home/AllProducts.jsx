@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { NavLink } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroller";
-import { CircularProgress } from "@mui/material";
-import { groupItemsByDate, showToast } from "../../utils/helper";
-import ProductCard from "../common/product-card/ProductCard";
-import { useFetchProducts } from "../../hooks/useFetchProducts";
+import { groupItemsByDate, showToast } from "../../../utils/helper";
+import ProductCard from "../../common/product-card/ProductCard";
+import { useFetchProducts } from "../../../hooks/useFetchProducts";
+import Loader from "../../common/loader/Loader";
 
 const isActiveLink = ({ isActive }) => isActive ? "category-btn active" : "category-btn";
 
@@ -26,7 +26,7 @@ const AllProducts = () => {
       className="posts-container"
       loadMore={handleLoadMore}
       hasMore={hasMore}
-      loader={<CircularProgress />}
+      loader={<Loader />}
       threshold={50}
       initialLoad={false}>
       {Object.entries(dateWisePosts).map(([date, posts]) => {

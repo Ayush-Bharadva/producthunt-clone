@@ -1,17 +1,13 @@
-import { NavLink, useLocation, useParams } from "react-router-dom";
-import { PropTypes } from "prop-types";
 import InfiniteScroll from "react-infinite-scroller";
-import { CircularProgress } from "@mui/material";
 import "./Launches.scss";
 import ProductCard from "../../components/common/product-card/ProductCard";
-import DateSelector from "./DateSelector";
-import LaunchArchive from "./LaunchArchive";
-import { extractDateInfo, getHeading, getLink, getPostedDates, pstCurrentDate } from "../../utils/helper";
+import DateSelector from "../../components/pages/launches/DateSelector";
+import LaunchArchive from "../../components/pages/launches/LaunchArchive";
+import { getPostedDates } from "../../utils/helper";
 import { useFetchProducts } from "../../hooks/useFetchProducts";
-import { useMemo } from "react";
-
-const isActiveLink = ({ isActive }) => (isActive ? "link link-active" : "link");
-const isActiveButton = ({ isActive }) => (isActive ? "category-btn active" : "category-btn");
+import LeaderBoardHeading from "../../components/pages/launches/LeaderBoardHeading";
+import { useLocation, useParams } from "react-router-dom";
+import Loader from "../../components/common/loader/Loader";
 
 const Launches = () => {
 
@@ -38,12 +34,12 @@ const Launches = () => {
         <LeaderBoardHeading year={year} month={month} day={day} type={routeType} />
         <DateSelector />
         {loading ?
-          <CircularProgress /> :
+          <Loader /> :
           <InfiniteScroll
             className="posts-container"
             loadMore={handleLoadMore}
             hasMore={hasMore}
-            loader={<CircularProgress />}
+            loader={<Loader />}
             threshold={50}
             initialLoad={false}>
             {productsList.map(product => <ProductCard key={product.id} product={product} />)}
@@ -56,50 +52,3 @@ const Launches = () => {
 };
 
 export default Launches;
-
-/* LeaderBoardHeading */
-
-const LeaderBoardHeading = ({ year, month, day, type }) => {
-
-  const { weekNumber } = extractDateInfo(pstCurrentDate);
-  const [currentYear, currentMonth, currentDay] = pstCurrentDate.split("-");
-
-  const link = useMemo(() => getLink({ type, year, month, day, weekNumber }), [day, month, type, weekNumber, year]);
-  const heading = useMemo(() => getHeading({ type, year, month, day, weekNumber }), [day, month, type, weekNumber, year]);
-
-  return (
-    <div className="launches-heading">
-      <h4 className="heading-text">{heading}</h4>
-      <div className="routes">
-        <NavLink className={isActiveLink} to={`/leaderboard/daily/${currentYear}/${currentMonth}/${currentDay}`}>
-          Daily
-        </NavLink>
-        <NavLink className={isActiveLink} to={`/leaderboard/weekly/${currentYear}/${weekNumber}`}>
-          Weekly
-        </NavLink>
-        <NavLink className={isActiveLink} to={`/leaderboard/monthly/${currentYear}/${currentMonth}`}>
-          Monthly
-        </NavLink>
-        <NavLink className={isActiveLink} to={`/leaderboard/yearly/${currentYear}`}>
-          Yearly
-        </NavLink>
-      </div>
-      <div className="button-group">
-        <NavLink to={link.featured} className={isActiveButton} end>
-          Featured
-        </NavLink>
-        <span>|</span>
-        <NavLink to={link.all} className={isActiveButton} end>
-          All
-        </NavLink>
-      </div>
-    </div>
-  );
-};
-
-LeaderBoardHeading.propTypes = {
-  year: PropTypes.string,
-  month: PropTypes.string,
-  day: PropTypes.string,
-  type: PropTypes.string,
-};

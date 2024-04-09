@@ -4,8 +4,8 @@ import "./App.scss";
 import "./styles/Global.scss";
 import Layout from "./components/layout/Layout";
 import Home from "./pages/home/Home";
-import { CircularProgress } from "@mui/material";
 import { Toaster } from "react-hot-toast";
+import Loader from "./components/common/loader/Loader";
 
 const dynamicImport = name => lazy(() => import("./pages/index").then((module) => ({ default: module[name] })));
 
@@ -59,7 +59,7 @@ const router = createBrowserRouter(
 function App() {
 
   return (
-    <Suspense fallback={<CircularProgress />}>
+    <Suspense fallback={<Loader />}>
       <RouterProvider router={router} />
       <Toaster position="bottom-right" />
     </Suspense>

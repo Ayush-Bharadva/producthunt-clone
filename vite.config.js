@@ -6,16 +6,16 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
 	plugins: [react()],
 	server: {
-		port: 3000,
+		// port: 3000,
 		// host: "producthunt-clone-5173.netlify.app",
 		// https: {
 		// 	key: fs.readFileSync("./cert/key.pem"),
 		// 	cert: fs.readFileSync("./cert/cert.pem"),
 		// },
 	},
-	preview: {
-		port: 4000,
-	},
+	// preview: {
+	// 	port: 4000,
+	// },
 	build: {
 		outDir: "build",
 	},
