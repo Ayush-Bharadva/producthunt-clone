@@ -37,7 +37,7 @@ const router = createBrowserRouter(
             <Route path=":year/:week/all" element={<Launches />} />
           </Route>
           <Route path="monthly" element={<Launches />} >
-            <Route path=":year/:month/" element={<Launches />} />
+            <Route path=":year/:month" element={<Launches />} />
             <Route path=":year/:month/all" element={<Launches />} />
           </Route>
           <Route path="yearly" element={<Launches />} >

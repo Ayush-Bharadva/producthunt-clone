@@ -64,7 +64,7 @@ const DateSelector = () => {
         {isValidDate ? <NavLink to={rightBtnLink}>
           <GoArrowRight className="right-arrow-icon" />
         </NavLink> :
-          <GoArrowRight className="right-arrow-icon disabled-btn" />
+          <GoArrowRight className="disabled-btn" />
         }
       </>
     </div>

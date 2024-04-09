@@ -10,8 +10,6 @@ const SelectedProduct = ({ product, closeModal }) => {
 
   const { name = "", tagline = "", website = "", votesCount = "", description = "", media: mediaList = [], thumbnail: { url: imgSrc = "" } } = product ?? {};
 
-  console.log("product :", product);
-
   return (
     <Modal closeModal={closeModal} >
       <div className="product-container">

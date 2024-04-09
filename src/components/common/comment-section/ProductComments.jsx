@@ -2,21 +2,20 @@ import { PropTypes } from "prop-types";
 import UserAvatar from "../../../assets/images/user-avatar.jpg";
 import "./ProductComments.scss";
 
-const parseComments = (comment) => {
+const parseComment = (comment) => {
   const doc = new DOMParser().parseFromString(comment, "text/html");
   return doc.body.textContent;
 };
 
 const ProductComments = ({ product }) => {
 
-  const { nodes: productComments, totalCount } = product?.comments ?? {};
-  console.log("productComments :", productComments, totalCount);
+  const { nodes: productComments, totalCount: commentsCount } = product?.comments ?? {};
 
   return (
     <div className="product-comments">
-      {productComments?.map(({ id, body, isVoted, votesCount }) => {
+      {commentsCount > 0 ? productComments?.map(({ id, body, isVoted, votesCount }) => {
 
-        const parsedComment = parseComments(body);
+        const parsedComment = parseComment(body);
 
         return (
           <div className="user-comment" key={id}>
@@ -43,7 +42,7 @@ const ProductComments = ({ product }) => {
             </div>
           </div>
         );
-      })}
+      }) : <p>no comments found</p>}
     </div>
   );
 };

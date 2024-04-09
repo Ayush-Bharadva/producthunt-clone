@@ -21,6 +21,10 @@ $text-color: #4b587c;
 		flex: 1 0;
 		text-align: left;
 	}
+
+	&:not(:first-child) {
+		margin-top: 2rem;
+	}
 }
 
 .period-wise-products {

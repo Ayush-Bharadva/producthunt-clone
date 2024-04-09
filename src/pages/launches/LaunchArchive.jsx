@@ -33,7 +33,7 @@ const LaunchArchive = memo(function LaunchArchive({ type }) {
             <div key={index} className="archive">
               <NavLink
                 to={`/leaderboard/${type}/${year}/${linkEndPoint}`}
-                className={isActiveLink}>
+                className={isActiveLink} end>
                 {year}
               </NavLink>
               <MonthSelector showMonths={showMonths} selectedYear={selectedYear} year={year} />

@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect } from "react";
+import { createContext, useCallback, useEffect, useMemo } from "react";
 import { PropTypes } from "prop-types";
 import { showToast } from "../utils/helper";
 import { getAccessToken, getUserName } from "../services/auth-service";
@@ -62,10 +62,10 @@ const UserProvider = ({ children }) => {
     }
   }, [getUserDetails, username]);
 
-  const ctxValue = {
+  const ctxValue = useMemo(() => ({
     userInfo,
     logoutUser
-  };
+  }), [userInfo, logoutUser]);
 
   return (
     <UserContext.Provider value={ctxValue}>

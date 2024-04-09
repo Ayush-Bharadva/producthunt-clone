@@ -11,8 +11,6 @@ export const useFetchProducts = ({
 	postedBefore,
 	featured,
 }) => {
-	console.log("useFetchProducts", order, postedAfter, postedBefore, featured);
-
 	const [productsInfo, setProductsInfo] = useState({
 		productsList: [],
 		endCursor: null,
@@ -63,7 +61,6 @@ export const useFetchProducts = ({
 				},
 				onError: error => {
 					showToast("error", error.message);
-					console.log("error", error);
 				},
 			});
 		}

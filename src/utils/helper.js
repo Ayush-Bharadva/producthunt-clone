@@ -120,16 +120,12 @@ export const extractDaysInfo = (year, month) => {
 export const getPreviousDateInfo = inputDate => {
 	const previousDate = formatDate(subDays(new Date(inputDate), 1));
 	const previousWeekNumber = getWeekNumberByDate(previousDate);
-	console.log("previousDate", previousDate);
-	console.log("getWeekNumberByDate", previousWeekNumber);
 	return { previousDate, previousWeekNumber };
 };
 
 export const getNextDateInfo = inputDate => {
 	const nextDate = formatDate(addDays(new Date(inputDate), 1));
 	const nextWeekNumber = getWeekNumberByDate(nextDate);
-	console.log("nextDate", nextDate);
-	console.log("getWeekNumberByDate", nextWeekNumber);
 	return { nextDate, nextWeekNumber };
 };
 
@@ -198,7 +194,7 @@ export const getLink = ({ type, year, month, day, weekNumber }) => {
 			break;
 	}
 
-	featured = `${active}/featured`;
+	featured = `${active}/`;
 	all = `${active}/all`;
 
 	return { active, featured, all };
