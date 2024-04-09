@@ -6,6 +6,8 @@ import Layout from "./components/layout/Layout";
 import Home from "./pages/home/Home";
 import { Toaster } from "react-hot-toast";
 import Loader from "./components/common/loader/Loader";
+import LaunchesWrapper from "./pages/launches/LaunchesWrapper";
+import { IsFeaturedProducts } from "./utils/constants";
 
 const dynamicImport = name => lazy(() => import("./pages/index").then((module) => ({ default: module[name] })));
 
@@ -27,23 +29,22 @@ const router = createBrowserRouter(
           <Route path="" element={<FeaturedProducts />} />
           <Route path="/all" element={<AllProducts />} />
         </Route>
-        <Route path="/leaderboard" element={<Launches />}>
-          <Route path="daily" element={<Launches />} >
-            <Route path=":year/:month/:day" element={<Launches />} />
-            <Route path=":year/:month/:day/all" element={<Launches />} />
-          </Route>
-          <Route path="weekly" element={<Launches />} >
-            <Route path=":year/:week" element={<Launches />} />
-            <Route path=":year/:week/all" element={<Launches />} />
-          </Route>
-          <Route path="monthly" element={<Launches />} >
-            <Route path=":year/:month" element={<Launches />} />
-            <Route path=":year/:month/all" element={<Launches />} />
-          </Route>
-          <Route path="yearly" element={<Launches />} >
-            <Route path=":year" element={<Launches />} />
-            <Route path=":year/all" element={<Launches />} />
-          </Route>
+        <Route path="/leaderboard" element={<LaunchesWrapper />}>
+          <Route path="daily/:year/:month/:day" element={<Launches isFeatured={true} key={IsFeaturedProducts["featured"]} />} />
+
+          <Route path="daily/:year/:month/:day/all" element={<Launches isFeatured={false} key={IsFeaturedProducts["all"]} />} />
+
+          <Route path="weekly/:year/:week" element={<Launches isFeatured={true} key={IsFeaturedProducts["featured"]} />} />
+
+          <Route path="weekly/:year/:week/all" element={<Launches isFeatured={false} key={IsFeaturedProducts["all"]} />} />
+
+          <Route path="monthly/:year/:month" element={<Launches isFeatured={true} key={IsFeaturedProducts["featured"]} />} />
+
+          <Route path="monthly/:year/:month/all" element={<Launches isFeatured={false} key={IsFeaturedProducts["all"]} />} />
+
+          <Route path="yearly/:year" element={<Launches isFeatured={true} />} key={IsFeaturedProducts["featured"]} />
+
+          <Route path="yearly/:year/all" element={<Launches isFeatured={false} key={IsFeaturedProducts["all"]} />} />
         </Route>
         <Route path="/products" element={<Products />} />
         <Route path="/news" element={<News />} />
