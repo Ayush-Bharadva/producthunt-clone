@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
 const getAccessTokenPayload = {
 	client_id: "39zsVF6R_8mbajaavFpoNkEHlqNTfw6IFgM5d2OpvhU",
 	client_secret: "v0XAT9pnOb0MIxj1s2d79J85kY3SF2ae4ZPUcJ_3o5c",
-	redirect_uri: "https://clone-producthunt-5173.netlify.app:3000",
+	redirect_uri: "https://clone-producthunt-5173.netlify.app",
 	grant_type: "authorization_code",
 };
 

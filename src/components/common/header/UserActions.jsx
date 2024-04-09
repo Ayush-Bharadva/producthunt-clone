@@ -24,7 +24,7 @@ const UserActions = () => {
         </> :
         <>
           <button type="button" className="text-button">How to Post</button>
-          <Link to="https://api.producthunt.com/v2/oauth/authorize?client_id=39zsVF6R_8mbajaavFpoNkEHlqNTfw6IFgM5d2OpvhU&redirect_uri=https://clone-producthunt-5173.netlify.app:3000&response_type=code&scope=public+private">
+          <Link to="https://api.producthunt.com/v2/oauth/authorize?client_id=39zsVF6R_8mbajaavFpoNkEHlqNTfw6IFgM5d2OpvhU&redirect_uri=https://clone-producthunt-5173.netlify.app&response_type=code&scope=public+private">
             <button type="button" className="sign-in-btn">
               Sign In
             </button>
