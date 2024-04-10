@@ -28,11 +28,6 @@ export const Months = [
 	"December",
 ];
 
-export const IsFeaturedProducts = {
-	featured: true,
-	all: false,
-};
-
 export const TrendingSearches = ["Edrawmax", "Eesee", "Shar", "Sha", "Sharpe"];
 
 export const ProductsTitle = {
