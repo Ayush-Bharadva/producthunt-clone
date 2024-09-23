@@ -58,6 +58,8 @@ const router = createBrowserRouter(
 
 function App() {
 
+  window.ReactNativeWebView.postMessage("Hello from ProductHunt");
+
   return (
     <Suspense fallback={<Loader />}>
       <RouterProvider router={router} />
