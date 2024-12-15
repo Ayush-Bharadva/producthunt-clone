@@ -1,30 +1,50 @@
 import { NavLink } from "react-router-dom";
 import "./Header.scss";
-import Logo from './../logo/Logo';
-import SearchInput from "../search-box/SearchInput";
+import Logo from "./../logo/Logo";
+import SearchInput from "../search-input/SearchInput";
+import { RxHamburgerMenu } from "react-icons/rx";
+import { IoClose } from "react-icons/io5";
+import { useState } from "react";
+import MobileNavigationMenu from "./MobileNavigationMenu";
+import UserActions from "./UserActions";
+import { pstCurrentDate } from "../../../utils/helper";
+
+const [year, month, day] = pstCurrentDate.split("-");
+
+const isActiveLink = ({ isActive }) => isActive ? "nav-link active" : "nav-link";
 
 const Header = () => {
-  return (
-    <header className="header">
-      <div className="left">
-        <Logo />
-        <SearchInput />
-      </div>
-      <nav className="navbar" >
-        <ul className="navbar-links" >
-          <NavLink to="leaderboard" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Launches</NavLink>
-          <NavLink to="products" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Products</NavLink>
-          <NavLink to="news" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>News</NavLink>
-          <NavLink to="community" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Community</NavLink>
-          <NavLink to="advertise" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Advertise</NavLink>
-        </ul>
-      </nav>
-      <div className="right">
-        <button type="button" className="text-button">How to post?</button>
-        <button type="button" className="sign-in-btn">Sign in</button>
-      </div>
-    </header>
-  )
-}
 
-export default Header
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  return (
+    <>
+      <header className="header">
+        <div className="left">
+          {!isMenuOpen ?
+            <RxHamburgerMenu className="hamburger-menu" onClick={toggleMenu} /> :
+            <IoClose className="close-header" onClick={toggleMenu} />}
+          <Logo />
+          <SearchInput />
+        </div>
+        <nav className="navbar">
+          <ul className="navbar-links" >
+            <NavLink to={`/leaderboard/daily/${year}/${month}/${day}`} className={isActiveLink}>Launches</NavLink>
+            <NavLink to="/products" className={isActiveLink}>Products</NavLink>
+            <NavLink to="/news" className={isActiveLink}>News</NavLink>
+            <NavLink to="/community" className={isActiveLink}>Community</NavLink>
+            <NavLink to="/advertise" className={isActiveLink}>Advertise</NavLink>
+          </ul>
+        </nav>
+        <UserActions />
+      </header>
+      <MobileNavigationMenu isMenuOpen={isMenuOpen} closeMenu={toggleMenu} />
+    </>
+  );
+};
+
+export default Header;

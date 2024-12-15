@@ -1,14 +1,14 @@
 $text-color: #4b587c;
 
-.post-card {
+.product-card {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	gap: 8px;
 	border-radius: 9px;
-	// border: 1px solid #e0e0e0;
 	padding: 0.5rem;
 	cursor: pointer;
-	margin: 0.5rem 0;
+	margin: 0 0 0.5rem 0;
 	width: 100%;
 	transition: all 0.3s ease-in-out;
 
@@ -17,7 +17,14 @@ $text-color: #4b587c;
 		width: 48px;
 		border-radius: 7px;
 		overflow: hidden;
+
+		img {
+			height: 100%;
+			width: 100%;
+			object-fit: cover;
+		}
 	}
+
 	.product-details {
 		flex: 1;
 		padding: 1rem;
@@ -45,7 +52,7 @@ $text-color: #4b587c;
 
 			.comment {
 				gap: 4px;
-				font-size: 0.85rem;
+				font-size: 12px;
 				transition: all 0.2s ease-in-out;
 				cursor: pointer;
 
@@ -57,10 +64,15 @@ $text-color: #4b587c;
 			.topics {
 				display: flex;
 				gap: 7px;
-				font-size: 0.85rem;
+				font-size: 12px;
 				transition: all 0.2s ease-in-out;
 				color: $text-color;
 				text-transform: capitalize;
+
+				.topic::before {
+					content: "•";
+					margin: 0 6px 0 0;
+				}
 
 				.topic:hover {
 					text-decoration: underline;
@@ -84,7 +96,8 @@ $text-color: #4b587c;
 			height: 44px;
 			width: 44px;
 			gap: 2px;
-			font-size: 13px;
+			font-size: 12px;
+			line-height: 20px;
 			font-weight: 500;
 			padding: 2px 7px 0;
 		}
@@ -94,7 +107,33 @@ $text-color: #4b587c;
 		}
 	}
 
+	.voted-product {
+		border: 1px solid #feb6b0;
+
+		.triangle-icon {
+			color: #fb6457;
+		}
+	}
+
 	&:hover {
 		background-image: linear-gradient(12deg, white 0 25%, #feede6 95%);
+	}
+}
+
+@media screen and (max-width: 760px) {
+	.product-card {
+		.product-details {
+			padding: 0.5rem;
+
+			.product-other-details,
+			.share-icon {
+				display: none;
+			}
+		}
+		.up-vote-button {
+			border: none;
+			border-left: 1px solid #d9e1ec;
+			border-radius: 0;
+		}
 	}
 }

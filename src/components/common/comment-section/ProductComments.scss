@@ -1,0 +1,75 @@
+@import "../../../styles/Global.scss";
+
+.product-comments {
+	margin-top: 1rem;
+	width: 100%;
+	max-width: 800px;
+	margin: 0 auto;
+	max-width: 800px;
+	margin: 1.5rem auto 0;
+}
+
+.temp {
+	background-color: rosybrown;
+}
+
+.user-comment {
+	display: flex;
+	padding: 0.5rem;
+	gap: 1rem;
+	font-size: 0.85rem;
+	margin-bottom: 0.5rem;
+
+	.commented-user-image {
+		width: 48px;
+		height: 48px;
+		border-radius: 50%;
+		overflow: hidden;
+
+		img {
+			height: 100%;
+			width: 100%;
+			object-fit: contain;
+		}
+	}
+
+	.comment-info {
+		flex: 1 0;
+		color: $text-color;
+
+		.commented-user-info {
+			@include flex(row, flex-start, center);
+			gap: 0.5rem;
+			margin-top: 0.5rem;
+
+			.profile-name {
+				font-weight: 600;
+			}
+			.user-name {
+				&::before {
+					content: "@";
+				}
+				font-style: italic;
+			}
+		}
+		.comment-body {
+			margin: 1rem 0;
+		}
+		.comment-stats {
+			@include flex(row, flex-start, center);
+			gap: 1rem;
+
+			.comment-up-vote-btn {
+				font-size: 0.75rem;
+				border: none;
+				background: none;
+				font-weight: 600;
+				color: $text-color;
+				cursor: pointer;
+			}
+			.voted {
+				color: #ff6154;
+			}
+		}
+	}
+}

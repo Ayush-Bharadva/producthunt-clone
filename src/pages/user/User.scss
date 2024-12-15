@@ -1,0 +1,49 @@
+$text-color: #4b587c;
+
+.user-container {
+	.user-details-container {
+		margin: 0 auto;
+		padding: 0 1.5rem;
+
+		.user-meta-info {
+			display: flex;
+			align-items: center;
+			gap: 30px;
+
+			.user-avatar {
+				aspect-ratio: 1/1;
+				height: 120px;
+				width: auto;
+				border-radius: 50%;
+				overflow: hidden;
+			}
+			.user-details {
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+
+				.user-name {
+					font-weight: 500;
+					font-size: 1.5rem;
+				}
+				.user-headline {
+					font-size: 1rem;
+					color: $text-color;
+				}
+				.user-id {
+					font-size: 0.7rem;
+					color: $text-color;
+				}
+			}
+		}
+
+		.user-voted-posts {
+			margin-top: 2rem;
+
+			.heading {
+				font-size: 0.8rem;
+				color: $text-color;
+			}
+		}
+	}
+}

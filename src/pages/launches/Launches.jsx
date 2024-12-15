@@ -1,54 +1,53 @@
-import { NavLink } from "react-router-dom"
+import InfiniteScroll from "react-infinite-scroller";
+import { PropTypes } from "prop-types";
 import "./Launches.scss";
-import { days, years } from "../../utils/constants";
+import ProductCard from "../../components/common/product-card/ProductCard";
+import DateSelector from "../../components/pages/launches/DateSelector";
+import { getPostedDates } from "../../utils/helper";
+import { useFetchProducts } from "../../hooks/useFetchProducts";
+import { useParams } from "react-router-dom";
+import Loader from "../../components/common/loader/Loader";
 
-const Launches = () => {
+const Launches = ({ isFeatured }) => {
+
+  console.log("isFeatured", isFeatured);
+
+  const { year, month, week, day } = useParams();
+
+  const { startDate, endDate } = getPostedDates({ year, month, week, day });
+
+  const { productsList, hasMore, error, loading, handleLoadMore } = useFetchProducts({
+    featured: isFeatured,
+    order: "VOTES",
+    postedAfter: startDate,
+    postedBefore: endDate
+  });
+
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
+
   return (
     <>
-      <div className="main-container">
-        <div className="launches-container">
-          <div className="launches-heading">
-            <div className="heading-text">Best of March 12, 2024</div>
-            <div className="routes">
-              <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to="daily">Daily</NavLink>
-              <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to="weekly">Weekly</NavLink>
-              <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to="monthly">Monthly</NavLink>
-              <NavLink className={({ isActive }) => isActive ? "link link-active" : "link"} to="yearly">Yearly</NavLink>
-            </div>
-            <div className="button-group">
-              <button type="button" className="text-button">Featured</button>
-              <span>|</span>
-              <button type="button" className="text-button">All</button>
-            </div>
-          </div>
-          <div className="pagination">
-            {
-              days.map((day, index) => {
-                return (
-                  <div key={index}>
-                    <NavLink to={`/leaderboard/daily/${day}`} className={({ isActive }) => isActive ? "day selected" : "day"}>{day}</NavLink>
-                  </div>
-                )
-              })
-            }
-          </div>
-          <div className="posts-list"></div>
-        </div>
-        <div className="launch-archive">
-          <p className="launch-archive-heading">LAUNCH ARCHIVE</p>
-          <div className="archive-list">
-            {years.map((year, index) => {
-              return (
-                <div key={index} className="archive">
-                  <NavLink to={`/leaderboard/${year}`} className={({ isActive }) => isActive ? "archive-link active" : "archive-link"}>{year}</NavLink>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </div>
+      <DateSelector />
+      {loading ?
+        <Loader /> :
+        <InfiniteScroll
+          className="posts-container"
+          loadMore={handleLoadMore}
+          hasMore={hasMore}
+          loader={<Loader />}
+          threshold={50}
+          initialLoad={false}>
+          {productsList.map(product => <ProductCard key={product.id} product={product} />)}
+        </InfiniteScroll>}
+      {!loading && !hasMore && productsList.length === 0 ? <p>No Products found</p> : null}
     </>
-  )
-}
+  );
+};
 
-export default Launches
+export default Launches;
+
+Launches.propTypes = {
+  isFeatured: PropTypes.bool
+};
